@@ -1,0 +1,348 @@
+/* ============================================================
+   dct design tokens — generated from dct.design Figma file
+   Collections: font, border, sys (light + dark)
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   FONT PRIMITIVES
+   ------------------------------------------------------------ */
+:root {
+  /* Family */
+  --font-family-sans: 'Geist', sans-serif;
+  --font-family-mono: 'Geist Mono', monospace;
+
+  /* Size scale */
+  --font-size-xs:   12px;
+  --font-size-sm:   14px;
+  --font-size-base: 16px;
+  --font-size-lg:   18px;
+  --font-size-xl:   20px;
+  --font-size-2xl:  24px;
+  --font-size-3xl:  30px;
+  --font-size-4xl:  36px;
+  --font-size-5xl:  48px;
+  --font-size-6xl:  60px;
+  --font-size-7xl:  72px;
+  --font-size-8xl:  96px;
+  --font-size-9xl:  128px;
+
+  /* Weight scale */
+  --font-weight-thin:       100;
+  --font-weight-extralight: 200;
+  --font-weight-light:      300;
+  --font-weight-normal:     400;
+  --font-weight-medium:     500;
+  --font-weight-semibold:   600;
+  --font-weight-bold:       700;
+  --font-weight-extrabold:  800;
+  --font-weight-black:      900;
+
+  /* Line height */
+  --font-leading-none:    1;
+  --font-leading-tight:   1.25;
+  --font-leading-snug:    1.375;
+  --font-leading-normal:  1.5;
+  --font-leading-relaxed: 1.625;
+  --font-leading-loose:   2;
+
+  /* Letter spacing */
+  --font-tracking-tighter: -0.8px;
+  --font-tracking-tight:   -0.4px;
+  --font-tracking-normal:   0px;
+  --font-tracking-wide:     0.4px;
+  --font-tracking-wider:    0.8px;
+  --font-tracking-widest:   1.6px;
+
+  /* ------------------------------------------------------------
+     BORDER RADIUS
+     ------------------------------------------------------------ */
+  --radius-none:    0px;
+  --radius-sm:      2px;
+  --radius-default: 4px;
+  --radius-md:      6px;
+  --radius-lg:      8px;
+  --radius-xl:      12px;
+  --radius-2xl:     16px;
+  --radius-3xl:     24px;
+  --radius-full:    9999px;
+}
+
+/* ------------------------------------------------------------
+   SYS TOKENS — LIGHT MODE (default)
+   ------------------------------------------------------------ */
+:root,
+[data-theme="light"] {
+
+  /* Background */
+  --color-bg-default:  #f9f9fb;
+  --color-bg-subtle:   #f0f0f4;
+  --color-bg-muted:    #e7e8ed;
+
+  /* Foreground / Text */
+  --color-fg-default:   #1f1f25;
+  --color-fg-muted:     #81828d;
+  --color-fg-subtle:    #b9bbc7;
+  --color-fg-disabled:  #d8d9e0;
+  --color-fg-on-accent: #ffffff;
+
+  /* Border */
+  --color-border-default: #e0e1e7;
+  --color-border-strong:  #cdced7;
+  --color-border-muted:   #e7e8ed;
+  --color-border-accent:  #87a5ef;
+
+  /* Accent (blue) */
+  --color-accent-default:    #3657c3;
+  --color-accent-hover:      #395bc7;
+  --color-accent-muted:      #f7f9ff;
+  --color-accent-subtle:     #fdfdfe;
+  --color-accent-foreground: #3657c3;
+
+  /* Surface */
+  --color-surface-default: #f9f9fb;
+  --color-surface-raised:  #f0f0f4;
+  --color-surface-overlay: #e7e8ed;
+
+  /* State */
+  --color-focus:            #87a5ef;
+  --color-disabled-bg:      #d8d9e0;
+  --color-disabled-text:    #62636c;
+
+  /* Danger */
+  --color-danger-default:    #e03131;
+  --color-danger-hover:      #c92a2a;
+  --color-danger-muted:      #ffe3e3;
+  --color-danger-fg:         #f03e3e;
+  --color-danger-on-danger:  #ffffff;
+
+  /* Status — Success */
+  --color-success-bg:       #dcfce7;
+  --color-success-bg-subtle:#f0fdf4;
+  --color-success-border:   #86efac;
+  --color-success-text:     #1e1f24;
+  --color-success-icon:     #15803d;
+  --color-success-solid:    #16a34a;
+  --color-success-on-solid: #ffffff;
+
+  /* Status — Warning */
+  --color-warning-bg:       #fef3c7;
+  --color-warning-bg-subtle:#fffbeb;
+  --color-warning-border:   #fcd34d;
+  --color-warning-text:     #1e1f24;
+  --color-warning-icon:     #b45309;
+  --color-warning-solid:    #f59e0b;
+  --color-warning-on-solid: #000000;
+
+  /* Status — Error */
+  --color-error-bg:         #ffe3e3;
+  --color-error-bg-subtle:  #fff5f5;
+  --color-error-border:     #ffa8a8;
+  --color-error-text:       #1e1f24;
+  --color-error-icon:       #f03e3e;
+  --color-error-solid:      #fa5252;
+  --color-error-on-solid:   #ffffff;
+
+  /* Status — Info */
+  --color-info-bg:          #f7f9ff;
+  --color-info-bg-subtle:   #fdfdfe;
+  --color-info-border:      #dfeaff;
+  --color-info-text:        #1e1f24;
+  --color-info-icon:        #87a5ef;
+  --color-info-solid:       #a6bff9;
+  --color-info-on-solid:    #ffffff;
+
+  /* Icon */
+  --color-icon-default:  #1e1f24;
+  --color-icon-muted:    #cdced7;
+  --color-icon-subtle:   #d8d9e0;
+  --color-icon-disabled: #e0e1e7;
+  --color-icon-on-accent:#ffffff;
+  --color-icon-accent:   #3657c3;
+  --color-icon-success:  #16a34a;
+  --color-icon-warning:  #d97706;
+  --color-icon-error:    #fa5252;
+  --color-icon-info:     #a6bff9;
+}
+
+/* ------------------------------------------------------------
+   SYS TOKENS — DARK MODE
+   ------------------------------------------------------------ */
+[data-theme="dark"],
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+
+    /* Background */
+    --color-bg-default:  #1f1f25;
+    --color-bg-subtle:   #62636c;
+    --color-bg-muted:    #81828d;
+
+    /* Foreground / Text */
+    --color-fg-default:   #e7e8ed;
+    --color-fg-muted:     #d8d9e0;
+    --color-fg-subtle:    #b9bbc7;
+    --color-fg-disabled:  #8c8d99;
+    --color-fg-on-accent: #ffffff;
+
+    /* Border */
+    --color-border-default: #8c8d99;
+    --color-border-strong:  #cdced7;
+    --color-border-muted:   #81828d;
+    --color-border-accent:  #d0dfff;
+
+    /* Accent */
+    --color-accent-default:    #3d63dd;
+    --color-accent-hover:      rgba(3, 145, 253, 0.49);
+    --color-accent-muted:      #3657c3;
+    --color-accent-subtle:     #395bc7;
+    --color-accent-foreground: #d0dfff;
+
+    /* Surface */
+    --color-surface-default: #1f1f25;
+    --color-surface-raised:  #81828d;
+    --color-surface-overlay: #8c8d99;
+
+    /* State */
+    --color-focus:          #d0dfff;
+    --color-disabled-bg:    rgba(0, 9, 50, 0.12);
+    --color-disabled-text:  #8c8d99;
+
+    /* Danger */
+    --color-danger-default:   #e03131;
+    --color-danger-hover:     #c92a2a;
+    --color-danger-muted:     #a61e1e;
+    --color-danger-fg:        #ffc9c9;
+    --color-danger-on-danger: #ffffff;
+
+    /* Status — Success */
+    --color-success-bg:        #052e16;
+    --color-success-bg-subtle: #14532d;
+    --color-success-border:    #15803d;
+    --color-success-text:      #f9f9fb;
+    --color-success-icon:      #4ade80;
+    --color-success-solid:     #22c55e;
+    --color-success-on-solid:  #ffffff;
+
+    /* Status — Warning */
+    --color-warning-bg:        #451a03;
+    --color-warning-bg-subtle: #78350f;
+    --color-warning-border:    #b45309;
+    --color-warning-text:      #f9f9fb;
+    --color-warning-icon:      #fbbf24;
+    --color-warning-solid:     #fbbf24;
+    --color-warning-on-solid:  #000000;
+
+    /* Status — Error */
+    --color-error-bg:          #a61e1e;
+    --color-error-bg-subtle:   #c92a2a;
+    --color-error-border:      #f03e3e;
+    --color-error-text:        #f9f9fb;
+    --color-error-icon:        #ff8787;
+    --color-error-solid:       #ff6b6b;
+    --color-error-on-solid:    #ffffff;
+
+    /* Status — Info */
+    --color-info-bg:           #395bc7;
+    --color-info-bg-subtle:    #3657c3;
+    --color-info-border:       #87a5ef;
+    --color-info-text:         #f9f9fb;
+    --color-info-icon:         #d0dfff;
+    --color-info-solid:        #bdd1ff;
+    --color-info-on-solid:     #ffffff;
+
+    /* Icon */
+    --color-icon-default:   #f9f9fb;
+    --color-icon-muted:     #b9bbc7;
+    --color-icon-subtle:    #8c8d99;
+    --color-icon-disabled:  #8c8d99;
+    --color-icon-on-accent: #ffffff;
+    --color-icon-accent:    #d0dfff;
+    --color-icon-success:   #4ade80;
+    --color-icon-warning:   #fbbf24;
+    --color-icon-error:     #ff8787;
+    --color-icon-info:      #d0dfff;
+  }
+}
+
+[data-theme="dark"] {
+  /* Background */
+  --color-bg-default:  #1f1f25;
+  --color-bg-subtle:   #62636c;
+  --color-bg-muted:    #81828d;
+
+  /* Foreground / Text */
+  --color-fg-default:   #e7e8ed;
+  --color-fg-muted:     #d8d9e0;
+  --color-fg-subtle:    #b9bbc7;
+  --color-fg-disabled:  #8c8d99;
+  --color-fg-on-accent: #ffffff;
+
+  /* Border */
+  --color-border-default: #8c8d99;
+  --color-border-strong:  #cdced7;
+  --color-border-muted:   #81828d;
+  --color-border-accent:  #d0dfff;
+
+  /* Accent */
+  --color-accent-default:    #3d63dd;
+  --color-accent-hover:      rgba(3, 145, 253, 0.49);
+  --color-accent-muted:      #3657c3;
+  --color-accent-subtle:     #395bc7;
+  --color-accent-foreground: #d0dfff;
+
+  /* Surface */
+  --color-surface-default: #1f1f25;
+  --color-surface-raised:  #81828d;
+  --color-surface-overlay: #8c8d99;
+
+  /* State */
+  --color-focus:          #d0dfff;
+  --color-disabled-bg:    rgba(0, 9, 50, 0.12);
+  --color-disabled-text:  #8c8d99;
+
+  /* Danger */
+  --color-danger-default:   #e03131;
+  --color-danger-hover:     #c92a2a;
+  --color-danger-muted:     #a61e1e;
+  --color-danger-fg:        #ffc9c9;
+  --color-danger-on-danger: #ffffff;
+
+  /* Status */
+  --color-success-bg:        #052e16;
+  --color-success-bg-subtle: #14532d;
+  --color-success-border:    #15803d;
+  --color-success-text:      #f9f9fb;
+  --color-success-icon:      #4ade80;
+  --color-success-solid:     #22c55e;
+  --color-success-on-solid:  #ffffff;
+  --color-warning-bg:        #451a03;
+  --color-warning-bg-subtle: #78350f;
+  --color-warning-border:    #b45309;
+  --color-warning-text:      #f9f9fb;
+  --color-warning-icon:      #fbbf24;
+  --color-warning-solid:     #fbbf24;
+  --color-warning-on-solid:  #000000;
+  --color-error-bg:          #a61e1e;
+  --color-error-bg-subtle:   #c92a2a;
+  --color-error-border:      #f03e3e;
+  --color-error-text:        #f9f9fb;
+  --color-error-icon:        #ff8787;
+  --color-error-solid:       #ff6b6b;
+  --color-error-on-solid:    #ffffff;
+  --color-info-bg:           #395bc7;
+  --color-info-bg-subtle:    #3657c3;
+  --color-info-border:       #87a5ef;
+  --color-info-text:         #f9f9fb;
+  --color-info-icon:         #d0dfff;
+  --color-info-solid:        #bdd1ff;
+  --color-info-on-solid:     #ffffff;
+  --color-icon-default:      #f9f9fb;
+  --color-icon-muted:        #b9bbc7;
+  --color-icon-subtle:       #8c8d99;
+  --color-icon-disabled:     #8c8d99;
+  --color-icon-on-accent:    #ffffff;
+  --color-icon-accent:       #d0dfff;
+  --color-icon-success:      #4ade80;
+  --color-icon-warning:      #fbbf24;
+  --color-icon-error:        #ff8787;
+  --color-icon-info:         #d0dfff;
+}
