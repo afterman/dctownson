@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/@phosphor-icons/web@2.1.1"></script>
   <style>
     *, *::before, *::after {
       box-sizing: border-box;
@@ -28,21 +29,43 @@
       transition: background-color 0.2s ease, color 0.2s ease;
     }
 
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    img {
-      display: block;
-      max-width: 100%;
-    }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
 
     /* ── Layout ────────────────────────────────────── */
     .page {
       max-width: 960px;
       margin: 0 auto;
       padding: 0 24px;
+    }
+
+    /* ── Tooltip ───────────────────────────────────── */
+    [data-tip] { position: relative; }
+
+    [data-tip]::after {
+      content: attr(data-tip);
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%) translateY(4px);
+      background: var(--color-fg-default);
+      color: var(--color-bg-default);
+      font-family: var(--font-family-mono);
+      font-size: 11px;
+      font-weight: var(--font-weight-medium);
+      letter-spacing: var(--font-tracking-wide);
+      white-space: nowrap;
+      padding: 4px 8px;
+      border-radius: var(--radius-md);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.12s ease, transform 0.12s ease;
+      z-index: 10;
+    }
+
+    [data-tip]:hover::after {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
     }
 
     /* ── Nav ───────────────────────────────────────── */
@@ -58,7 +81,7 @@
     .nav-left {
       display: flex;
       align-items: center;
-      gap: 20px;
+      gap: 16px;
     }
 
     .nav-logo {
@@ -66,14 +89,19 @@
       height: 32px;
       border-radius: var(--radius-full);
       object-fit: cover;
-      filter: grayscale(100%);
-      opacity: 0.9;
+    }
+
+    .nav-divider {
+      width: 1px;
+      height: 20px;
+      background: var(--color-border-default);
+      flex-shrink: 0;
     }
 
     .nav-links {
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 2px;
     }
 
     .nav-links a {
@@ -92,15 +120,11 @@
       background-color: var(--color-bg-subtle);
     }
 
-    .nav-links a svg {
-      width: 16px;
-      height: 16px;
-    }
+    .nav-links a i { font-size: 18px; }
 
     .nav-right {
       display: flex;
       align-items: center;
-      gap: 8px;
     }
 
     /* ── Theme Toggle ──────────────────────────────── */
@@ -123,21 +147,15 @@
       background-color: var(--color-bg-subtle);
     }
 
-    .theme-toggle svg {
-      width: 15px;
-      height: 15px;
-    }
+    .theme-toggle i { font-size: 16px; }
 
-    .icon-sun { display: none; }
-    .icon-moon { display: block; }
-
-    [data-theme="light"] .icon-sun { display: block; }
+    .icon-sun  { display: none; }
+    .icon-moon { display: flex; }
+    [data-theme="light"] .icon-sun  { display: flex; }
     [data-theme="light"] .icon-moon { display: none; }
 
     /* ── Hero ──────────────────────────────────────── */
-    .hero {
-      margin-bottom: 64px;
-    }
+    .hero { margin-bottom: 64px; }
 
     .hero h1 {
       font-size: var(--font-size-5xl);
@@ -153,8 +171,8 @@
       font-weight: var(--font-weight-normal);
       line-height: var(--font-leading-relaxed);
       color: var(--color-fg-muted);
-      max-width: 960px;
-      margin-bottom: 16px;
+      max-width: 480px;
+      margin-bottom: 20px;
     }
 
     .hero-tags {
@@ -163,20 +181,21 @@
       flex-wrap: wrap;
     }
 
+    /* ── Pills ─────────────────────────────────────── */
     .tag {
       font-family: var(--font-family-mono);
       font-size: var(--font-size-xs);
-      font-weight: var(--font-weight-normal);
+      font-weight: var(--font-weight-medium);
       letter-spacing: var(--font-tracking-wide);
-      color: var(--color-fg-subtle);
-      padding: 3px 8px;
+      color: var(--color-fg-muted);
+      padding: 4px 10px;
       border-radius: var(--radius-full);
-      border: 1px solid var(--color-border-default);
-      background: transparent;
+      border: 1px solid var(--color-border-strong);
+      background: var(--color-bg-subtle);
       white-space: nowrap;
     }
 
-    /* ── Case Study Grid ───────────────────────────── */
+    /* ── Section label ─────────────────────────────── */
     .section-label {
       font-family: var(--font-family-mono);
       font-size: var(--font-size-xs);
@@ -187,17 +206,12 @@
       margin-bottom: 24px;
     }
 
+    /* ── Card grid ─────────────────────────────────── */
     .card-grid {
       display: grid;
       grid-template-columns: 1fr;
       gap: 16px;
       margin-bottom: 80px;
-    }
-
-    @media (max-width: 960px) {
-      .card-grid {
-        grid-template-columns: 1fr;
-      }
     }
 
     .card {
@@ -210,7 +224,6 @@
       text-decoration: none;
       color: inherit;
       transition: border-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
-      cursor: pointer;
     }
 
     .card:hover {
@@ -229,19 +242,44 @@
       pointer-events: none;
     }
 
-    .card-image {
+    /* ── Card media ────────────────────────────────── */
+    .card-media {
+      position: relative;
       width: 100%;
       aspect-ratio: 16 / 9;
-      object-fit: cover;
+      overflow: hidden;
       background-color: var(--color-bg-muted);
     }
 
+    .card-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .card-logo {
+      position: absolute;
+      bottom: 14px;
+      left: 16px;
+      height: 22px;
+      width: auto;
+      object-fit: contain;
+      filter: brightness(0) invert(1);
+      opacity: 0.9;
+    }
+
+    [data-theme="light"] .card-logo {
+      filter: brightness(0);
+      opacity: 0.65;
+    }
+
+    /* ── Card body ─────────────────────────────────── */
     .card-body {
-      padding: 16px;
+      padding: 14px 16px 16px;
       display: flex;
       flex-direction: column;
-      gap: 6px;
-      flex: 1;
+      gap: 4px;
     }
 
     .card-type {
@@ -262,8 +300,6 @@
 
     .card-desc {
       font-size: var(--font-size-sm);
-      font-weight: var(--font-weight-normal);
-      line-height: var(--font-leading-normal);
       color: var(--color-fg-muted);
     }
 
@@ -305,64 +341,37 @@
     <!-- Nav -->
     <nav>
       <div class="nav-left">
-        <a href="/">
+        <a href="/" data-tip="Home">
           <img
             class="nav-logo"
-            src="assets/images/651d8e4dbf31dd4dd203c1da_DCT-Selfie-BW.png"
+            src="assets/images/DCT-Selfie-BW.png"
             alt="Daniel Townson"
           />
         </a>
+        <div class="nav-divider"></div>
         <div class="nav-links">
-          <!-- LinkedIn -->
-          <a href="https://www.linkedin.com/in/danieltownson/" target="_blank" rel="noopener" aria-label="LinkedIn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
-              <rect x="2" y="9" width="4" height="12"/>
-              <circle cx="4" cy="4" r="2"/>
-            </svg>
+          <a href="https://www.linkedin.com/in/danieltownson/" target="_blank" rel="noopener" data-tip="LinkedIn">
+            <i class="ph ph-linkedin-logo"></i>
           </a>
-          <!-- Instagram -->
-          <a href="https://www.instagram.com/dctownson/" target="_blank" rel="noopener" aria-label="Instagram">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
-              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
-              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
-            </svg>
+          <a href="https://www.instagram.com/dctownson/" target="_blank" rel="noopener" data-tip="Instagram">
+            <i class="ph ph-instagram-logo"></i>
           </a>
-          <!-- Threads -->
-          <a href="https://www.threads.net/@dctownson" target="_blank" rel="noopener" aria-label="Threads">
-            <svg viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12.186 24h-.007c-3.581-.024-6.334-1.205-8.184-3.509C2.35 18.44 1.5 15.586 1.473 12.01v-.017c.027-3.579.877-6.43 2.525-8.482C5.845 1.205 8.6.024 12.18 0h.014c2.746.02 5.043.725 6.826 2.098 1.677 1.29 2.858 3.13 3.509 5.467l-2.04.569c-1.104-3.96-3.898-5.984-8.304-6.015-2.91.022-5.11.936-6.54 2.717C4.307 6.504 3.616 8.914 3.594 12c.022 3.086.713 5.496 2.05 7.164 1.43 1.783 3.631 2.698 6.54 2.717 2.623-.02 4.358-.631 5.8-2.045 1.647-1.613 1.618-3.593 1.09-4.798-.31-.71-.873-1.3-1.634-1.75-.192 1.352-.622 2.446-1.284 3.272-.886 1.102-2.14 1.704-3.73 1.79-1.202.065-2.361-.218-3.259-.801-1.063-.689-1.685-1.74-1.752-2.964-.065-1.19.408-2.285 1.33-3.082.88-.76 2.119-1.207 3.583-1.291a13.853 13.853 0 0 1 3.02.142c-.126-.742-.375-1.332-.75-1.757-.513-.586-1.298-.883-2.333-.889H12c-.91 0-1.723.223-2.37.647-.boom-.421-.648-.747-.648-1.275h2.04c.123 0 .242.007.36.022.85.09 1.517.47 1.982 1.127.53.75.794 1.82.794 3.18v.317c.376.166.733.352 1.066.557 1.028.632 1.744 1.497 2.119 2.558.418 1.19.397 3.052-.75 4.886-1.072 1.713-2.858 2.71-5.14 2.95-.337.033-.678.05-1.018.05zM12.45 14.12c-.157 0-.314.007-.47.02-1.036.06-1.875.368-2.435.893-.485.452-.724 1.022-.692 1.644.056 1.053 1.06 1.803 2.423 1.803h.07c1.077-.04 1.918-.481 2.4-1.243.55-.881.645-2.018.278-3.218a11.853 11.853 0 0 0-1.574.1z"/>
-            </svg>
+          <a href="https://www.threads.net/@dctownson" target="_blank" rel="noopener" data-tip="Threads">
+            <i class="ph ph-threads-logo"></i>
           </a>
-          <!-- AllTrails -->
-          <a href="https://www.alltrails.com/members/daniel-townson" target="_blank" rel="noopener" aria-label="AllTrails">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M3 17l4-8 4 5 3-3 4 6"/>
-              <path d="M2 20h20"/>
-            </svg>
+          <a href="https://www.alltrails.com/members/daniel-townson" target="_blank" rel="noopener" data-tip="AllTrails">
+            <i class="ph ph-mountains"></i>
           </a>
-          <!-- Email -->
-          <a href="mailto:dctownson@gmail.com?subject=Hi%20Daniel!" aria-label="Email">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="2" y="4" width="20" height="16" rx="2"/>
-              <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
-            </svg>
+          <a href="mailto:dctownson@gmail.com?subject=Hi%20Daniel!" data-tip="Email Me">
+            <i class="ph ph-envelope-simple"></i>
           </a>
         </div>
       </div>
 
       <div class="nav-right">
-        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
-          <!-- Sun icon (shown in light mode) -->
-          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="4"/>
-            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
-          </svg>
-          <!-- Moon icon (shown in dark mode) -->
-          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/>
-          </svg>
+        <button class="theme-toggle" id="themeToggle" data-tip="Toggle theme">
+          <i class="ph ph-sun icon-sun"></i>
+          <i class="ph ph-moon icon-moon"></i>
         </button>
       </div>
     </nav>
@@ -370,7 +379,7 @@
     <!-- Hero -->
     <section class="hero">
       <h1>Hello, I'm Daniel.</h1>
-      <p>I design digital experiences and products that help everyday people live happier, healthier lives.</p>
+      <p>I design digital experiences for products that help everyday people live happier, healthier lives.</p>
       <div class="hero-tags">
         <span class="tag">Design Systems</span>
         <span class="tag">Wearables</span>
@@ -383,12 +392,10 @@
     <div class="card-grid">
 
       <a class="card" href="/ua-samsung">
-        <img
-          class="card-image"
-          src="assets/images/655d059e194dbdd08f9f15af_Samsung---OverShoulder.png"
-          alt="UA Samsung Galaxy Watch Active2"
-          loading="lazy"
-        />
+        <div class="card-media">
+          <img class="card-image" src="assets/images/cs.uasamsung.mmr.heroimage.png" alt="UA Samsung Galaxy Watch Active2" loading="lazy" />
+          <img class="card-logo" src="assets/images/UA Samsung Lockup.svg" alt="Under Armour × Samsung" />
+        </div>
         <div class="card-body">
           <span class="card-type">Wearable</span>
           <span class="card-title">Find Your Form with a co-branded smartwatch</span>
@@ -396,12 +403,10 @@
       </a>
 
       <a class="card" href="/ua-baselayer">
-        <img
-          class="card-image"
-          src="assets/images/656df9e2c67f0ce1285daaf6_uabaselayer.image1.png"
-          alt="UA Baselayer Design System"
-          loading="lazy"
-        />
+        <div class="card-media">
+          <img class="card-image" src="assets/images/cs.uabaselayer.heroimage.png" alt="UA Baselayer Design System" loading="lazy" />
+          <!-- Add a UA Baselayer logo SVG to assets/images/ and update src here -->
+        </div>
         <div class="card-body">
           <span class="card-type">Design System</span>
           <span class="card-title">UA Baselayer — Unifying the product with a brand-right design system</span>
@@ -409,12 +414,10 @@
       </a>
 
       <a class="card" href="/mfpinsights">
-        <img
-          class="card-image"
-          src="assets/images/6573358b74893618b5c35337_mfpinsights.image1.png"
-          alt="MyFitnessPal Nutrition Insights"
-          loading="lazy"
-        />
+        <div class="card-media">
+          <img class="card-image" src="assets/images/cs.mfpinsights.image1.png" alt="MyFitnessPal Nutrition Insights" loading="lazy" />
+          <img class="card-logo" src="assets/images/myfitnesspal.svg" alt="MyFitnessPal" />
+        </div>
         <div class="card-body">
           <span class="card-type">Premium Feature</span>
           <span class="card-title">Premium insights to help you hit your goals</span>
@@ -422,7 +425,7 @@
       </a>
 
       <div class="card disabled">
-        <div class="card-image" style="background-color: var(--color-bg-muted);"></div>
+        <div class="card-media"></div>
         <div class="card-body">
           <span class="card-type">Feature</span>
           <span class="card-title">MMR Challenges — Bringing a Global Community Together</span>
@@ -445,14 +448,10 @@
   <script>
     const toggle = document.getElementById('themeToggle');
     const html = document.documentElement;
-
-    // Respect saved preference
     const saved = localStorage.getItem('dct-theme');
     if (saved) html.setAttribute('data-theme', saved);
-
     toggle.addEventListener('click', () => {
-      const current = html.getAttribute('data-theme');
-      const next = current === 'dark' ? 'light' : 'dark';
+      const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
       html.setAttribute('data-theme', next);
       localStorage.setItem('dct-theme', next);
     });
