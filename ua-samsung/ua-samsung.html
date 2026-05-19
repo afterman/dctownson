@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UA × Samsung — dctownson.com</title>
+  <link rel="stylesheet" href="../tokens.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-family-sans);
+      background-color: var(--color-bg-default);
+      color: var(--color-fg-default);
+      min-height: 100vh;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    /* ── Reading progress bar ──────────────────────── */
+    #progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 2px;
+      width: 0%;
+      background: var(--color-accent-default);
+      z-index: 100;
+      transition: width 0.1s linear;
+    }
+
+    /* ── Sticky Nav ────────────────────────────────── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: var(--color-bg-default);
+      border-bottom: 1px solid var(--color-border-default);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: background-color 0.2s ease;
+    }
+
+    .nav-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .nav-back {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--color-fg-muted);
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-medium);
+      transition: color 0.15s ease;
+      flex-shrink: 0;
+    }
+
+    .nav-back:hover { color: var(--color-fg-default); }
+
+    .nav-back svg {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+    }
+
+    .nav-title {
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-medium);
+      color: var(--color-fg-subtle);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    /* ── Theme Toggle ──────────────────────────────── */
+    .theme-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--color-border-default);
+      background: transparent;
+      color: var(--color-fg-muted);
+      cursor: pointer;
+      transition: color 0.15s ease, background-color 0.15s ease;
+    }
+
+    .theme-toggle:hover {
+      color: var(--color-fg-default);
+      background-color: var(--color-bg-subtle);
+    }
+
+    .icon-sun  { display: none; }
+    .icon-moon { display: flex; }
+    [data-theme="light"] .icon-sun  { display: flex; }
+    [data-theme="light"] .icon-moon { display: none; }
+
+    /* ── Hero — full bleed ─────────────────────────── */
+    .hero-bleed {
+      width: 100%;
+      max-height: 520px;
+      overflow: hidden;
+      background: var(--color-bg-muted);
+    }
+
+    .hero-bleed img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* ── Content column ────────────────────────────── */
+    .content {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ── Case study header ─────────────────────────── */
+    .cs-header {
+      padding: 48px 0 40px;
+      border-bottom: 1px solid var(--color-border-default);
+      margin-bottom: 48px;
+    }
+
+    .cs-type {
+      font-family: var(--font-family-mono);
+      font-size: var(--font-size-xs);
+      font-weight: var(--font-weight-medium);
+      letter-spacing: var(--font-tracking-widest);
+      text-transform: uppercase;
+      color: var(--color-fg-subtle);
+      margin-bottom: 12px;
+    }
+
+    .cs-title {
+      font-size: var(--font-size-4xl);
+      font-weight: var(--font-weight-bold);
+      line-height: var(--font-leading-tight);
+      letter-spacing: var(--font-tracking-tight);
+      color: var(--color-fg-default);
+      margin-bottom: 16px;
+      max-width: 720px;
+    }
+
+    .cs-summary {
+      font-size: var(--font-size-lg);
+      font-weight: var(--font-weight-normal);
+      line-height: var(--font-leading-relaxed);
+      color: var(--color-fg-muted);
+      max-width: 640px;
+    }
+
+    /* ── Meta grid ─────────────────────────────────── */
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      padding: 32px;
+      background: var(--color-bg-subtle);
+      border: 1px solid var(--color-border-default);
+      border-radius: var(--radius-xl);
+      margin-bottom: 64px;
+    }
+
+    @media (max-width: 640px) {
+      .meta-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    .meta-label {
+      font-family: var(--font-family-mono);
+      font-size: 10px;
+      font-weight: var(--font-weight-medium);
+      letter-spacing: var(--font-tracking-widest);
+      text-transform: uppercase;
+      color: var(--color-fg-subtle);
+      margin-bottom: 6px;
+    }
+
+    .meta-value {
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-medium);
+      color: var(--color-fg-default);
+      line-height: var(--font-leading-snug);
+    }
+
+    .meta-value.tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    .meta-tag {
+      font-family: var(--font-family-mono);
+      font-size: 10px;
+      font-weight: var(--font-weight-medium);
+      letter-spacing: var(--font-tracking-wide);
+      color: var(--color-fg-muted);
+      padding: 2px 7px;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--color-border-strong);
+      background: var(--color-bg-default);
+      white-space: nowrap;
+    }
+
+    /* ── Body sections ─────────────────────────────── */
+    .cs-body {
+      display: flex;
+      flex-direction: column;
+      gap: 64px;
+      margin-bottom: 80px;
+    }
+
+    .cs-section-label {
+      font-family: var(--font-family-mono);
+      font-size: var(--font-size-xs);
+      font-weight: var(--font-weight-medium);
+      letter-spacing: var(--font-tracking-widest);
+      text-transform: uppercase;
+      color: var(--color-accent-default);
+      margin-bottom: 12px;
+    }
+
+    [data-theme="light"] .cs-section-label {
+      color: var(--color-accent-fg);
+    }
+
+    .cs-section h2 {
+      font-size: var(--font-size-2xl);
+      font-weight: var(--font-weight-bold);
+      line-height: var(--font-leading-tight);
+      letter-spacing: var(--font-tracking-tight);
+      color: var(--color-fg-default);
+      margin-bottom: 16px;
+    }
+
+    .cs-section p {
+      font-size: var(--font-size-base);
+      font-weight: var(--font-weight-normal);
+      line-height: var(--font-leading-relaxed);
+      color: var(--color-fg-muted);
+      max-width: 680px;
+      margin-bottom: 16px;
+    }
+
+    .cs-section p:last-of-type { margin-bottom: 0; }
+
+    /* ── Image grid ────────────────────────────────── */
+    .img-grid {
+      display: grid;
+      gap: 12px;
+      margin-top: 32px;
+    }
+
+    .img-grid.cols-1 { grid-template-columns: 1fr; }
+    .img-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+    .img-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+    @media (max-width: 600px) {
+      .img-grid.cols-2,
+      .img-grid.cols-3 { grid-template-columns: 1fr; }
+    }
+
+    .img-wrap {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--color-border-default);
+      background: var(--color-bg-subtle);
+      cursor: zoom-in;
+    }
+
+    .img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    .img-wrap:hover img {
+      transform: scale(1.02);
+      opacity: 0.92;
+    }
+
+    .img-caption {
+      font-family: var(--font-family-mono);
+      font-size: var(--font-size-xs);
+      color: var(--color-fg-subtle);
+      margin-top: 8px;
+      padding-left: 2px;
+    }
+
+    /* ── Divider ───────────────────────────────────── */
+    .cs-divider {
+      border: none;
+      border-top: 1px solid var(--color-border-default);
+    }
+
+    /* ── Footer ────────────────────────────────────── */
+    footer {
+      padding: 32px 0 48px;
+      border-top: 1px solid var(--color-border-default);
+    }
+
+    .footer-built {
+      font-family: var(--font-family-mono);
+      font-size: var(--font-size-sm);
+      line-height: var(--font-leading-relaxed);
+      color: var(--color-fg-subtle);
+      margin-bottom: 4px;
+    }
+
+    .footer-built a {
+      color: var(--color-fg-muted);
+      border-bottom: 1px solid var(--color-border-default);
+      transition: color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .footer-built a:hover {
+      color: var(--color-fg-default);
+      border-color: var(--color-border-strong);
+    }
+
+    .footer-copy {
+      font-family: var(--font-family-mono);
+      font-size: var(--font-size-sm);
+      color: var(--color-fg-subtle);
+    }
+
+    /* ── Lightbox ──────────────────────────────────── */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: rgba(0, 0, 0, 0.88);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      cursor: zoom-out;
+    }
+
+    .lightbox.active {
+      display: flex;
+      animation: lb-in 0.2s ease;
+    }
+
+    @keyframes lb-in {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    .lightbox-img {
+      max-width: 100%;
+      max-height: 90vh;
+      object-fit: contain;
+      border-radius: var(--radius-lg);
+      box-shadow: 0 32px 80px rgba(0,0,0,0.6);
+      animation: lb-scale 0.2s ease;
+      cursor: default;
+    }
+
+    @keyframes lb-scale {
+      from { transform: scale(0.96); opacity: 0; }
+      to   { transform: scale(1);    opacity: 1; }
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-full);
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+
+    .lightbox-close:hover { background: rgba(255,255,255,0.2); }
+    .lightbox-close svg { width: 16px; height: 16px; }
+
+    .lightbox-caption {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: var(--font-family-mono);
+      font-size: var(--font-size-xs);
+      color: rgba(255,255,255,0.5);
+      letter-spacing: var(--font-tracking-wide);
+      white-space: nowrap;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="progress-bar"></div>
+
+  <!-- Nav -->
+  <nav>
+    <div class="nav-inner">
+      <a class="nav-back" href="/">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 12H5M12 5l-7 7 7 7"/>
+        </svg>
+        Work
+      </a>
+      <span class="nav-title">UA × Samsung Galaxy Watch Active2</span>
+      <div class="nav-right">
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+          <svg class="icon-sun" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="4"/>
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+          </svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <div class="hero-bleed">
+    <img src="../assets/images/cs.uasamsung.mmr.heroimage.png" alt="UA Samsung Galaxy Watch Active2 hero shot" />
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+
+    <header class="cs-header">
+      <p class="cs-type">Wearable · Coaching</p>
+      <h1 class="cs-title">Find Your Form with a co-branded smartwatch</h1>
+      <p class="cs-summary">Sync Under Armour's shoes with Samsung's watch to create a connected coaching experience based on real-time data.</p>
+    </header>
+
+    <div class="meta-grid">
+      <div class="meta-item">
+        <p class="meta-label">Role</p>
+        <p class="meta-value">Lead UX/UI Designer</p>
+      </div>
+      <div class="meta-item">
+        <p class="meta-label">Timeframe</p>
+        <p class="meta-value">2018 – 2020</p>
+      </div>
+      <div class="meta-item">
+        <p class="meta-label">Responsibilities</p>
+        <p class="meta-value">On-watch UX/UI, device sync, real-time coaching</p>
+      </div>
+      <div class="meta-item">
+        <p class="meta-label">Keywords</p>
+        <div class="meta-value tags">
+          <span class="meta-tag">Wearable</span>
+          <span class="meta-tag">Coaching</span>
+          <span class="meta-tag">Integrations</span>
+          <span class="meta-tag">Design System</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="cs-body">
+
+      <!-- Section 1 -->
+      <section class="cs-section">
+        <p class="cs-section-label">Background</p>
+        <h2>Building on foundations</h2>
+        <p>Our work with Samsung began in 2014 when Samsung released a line of fitness-tracking wearable devices, wanting to counter the Apple and Nike partnership dominating the fitness tracking space at the time. We released wearable versions of our apps UA Record, MyFitnessPal, Endomondo and MapMyRun on their flagship devices, as well as some custom watchfaces.</p>
+        <p>I took over as lead designer in 2018, implementing improvements to the fitness tracking experience in MapMyRun and helping finalize new custom watchfaces. It was around this time that Under Armour's connected footwear and Form Coaching feature were starting to show promise in attracting and retaining users, so we decided to overhaul the MapMyRun app on Samsung's family of wearable devices — with a focus on connected running shoes and coaching features.</p>
+      </section>
+
+      <hr class="cs-divider" />
+
+      <!-- Section 2 -->
+      <section class="cs-section">
+        <p class="cs-section-label">Vision</p>
+        <h2>Aiming for the ultimate connected coaching experience</h2>
+        <p>MapMyRun on the watch was meant to be experienced while running — and sometimes while running fast. Our goal was to get you connected and going, focusing on the small interactions and indicators that let you know you were good-to-go. We wanted the watch to auto-detect your shoes, and allow you to quickly choose your specific activity, offering form and fitness coaching on your first run. Launch the app, press START, and go.</p>
+        <p>We wanted continuous scanning so your shoes were always in-sync, data-smoothing so we didn't over-coach on every little bump in the road, and easy syncing so you never lost sight of your goals. The only way to make it work so seamlessly was to build our own watch together. What started as a software project quickly scaled up to a co-developed, co-branded Galaxy Watch Active2 Under Armour Edition — announced at Samsung's Unpacked developer conference in August of 2019, and released in October of the same year.</p>
+        <div class="img-grid cols-1">
+          <div>
+            <div class="img-wrap" data-caption="Samsung Unpacked — UA Form Coaching debut on the Galaxy Watch Active2">
+              <img src="../assets/images/cs.uasamsung.mmr.cnet.png" alt="Samsung Unpacked conference stage showing UA MapMyRun form coaching" />
+            </div>
+            <p class="img-caption">Samsung Unpacked — UA Form Coaching debut on the Galaxy Watch Active2 · <a href="https://www.cnet.com/videos/samsung-debuts-under-armour-branded-galaxy-watch-active-2/" target="_blank" rel="noopener" style="border-bottom: 1px solid var(--color-border-default);">via CNET</a></p>
+          </div>
+        </div>
+      </section>
+
+      <hr class="cs-divider" />
+
+      <!-- Section 3 -->
+      <section class="cs-section">
+        <p class="cs-section-label">Hardware + Software</p>
+        <h2>Hardware 🤝 Software</h2>
+        <p>We worked very closely with Samsung's device engineers to develop the data sensors on the Galaxy Watch Active2. Engineers and product managers from Korea would often travel to our Austin, TX facility to work with our device engineers and exercise scientists to fine-tune the device's heart rate, GPS and accelerometer. This was an amazing opportunity to optimize our data sampling and coaching experience, giving us the ability to provide incredibly responsive tips and updates while running.</p>
+        <p>Multiple testing sessions resulted in the most accurate consumer-level fitness tracking device available at the time. As device and engineering teams worked on the hardware integrations, I kicked off visioning for the MapMyRun experience — including the connected footwear sync and form-coaching feature.</p>
+        <div class="img-grid cols-2">
+          <div>
+            <div class="img-wrap" data-caption="Early brainstorming — getting the coaching flow mapped out">
+              <img src="../assets/images/cs.uasamsung.mmr.formcoachinguxwhiteboard.png" alt="Whiteboard session mapping the coaching flow" />
+            </div>
+            <p class="img-caption">Early brainstorming — getting the coaching flow mapped out</p>
+          </div>
+          <div>
+            <div class="img-wrap" data-caption="Shoe connection dropdown — matching the pair on your feet">
+              <img src="../assets/images/cs.uasamsung.mmr.formcoaching1.png" alt="Shoe connection dropdown UI" />
+            </div>
+            <p class="img-caption">Shoe connection dropdown — matching the pair on your feet</p>
+          </div>
+        </div>
+      </section>
+
+      <hr class="cs-divider" />
+
+      <!-- Section 4 -->
+      <section class="cs-section">
+        <p class="cs-section-label">Design System</p>
+        <h2>Systems-led design</h2>
+        <p>I began building out our own Samsung UI Kit for the MapMyRun app on the Galaxy Watch, hoping to leverage Samsung's OneUI design system for the overall look and feel — only introducing custom elements when necessary. Using the inherent system UI for the basics meant users weren't forced to learn new interactions and UI elements while mid-run. Our buttons were the same size, shape and position as the system OS buttons; our transitions followed the system UX, doing exactly what you expected when you interacted with them.</p>
+        <p>This allowed us to build out basic versions of the entire app quickly, freeing up time to focus on the unique moments where Under Armour and MapMyRun could shine.</p>
+        <div class="img-grid cols-1">
+          <div>
+            <div class="img-wrap" data-caption="UI Kit for MapMyRun on the Samsung Galaxy Watch">
+              <img src="../assets/images/cs.uasamsung.mmr.uikit.png" alt="MapMyRun Samsung Galaxy Watch UI Kit" />
+            </div>
+            <p class="img-caption">UI Kit for MapMyRun on the Samsung Galaxy Watch</p>
+          </div>
+        </div>
+      </section>
+
+      <hr class="cs-divider" />
+
+      <!-- Section 5 -->
+      <section class="cs-section">
+        <p class="cs-section-label">Documentation</p>
+        <h2>Documenting the experience for stakeholder alignment</h2>
+        <p>We packed a lot of features into a small screen, and coherently explaining them to stakeholders was paramount. I created flow documents for all use cases, highlighting the visual, audio and haptic experiences in easy-to-read documents. This helped everyone from engineering to marketing to customer happiness understand the intent of a given feature, keeping us all on the same page throughout development.</p>
+        <p>Onboarding users was a particularly tricky process — two physical products needed to connect across multiple software products to communicate with each other. There were several pain points and failure potentials that could lead to an overall dissatisfaction with the experience, resulting in low ratings and returned products. This was an absolute non-starter. Using detailed documentation, we were able to identify opportunities to smooth out the experience and provide fallbacks when things did go awry.</p>
+        <div class="img-grid cols-2">
+          <div>
+            <div class="img-wrap" data-caption="Detailed user flow document — setup and onboarding">
+              <img src="../assets/images/cs.uasamsung.mmr.setupux.png" alt="User flow document showing setup and onboarding" />
+            </div>
+            <p class="img-caption">One of many detailed user flow documents</p>
+          </div>
+          <div>
+            <div class="img-wrap" data-caption="In-workout experience — detailed reference screens">
+              <img src="../assets/images/cs.uasamsung.mmr.inworkouttimingux.png" alt="Audio feedback experience timing diagram" />
+            </div>
+            <p class="img-caption">Audio feedback — timing of coaching alerts on a typical 5mi run</p>
+          </div>
+        </div>
+        <div class="img-grid cols-2" style="margin-top: 12px;">
+          <div>
+            <div class="img-wrap" data-caption="Detailed reference doc showing in-workout experience screens">
+              <img src="../assets/images/cs.uasamsung.mmr.inworkoutux.png" alt="In-workout experience reference screens" />
+            </div>
+            <p class="img-caption">Detailed reference — in-workout experience screens</p>
+          </div>
+          <div>
+            <div class="img-wrap" data-caption="Stakeholder presentation deck">
+              <img src="../assets/images/cs.uasamsung.mmr.presentation1.png" alt="Stakeholder presentation deck" />
+            </div>
+            <p class="img-caption">Many decks were created and presented to stakeholders</p>
+          </div>
+        </div>
+      </section>
+
+      <hr class="cs-divider" />
+
+      <!-- Section 6 -->
+      <section class="cs-section">
+        <p class="cs-section-label">Experience</p>
+        <h2>Keeping the runner motivated</h2>
+        <p>One of our primary principles was to always celebrate the athlete, no matter their goal or performance. You could be aiming for your first mile or your fastest pace, and we'd cheer you on the entire time just for trying. The Progress-to-Goal interface used a hi-viz green gauge and big bold stats, keeping you motivated and informed throughout your run.</p>
+        <p>The Pace and Form Coaching gauge only alerted you when you fell outside a generously wide range from your stated goal — using gentle haptics, minimal negative feedback, and incredibly useful coaching tips to get you back on track. Hitting your distance or duration goal triggered a brief celebratory moment, then went right back to tracking and coaching, allowing you to keep going if you felt the motivation to.</p>
+        <div class="img-grid cols-3">
+          <div>
+            <div class="img-wrap" data-caption="Start screen — launch and go">
+              <img src="../assets/images/cs.uasamsung.mmr.startscreen.png" alt="Watch start screen" />
+            </div>
+            <p class="img-caption">Start screen</p>
+          </div>
+          <div>
+            <div class="img-wrap" data-caption="In-workout — progress to goal view">
+              <img src="../assets/images/cs.uasamsung.mmr.onwrist.png" alt="On-wrist in-workout experience" />
+            </div>
+            <p class="img-caption">In-workout — on wrist</p>
+          </div>
+          <div>
+            <div class="img-wrap" data-caption="Customize — pick your stats and screen order">
+              <img src="../assets/images/cs.uasamsung.mmr.customize.png" alt="Customize workout screens" />
+            </div>
+            <p class="img-caption">Customize workout screens</p>
+          </div>
+        </div>
+        <div class="img-grid cols-1" style="margin-top: 12px;">
+          <div>
+            <div class="img-wrap" data-caption="Training Plans — pre-set workout reminders on the watch">
+              <img src="../assets/images/cs.uasamsung.mmr.trainingplans.png" alt="Training plans feature" />
+            </div>
+            <p class="img-caption">Training Plans — pre-set workout reminders synced to your watch</p>
+          </div>
+        </div>
+      </section>
+
+      <hr class="cs-divider" />
+
+      <!-- Section 7 -->
+      <section class="cs-section">
+        <p class="cs-section-label">Marketing</p>
+        <h2>Marketing the watch</h2>
+        <p>We partnered with noted agency We Are Royale to produce promotional videos and marketing stills for the watch, including the announcement reel shown at the developer conference. I contributed to the art direction, providing UX and UI guidance for on-wrist mockups.</p>
+        <div class="img-grid cols-2">
+          <div>
+            <div class="img-wrap" data-caption="Marketing stills — device orientation for UI overlays">
+              <img src="../assets/images/cs.uasamsung.mmr.marketing.png" alt="Marketing still showing device orientation" />
+            </div>
+            <p class="img-caption">Marketing stills — device orientation for UI overlays</p>
+          </div>
+          <div>
+            <div class="img-wrap" data-caption="Marketing still — Form Coaching visual concept by We Are Royale">
+              <img src="../assets/images/cs.uasamsung.mmr.marketing2.png" alt="Form Coaching marketing visual" />
+            </div>
+            <p class="img-caption">Form Coaching visual concept — We Are Royale</p>
+          </div>
+        </div>
+      </section>
+
+      <hr class="cs-divider" />
+
+      <!-- Section 8 -->
+      <section class="cs-section">
+        <p class="cs-section-label">Outcome</p>
+        <h2>Final product</h2>
+        <p>The Samsung Galaxy Watch Active2 Under Armour Edition was released in October of 2019, alongside a collection of upgraded wearables by Samsung. In hindsight, releasing competing products simultaneously was a miscalculation — sales, while steady, fell short of expectations despite a high-quality marketing push.</p>
+        <p>Our Form Coaching feature, on the other hand, was very successful. We quickly ported it onto the mobile app and eventually onto Garmin devices as an optional third-party data screen.</p>
+        <div class="img-grid cols-1">
+          <div>
+            <div class="img-wrap" data-caption="The final product — Samsung Galaxy Watch Active2 Under Armour Edition">
+              <img src="../assets/images/cs.uasamsung.mmr.heroshot.faded.png" alt="Samsung Galaxy Watch Active2 Under Armour Edition" />
+            </div>
+            <p class="img-caption">Samsung Galaxy Watch Active2 Under Armour Edition — October 2019</p>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <footer>
+      <p class="footer-built">
+        Built with <a href="https://fonts.google.com/specimen/Geist" target="_blank" rel="noopener">Geist</a> and <a href="https://dct.design" target="_blank" rel="noopener">dct tokens</a>.
+      </p>
+      <p class="footer-copy">© 2026 Daniel C Townson</p>
+    </footer>
+
+  </div>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox-close" id="lightbox-close" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M18 6L6 18M6 6l12 12"/>
+      </svg>
+    </button>
+    <img class="lightbox-img" id="lightbox-img" src="" alt="" />
+    <p class="lightbox-caption" id="lightbox-caption"></p>
+  </div>
+
+  <script>
+    // Theme toggle
+    const toggle = document.getElementById('themeToggle');
+    const html = document.documentElement;
+    const saved = localStorage.getItem('dct-theme');
+    if (saved) html.setAttribute('data-theme', saved);
+    toggle.addEventListener('click', () => {
+      const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('dct-theme', next);
+    });
+
+    // Reading progress
+    const bar = document.getElementById('progress-bar');
+    window.addEventListener('scroll', () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      bar.style.width = (docHeight > 0 ? (scrollTop / docHeight) * 100 : 0) + '%';
+    });
+
+    // Lightbox
+    const lightbox = document.getElementById('lightbox');
+    const lbImg    = document.getElementById('lightbox-img');
+    const lbCap    = document.getElementById('lightbox-caption');
+    const lbClose  = document.getElementById('lightbox-close');
+
+    function openLightbox(src, alt, caption) {
+      lbImg.src = src;
+      lbImg.alt = alt || '';
+      lbCap.textContent = caption || '';
+      lightbox.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      lightbox.classList.remove('active');
+      document.body.style.overflow = '';
+      setTimeout(() => { lbImg.src = ''; }, 200);
+    }
+
+    document.querySelectorAll('.img-wrap').forEach(wrap => {
+      wrap.addEventListener('click', () => {
+        const img = wrap.querySelector('img');
+        if (img) openLightbox(img.src, img.alt, wrap.dataset.caption);
+      });
+    });
+
+    lbClose.addEventListener('click', closeLightbox);
+    lightbox.addEventListener('click', e => {
+      if (e.target === lightbox) closeLightbox();
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeLightbox();
+    });
+  </script>
+</body>
+</html>
