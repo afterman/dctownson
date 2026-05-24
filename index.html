@@ -6,7 +6,7 @@
   <title>dctownson.com</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Inconsolata:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Inconsolata:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="tokens.css" />
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -17,11 +17,7 @@
     <nav class="anim anim-1">
       <div class="nav-left">
         <a href="/" data-tip="Home">
-          <img
-            class="nav-logo"
-            src="assets/images/DCT-Selfie-BW.png"
-            alt="Daniel Townson"
-          />
+          <img class="nav-logo" src="assets/images/DCT-Selfie-BW.png" alt="Daniel Townson" />
         </a>
         <div class="nav-divider"></div>
         <div class="nav-links">
@@ -37,9 +33,11 @@
           <a href="mailto:dctownson@gmail.com?subject=Hi%20Daniel!" data-tip="Email Me">
             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M19.7975 4H3.79749C2.69749 4 1.80749 4.9 1.80749 6L1.79749 18C1.79749 19.1 2.69749 20 3.79749 20H19.7975C20.8975 20 21.7975 19.1 21.7975 18V6C21.7975 4.9 20.8975 4 19.7975 4ZM19.7975 18H3.79749V8L11.7975 13L19.7975 8V18ZM11.7975 11L3.79749 6H19.7975L11.7975 11Z" fill="currentColor"/></svg>
           </a>
+          <a href="/resume" data-tip="Résumé">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 2V8H20" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 13H8" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 17H8" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 9H9H8" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
         </div>
       </div>
-
       <div class="nav-right">
         <button class="theme-toggle" id="themeToggle" data-tip="Toggle theme">
           <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
@@ -56,7 +54,7 @@
     <!-- Hero -->
     <section class="hero">
       <h1 class="anim anim-2">Hello, I'm Daniel.</h1>
-      <p class="anim anim-3">I design digital experiences for products that help everyday people live happier, healthier lives.</p>
+      <p class="anim anim-3">I design digital experiences for health and medical products that help everyday people live happier, healthier lives.</p>
       <div class="hero-tags anim anim-4">
         <span class="tag">Design Systems</span>
         <span class="tag">Wearables</span>
@@ -68,43 +66,48 @@
     <p class="section-label anim anim-4">Work</p>
     <div class="card-grid anim anim-5">
 
+      <!-- UA Samsung -->
       <a class="card" href="/ua-samsung">
         <div class="card-media">
           <img class="card-image" src="assets/images/cs.uasamsung.mmr.heroimage.png" alt="UA Samsung Galaxy Watch Active2" loading="lazy" />
-          <img class="card-logo" src="assets/images/UA Samsung Lockup.svg" alt="Under Armour × Samsung" />
         </div>
         <div class="card-body">
           <span class="card-type">Wearable</span>
-          <span class="card-title">Find Your Form with a co-branded smartwatch</span>
+          <img class="card-logo" src="assets/images/UA Samsung Lockup.svg" alt="Under Armour × Samsung" />
+          <span class="card-desc">Find Your Form with a co-branded smartwatch</span>
         </div>
       </a>
 
+      <!-- UA Baselayer -->
       <a class="card" href="/ua-baselayer">
         <div class="card-media">
-          <img class="card-image" src="assets/images/cs.uabaselayer.heroimage.png" alt="UA Baselayer Design System" loading="lazy" />
+          <img class="card-image" src="assets/images/card.hero.uabaselayer.png" alt="UA Baselayer Design System" loading="lazy" />
         </div>
         <div class="card-body">
           <span class="card-type">Design System</span>
-          <span class="card-title">UA Baselayer — Unifying the product with a brand-right design system</span>
+          <span class="card-title">UA Baselayer</span>
+          <span class="card-desc">Unifying the product with a brand-right design system</span>
         </div>
       </a>
 
+      <!-- MFP Insights -->
       <a class="card" href="/mfpinsights">
         <div class="card-media">
-          <img class="card-image" src="assets/images/cs.mfpinsights.image1.png" alt="MyFitnessPal Nutrition Insights" loading="lazy" />
-          <img class="card-logo" src="assets/images/myfitnesspal.svg" alt="MyFitnessPal" />
+          <img class="card-image" src="assets/images/card.hero.mfpnutritioninisghts.png" alt="MyFitnessPal Nutrition Insights" loading="lazy" />
         </div>
         <div class="card-body">
           <span class="card-type">Premium Feature</span>
-          <span class="card-title">Premium insights to help you hit your goals</span>
+          <img class="card-logo" src="assets/images/myfitnesspal.svg" alt="MyFitnessPal" />
+          <span class="card-desc">Premium insights to help you hit your goals</span>
         </div>
       </a>
 
+      <!-- Olysense DS — coming soon -->
       <div class="card disabled">
         <div class="card-media"></div>
         <div class="card-body">
-          <span class="card-type">Feature</span>
-          <span class="card-title">MMR Challenges — Bringing a Global Community Together</span>
+          <span class="card-type">Design System</span>
+          <span class="card-title">Olysense DS</span>
           <span class="card-desc">Coming soon</span>
         </div>
       </div>
@@ -120,7 +123,27 @@
     </footer>
 
   </div>
+  <script>
+   let mouseX = 0, mouseY = 0;
 
+window.addEventListener('mousemove', e => {
+  mouseX = e.clientX;
+  mouseY = e.clientY;
+}, { passive: true });
+
+window.addEventListener('scroll', () => {
+  requestAnimationFrame(() => {
+    document.querySelectorAll('.card').forEach(card => {
+      const rect = card.getBoundingClientRect();
+      const over = mouseX >= rect.left && mouseX <= rect.right &&
+                   mouseY >= rect.top  && mouseY <= rect.bottom;
+      card.classList.toggle('is-hovered', over);
+    });
+  });
+}, { passive: true });
+
+  </script>
+  
   <script>
     const toggle = document.getElementById('themeToggle');
     const html = document.documentElement;
