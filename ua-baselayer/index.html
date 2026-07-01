@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UA Baselayer — dctownson.com</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Inconsolata:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../tokens.css" />
+  <link rel="stylesheet" href="../style.css" />
+  <style>
+    /* ── Reading progress bar ──────────────────────── */
+    #progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 2px;
+      width: 0%;
+      background: var(--color-accent-default);
+      z-index: 100;
+      transition: width 0.1s linear;
+    }
+
+    /* ── Sticky Nav ────────────────────────────────── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: var(--color-bg-default);
+      border-bottom: 1px solid var(--color-border-default);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: background-color 0.2s ease;
+      margin-bottom: 0;
+      padding: 0;
+    }
+
+    .nav-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .nav-back {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--color-fg-muted);
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-medium);
+      transition: color 0.15s ease;
+      flex-shrink: 0;
+    }
+
+    .nav-back:hover { color: var(--color-fg-default); }
+    .nav-back svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+    .nav-title {
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-medium);
+      color: var(--color-fg-subtle);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    /* ── Hero — full bleed ─────────────────────────── */
+    .hero-bleed {
+      width: 100%;
+      max-height: 520px;
+      overflow: hidden;
+      background: var(--color-bg-muted);
+    }
+
+    .hero-bleed img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* ── Content column ────────────────────────────── */
+    .content {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ── Case study header ─────────────────────────── */
+    .cs-header {
+      padding: 48px 0 40px;
+      border-bottom: 1px solid var(--color-border-default);
+      margin-bottom: 48px;
+    }
+
+    .cs-type {
+      font-family: var(--font-family-mono);
+      font-size: var(--font-size-xs);
+      font-weight: var(--font-weight-medium);
+      letter-spacing: var(--font-tracking-widest);
+      text-transform: uppercase;
+      color: var(--color-fg-subtle);
+      margin-bottom: 12px;
+    }
+
+    .cs-title {
+      font-size: var(--font-size-4xl);
+      font-weight: var(--font-weight-bold);
+      line-height: var(--font-leading-tight);
+      letter-spacing: var(--font-tracking-tight);
+      color: var(--color-fg-default);
+      margin-bottom: 16px;
+      max-width: 720px;
+    }
+
+    .cs-summary {
+      font-size: var(--font-size-lg);
+      font-weight: var(--font-weight-normal);
+      line-height: var(--font-leading-relaxed);
+      color: var(--color-fg-muted);
+      max-width: 640px;
+    }
+
+    /* ── Meta grid ─────────────────────────────────── */
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      padding: 32px;
+      background: var(--color-bg-subtle);
+      border: 1px solid var(--color-border-default);
+      border-radius: var(--radius-xl);
+      margin-bottom: 64px;
+    }
+
+    @media (max-width: 640px) {
+      .meta-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    .meta-label {
+      font-family: var(--font-family-mono);
+      font-size: 10px;
+      font-weight: var(--font-weight-medium);
+      letter-spacing: var(--font-tracking-widest);
+      text-transform: uppercase;
+      color: var(--color-fg-subtle);
+      margin-bottom: 6px;
+    }
+
+    .meta-value {
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-medium);
+      color: var(--color-fg-default);
+      line-height: var(--font-leading-snug);
+    }
+
+    .meta-value.tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    .meta-tag {
+      font-family: var(--font-family-mono);
+      font-size: 10px;
+      font-weight: var(--font-weight-medium);
+      letter-spacing: var(--font-tracking-wide);
+      color: var(--color-fg-muted);
+      padding: 2px 7px;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--color-border-strong);
+      background: var(--color-bg-default);
+      white-space: nowrap;
+    }
+
+    /* ── Body sections ─────────────────────────────── */
+    .cs-body {
+      display: flex;
+      flex-direction: column;
+      gap: 64px;
+      margin-bottom: 80px;
+    }
+
+    .cs-section-label {
+      font-family: var(--font-family-mono);
+      font-size: var(--font-size-xs);
+      font-weight: var(--font-weight-medium);
+      letter-spacing: var(--font-tracking-widest);
+      text-transform: uppercase;
+      color: var(--color-accent-default);
+      margin-bottom: 12px;
+    }
+
+    [data-theme="light"] .cs-section-label {
+      color: var(--color-accent-fg);
+    }
+
+    .cs-section h2 {
+      font-size: var(--font-size-2xl);
+      font-weight: var(--font-weight-bold);
+      line-height: var(--font-leading-tight);
+      letter-spacing: var(--font-tracking-tight);
+      color: var(--color-fg-default);
+      margin-bottom: 16px;
+    }
+
+    .cs-section p {
+      font-size: var(--font-size-base);
+      font-weight: var(--font-weight-normal);
+      line-height: var(--font-leading-relaxed);
+      color: var(--color-fg-muted);
+      max-width: 680px;
+      margin-bottom: 16px;
+    }
+
+    .cs-section p:last-of-type { margin-bottom: 0; }
+
+    /* ── Image grid ────────────────────────────────── */
+    .img-grid {
+      display: grid;
+      gap: 12px;
+      margin-top: 32px;
+    }
+
+    .img-grid.cols-1 { grid-template-columns: 1fr; }
+    .img-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+    .img-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+    @media (max-width: 600px) {
+      .img-grid.cols-2,
+      .img-grid.cols-3 { grid-template-columns: 1fr; }
+    }
+
+    .img-wrap {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--color-border-default);
+      background: var(--color-bg-subtle);
+      cursor: zoom-in;
+    }
+
+    .img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    .img-wrap:hover img {
+      transform: scale(1.02);
+      opacity: 0.92;
+    }
+
+    .img-caption {
+      font-family: var(--font-family-mono);
+      font-size: var(--font-size-xs);
+      color: var(--color-fg-subtle);
+      margin-top: 8px;
+      padding-left: 2px;
+    }
+
+    /* ── Divider ───────────────────────────────────── */
+    .cs-divider {
+      border: none;
+      border-top: 1px solid var(--color-border-default);
+    }
+
+    /* ── Lightbox ──────────────────────────────────── */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: rgba(0, 0, 0, 0.88);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      cursor: zoom-out;
+    }
+
+    .lightbox.active {
+      display: flex;
+      animation: lb-in 0.2s ease;
+    }
+
+    @keyframes lb-in {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    .lightbox-img {
+      max-width: 100%;
+      max-height: 90vh;
+      object-fit: contain;
+      border-radius: var(--radius-lg);
+      box-shadow: 0 32px 80px rgba(0,0,0,0.6);
+      animation: lb-scale 0.2s ease;
+      cursor: default;
+    }
+
+    @keyframes lb-scale {
+      from { transform: scale(0.96); opacity: 0; }
+      to   { transform: scale(1);    opacity: 1; }
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-full);
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+
+    .lightbox-close:hover { background: rgba(255,255,255,0.2); }
+    .lightbox-close svg { width: 16px; height: 16px; }
+
+    .lightbox-caption {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: var(--font-family-mono);
+      font-size: var(--font-size-xs);
+      color: rgba(255,255,255,0.5);
+      letter-spacing: var(--font-tracking-wide);
+      white-space: nowrap;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="progress-bar"></div>
+
+  <!-- Nav -->
+  <nav>
+    <div class="nav-inner">
+      <a class="nav-back" href="/">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 12H5M12 5l-7 7 7 7"/>
+        </svg>
+        Work
+      </a>
+      <span class="nav-title">UA Baselayer Design System</span>
+      <div class="nav-right">
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+          <svg class="icon-sun" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="4"/>
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+          </svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <div class="hero-bleed">
+    <img src="../assets/images/cs.uabaselayer.heroimage.png" alt="UA Baselayer Design System hero" />
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+
+    <header class="cs-header">
+      <p class="cs-type">Design System</p>
+      <h1 class="cs-title">UA Baselayer — Unifying the product with a brand-right design system</h1>
+      <p class="cs-summary">Establish a scalable design system that brings multiple Under Armour digital products under one brand — giving the Focused Performer a true performance experience.</p>
+    </header>
+
+    <div class="meta-grid">
+      <div class="meta-item">
+        <p class="meta-label">Role</p>
+        <p class="meta-value">Lead Designer</p>
+      </div>
+      <div class="meta-item">
+        <p class="meta-label">Timeframe</p>
+        <p class="meta-value">2021 – 2023</p>
+      </div>
+      <div class="meta-item">
+        <p class="meta-label">Responsibilities</p>
+        <p class="meta-value">Co-lead design system across web, mobile, and wearables</p>
+      </div>
+      <div class="meta-item">
+        <p class="meta-label">Keywords</p>
+        <div class="meta-value tags">
+          <span class="meta-tag">Design System</span>
+          <span class="meta-tag">Tokens</span>
+          <span class="meta-tag">Components</span>
+          <span class="meta-tag">Brand</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="cs-body">
+
+      <!-- Section 1 -->
+      <section class="cs-section">
+        <p class="cs-section-label">Background</p>
+        <h2>Starting with 10+ years of design debt</h2>
+        <p>After 10+ years on the market, MapMyRun was barely holding itself together with a decaying tech stack and a myriad of mismatched app experiences — none of which really aligned with the Under Armour brand. Multiple surveys over the years made it clear there was a distinct disconnect between the fitness-tracking apps we owned and Under Armour as a whole.</p>
+        <p>Engineering teams started planning to completely overhaul the tech stack — ripping out old unused code, rebuilding databases from the ground up, and optimizing the overall responsiveness of the app. Our design team took this opportunity to give the app a complete visual refresh and increase brand affinity.</p>
+        <div class="img-grid cols-1">
+          <div>
+            <div class="img-wrap" data-caption="Visual refresh direction — visioning for UA MapMyRun">
+              <img src="../assets/images/cs.uabaselayer.visualrefresh1.png" alt="Visual refresh direction for UA MapMyRun" />
+            </div>
+            <p class="img-caption">Setting the direction — Visual Refresh</p>
+          </div>
+        </div>
+      </section>
+
+      <hr class="cs-divider" />
+
+      <!-- Section 2 -->
+      <section class="cs-section">
+        <p class="cs-section-label">Vision</p>
+        <h2>Visioning for UA MapMyRun</h2>
+        <p>Our goal was to envision what a true Under Armour running app could feel like, elevating the existing product features into a true performance and coaching service. Our 3–5 year plan was to shift MapMyRun from a casual consumer-level run tracking app into an essential tool for our core audience — the "Focused Performer". Tracking your activity was only a small part of the experience; the true value came in the analysis, insights and coaching we offered.</p>
+        <p>After months of iterating and testing new visual and UX directions, we landed on some key themes, leveraging Under Armour's well-established brand guidelines into a comprehensive visual language for digital products. We decided it was time for a true Design System — one that would embody the Under Armour brand through the interface and scale across multiple digital products, from web to wearables. We dusted off an old attempt at a styleguide called Baselayer and pivoted it into a foundational design system.</p>
+      </section>
+
+      <hr class="cs-divider" />
+
+      <!-- Section 3 -->
+      <section class="cs-section">
+        <p class="cs-section-label">Principles</p>
+        <h2>Let's establish some principles</h2>
+        <p>Principles keep a project focused, aligned and on-track. We established some basic ones right away and adapted them as we went:</p>
+        <p><strong style="color: var(--color-fg-default);">Start with system components.</strong> Material Design and HIG as the basis for surface-level components and interactions. Introduce custom components at brand-specific touchpoints only.</p>
+        <p><strong style="color: var(--color-fg-default);">Keep the Focused Performer at the forefront.</strong> Everything we did had to, at the very least, not disrupt the progress any of our users had made in their fitness journey. We couldn't overhaul a critical training feature in the middle of a runner's couch-to-5k efforts. Our visual changes had to enhance them — elevating the truly important parts through larger, bolder, more prominent elements like training stats and graphs.</p>
+        <p><strong style="color: var(--color-fg-default);">Introduce branded moments at key points.</strong> We had to be a conduit into the brand team to truly position MapMyRun as an extension of the brand — carefully crafting or selecting imagery and styles that connected the two entities. We created branded components that supported campaigns, so the aesthetic you saw in the app matched what you encountered in the stores.</p>
+      </section>
+
+      <hr class="cs-divider" />
+
+      <!-- Section 4 -->
+      <section class="cs-section">
+        <p class="cs-section-label">Typography</p>
+        <h2>Tidying up existing font styles</h2>
+        <p>Under Armour's official font is Neue Plak UA — a custom version of Neue Plak. We were already using a variation fine-tuned to our mobile app interface, but we kept seeing visual discrepancies. I dug in with engineers to identify the source of the issues and fix them once and for all.</p>
+        <div class="img-grid cols-2">
+          <div>
+            <div class="img-wrap" data-caption="Font styles for MapMyRun">
+              <img src="../assets/images/cs.uabaselayer.fonts1.png" alt="Font styles for MapMyRun" />
+            </div>
+            <p class="img-caption">Font styles for MapMyRun</p>
+          </div>
+          <div>
+            <div class="img-wrap" data-caption="Fixing font discrepancies in the code">
+              <img src="../assets/images/cs.uabaselayer.fonts2.png" alt="Fixing discrepancies in the code" />
+            </div>
+            <p class="img-caption">Fixing discrepancies in the code</p>
+          </div>
+        </div>
+      </section>
+
+      <hr class="cs-divider" />
+
+      <!-- Section 5 -->
+      <section class="cs-section">
+        <p class="cs-section-label">Color</p>
+        <h2>Consolidating the colors</h2>
+        <p>Possibly our biggest change was deciding to ditch the MapMyRun Blue. It wasn't easy to say goodbye to a color strategy that played a big role in the overall earlier success of the MapMyFitness suite of apps — but it was clearly a necessity to achieve our goal of bringing the apps into the Under Armour brand.</p>
+        <p>Under Armour's brand palette was primarily shades of grey with a solid black and white at either end. The only interesting brand color we had to work with was red — and given the negative connotations of a red UI element, we had to be incredibly intentional about when and where we used it. I began reorganizing our color palettes into intentional uses, establishing a new UA Digital family of colors that would eventually complement and support the primary brand palette.</p>
+        <div class="img-grid cols-1">
+          <div>
+            <div class="img-wrap" data-caption="Separating and organizing colors by application">
+              <img src="../assets/images/cs.uabaselayer.colors1.png" alt="Color organization by application" />
+            </div>
+            <p class="img-caption">Separating and organizing colors by application — a WIP that never got to its final stages</p>
+          </div>
+        </div>
+      </section>
+
+      <hr class="cs-divider" />
+
+      <!-- Section 6 -->
+      <section class="cs-section">
+        <p class="cs-section-label">Components</p>
+        <h2>Building the component library</h2>
+        <p>Following our principle of adhering to system-level basics, we built out components that felt natural in their given platform but also clearly an Under Armour asset — using brand fonts and colors, and leveraging brand imagery when possible. This made a clear and distinct connection between the app and all the other campaign materials Under Armour would produce.</p>
+        <div class="img-grid cols-1">
+          <div>
+            <div class="img-wrap" data-caption="Snapshot of the Baselayer components">
+              <img src="../assets/images/cs.uabaselayer.components1.png" alt="Baselayer component library snapshot" />
+            </div>
+            <p class="img-caption">Snapshot of the Baselayer component library</p>
+          </div>
+        </div>
+      </section>
+
+      <hr class="cs-divider" />
+
+      <!-- Section 7 -->
+      <section class="cs-section">
+        <p class="cs-section-label">File Resources</p>
+        <h2>Our design system had its own design system</h2>
+        <p>Including helpful resources that kept our files clean, organized and consistent. I created a set of spec elements for VQA purposes — useful file markup components, all auto-layout'd, along with detailed layout and behaviour specs.</p>
+        <div class="img-grid cols-2">
+          <div>
+            <div class="img-wrap" data-caption="Useful file markup components, all auto-layout'd">
+              <img src="../assets/images/cs.uabaselayer.resources1.png" alt="File markup components" />
+            </div>
+            <p class="img-caption">Useful file markup components, all auto-layout'd</p>
+          </div>
+          <div>
+            <div class="img-wrap" data-caption="Detailed layout and behaviour specs">
+              <img src="../assets/images/cs.uabaselayer.resources2.png" alt="Layout and behaviour specs" />
+            </div>
+            <p class="img-caption">Detailed layout and behaviour specs</p>
+          </div>
+        </div>
+        <div class="img-grid cols-1" style="margin-top: 12px;">
+          <div>
+            <div class="img-wrap" data-caption="Spec documentation">
+              <img src="../assets/images/cs.uabaselayer.specs1.png" alt="Spec documentation" />
+            </div>
+            <p class="img-caption">Spec documentation</p>
+          </div>
+        </div>
+      </section>
+
+      <hr class="cs-divider" />
+
+      <!-- Section 8 -->
+      <section class="cs-section">
+        <p class="cs-section-label">File Structure</p>
+        <h2>Keeping the end users in mind</h2>
+        <p>One of my personal principles while building Baselayer was to keep the end users of the system — our design team — in mind. I would regularly check in with the team to make sure everything was working as expected, tweaking the file structure and organizing elements in a logical manner that allowed for quick search and placement by my teammates.</p>
+        <div class="img-grid cols-1">
+          <div>
+            <div class="img-wrap" data-caption="File organization for end users of the library">
+              <img src="../assets/images/cs.uabaselayer.filestructure.png" alt="File organization for the design library" />
+            </div>
+            <p class="img-caption">File organization for end users of the library</p>
+          </div>
+        </div>
+      </section>
+
+      <hr class="cs-divider" />
+
+      <!-- Section 9 -->
+      <section class="cs-section">
+        <p class="cs-section-label">Outcome</p>
+        <h2>Bringing it to life</h2>
+        <p>We worked closely with product, project and engineering teams to bring UA Baselayer to life using a phased, targeted approach that updated key features with minimal disruption to the overall experience. Any desired UX updates were carefully vetted and conservatively implemented — keeping the app familiar to our users and avoiding the typical backlash against major app updates.</p>
+        <p>We rolled out changes over about 6 months, combining efforts with the code cleanup projects taking place across our infrastructure. The first success came when an engineer found a sub-screen not included in our design documents and was able to apply the new components without needing a fully spec'd design file — revealing the true potential of a full design system: build and ship quality, on-brand interfaces faster.</p>
+        <p>A more impactful success came with our Friend Challenges feature. Engineering had subcontracted a codebase revamp and the result was an even worse experience — mismatched fonts, misaligned margins, incorrect colors. Lucky for us, most components were already built and we could simply swap out the chaotic custom-coded versions for the new Baselayer elements. A visual refresh that would have taken multiple sprints of back-and-forth now took a week.</p>
+        <div class="img-grid cols-1">
+          <div>
+            <div class="img-wrap" data-caption="Updated Training Plans feature using Baselayer components">
+              <img src="../assets/images/cs.uabaselayer.results.trainingplans.png" alt="Updated Training Plans feature" />
+            </div>
+            <p class="img-caption">Updated Training Plans feature</p>
+          </div>
+        </div>
+        <div class="img-grid cols-2" style="margin-top: 12px;">
+          <div>
+            <div class="img-wrap" data-caption="Updated Workout Details screen using Baselayer components">
+              <img src="../assets/images/cs.uabaselayer.results.postworkoutpng.png" alt="Updated Workout Details screen" />
+            </div>
+            <p class="img-caption">Updated Workout Details screen</p>
+          </div>
+          <div>
+            <div class="img-wrap" data-caption="Updated Training Plan details using Baselayer components">
+              <img src="../assets/images/cs.uabaselayer.results.trainingplandetails.png" alt="Updated Training Plan details" />
+            </div>
+            <p class="img-caption">Updated Training Plan details</p>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <footer>
+      <p class="footer-built">
+        Built with <a href="https://fonts.google.com/specimen/Inter" target="_blank" rel="noopener">Inter</a> and <a href="https://dct.design" target="_blank" rel="noopener">dct tokens</a>.
+      </p>
+      <p class="footer-copy">© 2026 Daniel C Townson</p>
+    </footer>
+
+  </div>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox-close" id="lightbox-close" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M18 6L6 18M6 6l12 12"/>
+      </svg>
+    </button>
+    <img class="lightbox-img" id="lightbox-img" src="" alt="" />
+    <p class="lightbox-caption" id="lightbox-caption"></p>
+  </div>
+
+  <script>
+    // Theme toggle
+    const toggle = document.getElementById('themeToggle');
+    const html = document.documentElement;
+    const saved = localStorage.getItem('dct-theme');
+    if (saved) html.setAttribute('data-theme', saved);
+    toggle.addEventListener('click', () => {
+      const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('dct-theme', next);
+    });
+
+    // Reading progress
+    const bar = document.getElementById('progress-bar');
+    window.addEventListener('scroll', () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      bar.style.width = (docHeight > 0 ? (scrollTop / docHeight) * 100 : 0) + '%';
+    });
+
+    // Lightbox
+    const lightbox = document.getElementById('lightbox');
+    const lbImg    = document.getElementById('lightbox-img');
+    const lbCap    = document.getElementById('lightbox-caption');
+    const lbClose  = document.getElementById('lightbox-close');
+
+    function openLightbox(src, alt, caption) {
+      lbImg.src = src;
+      lbImg.alt = alt || '';
+      lbCap.textContent = caption || '';
+      lightbox.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      lightbox.classList.remove('active');
+      document.body.style.overflow = '';
+      setTimeout(() => { lbImg.src = ''; }, 200);
+    }
+
+    document.querySelectorAll('.img-wrap').forEach(wrap => {
+      wrap.addEventListener('click', () => {
+        const img = wrap.querySelector('img');
+        if (img) openLightbox(img.src, img.alt, wrap.dataset.caption);
+      });
+    });
+
+    lbClose.addEventListener('click', closeLightbox);
+    lightbox.addEventListener('click', e => {
+      if (e.target === lightbox) closeLightbox();
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeLightbox();
+    });
+  </script>
+</body>
+</html>
