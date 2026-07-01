@@ -343,8 +343,8 @@ nav.cs-nav {
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   transition: background-color 0.2s ease;
-  padding: 0;
-  margin-bottom: 0;
+  padding: 0 !important;
+  margin-bottom: 0 !important;
 }
 
 .nav-inner {
@@ -411,4 +411,8 @@ footer {
   font-family: var(--font-family-mono);
   font-size: var(--font-size-sm);
   color: var(--color-fg-subtle);
+}
+
+site-nav {
+  display: block;
 }
