@@ -189,7 +189,7 @@ nav {
 .hero { margin-bottom: 64px; }
 
 .hero h1 {
-  font-size: var(--font-size-4xl);
+  font-size: var(--font-size-5xl);
   font-weight: var(--font-weight-black);
   line-height: var(--font-leading-tight);
   letter-spacing: var(--font-tracking-tight);
