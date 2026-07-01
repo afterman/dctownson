@@ -42,7 +42,7 @@ class SiteNav extends HTMLElement {
 
   _homeNav(depth) {
     return `
-      <nav class="anim anim-1">
+      <nav class="home-nav anim anim-1">
         <div class="nav-left">
           <a href="/" data-tip="Home">
             <img class="nav-logo" src="${depth}assets/images/DCT-Selfie-BW.png" alt="Daniel Townson" />
