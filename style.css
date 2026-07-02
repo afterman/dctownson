@@ -395,6 +395,128 @@ html[data-theme="light"] .card-logo {
   color: var(--color-fg-muted);
 }
 
+/* ── Contact form ────────────────────────────────────── */
+contact-form { display: block; }
+
+.contact-section {
+  padding: 48px 0;
+  border-top: 1px solid var(--color-border-default);
+}
+
+.contact-header {
+  margin-bottom: 32px;
+}
+
+.contact-header h2 {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--font-tracking-tight);
+  color: var(--color-fg-default);
+  margin-bottom: 8px;
+}
+
+.contact-header p {
+  font-size: var(--font-size-base);
+  color: var(--color-fg-muted);
+  line-height: var(--font-leading-relaxed);
+}
+
+.contact-header a {
+  color: var(--color-fg-muted);
+  border-bottom: 1px solid var(--color-border-default);
+  transition: color 0.15s ease;
+}
+
+.contact-header a:hover {
+  color: var(--color-fg-default);
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 560px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+@media (max-width: 480px) {
+  .form-row { grid-template-columns: 1fr; }
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-label {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--font-tracking-wider);
+  text-transform: uppercase;
+  color: var(--color-fg-subtle);
+}
+
+.form-input,
+.form-textarea {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-normal);
+  color: var(--color-fg-default);
+  background: var(--color-bg-subtle);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-lg);
+  padding: 10px 14px;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  width: 100%;
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder {
+  color: var(--color-fg-subtle);
+}
+
+.form-input:focus,
+.form-textarea:focus {
+  border-color: var(--color-focus);
+  box-shadow: 0 0 0 3px rgba(135, 165, 239, 0.15);
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.form-submit {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 20px;
+  border-radius: var(--radius-lg);
+  border: none;
+  background: var(--color-fg-default);
+  color: var(--color-bg-default);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--font-tracking-wide);
+  cursor: pointer;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  align-self: flex-start;
+}
+
+.form-submit:hover {
+  opacity: 0.85;
+  transform: translateY(-1px);
+}
+
 /* ── Footer ──────────────────────────────────────────── */
 footer {
   padding: 32px 0 48px;
