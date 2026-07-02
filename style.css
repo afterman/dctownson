@@ -28,8 +28,13 @@
   img { display: block; max-width: 100%; }
   
   /* ── Web components ──────────────────────────────────── */
-  site-nav { display: block; }
-  
+ 
+  site-nav {
+    display: block;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
   /* ── Layout ──────────────────────────────────────────── */
   .page {
     max-width: 960px;
@@ -104,9 +109,6 @@
   
   /* ── Case study nav ──────────────────────────────────── */
   nav.cs-nav {
-    position: sticky;
-    top: 0;
-    z-index: 50;
     background: var(--color-bg-default);
     border-bottom: 1px solid var(--color-border-default);
     backdrop-filter: blur(12px);
