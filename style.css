@@ -327,6 +327,47 @@ nav.cs-nav {
   pointer-events: none;
 }
 
+/* ── View Transitions ────────────────────────────────── */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes fade-out {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+@keyframes slide-up-in {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Page-level crossfade */
+::view-transition-old(root) {
+  animation: 300ms ease fade-out;
+}
+
+::view-transition-new(root) {
+  animation: 400ms ease fade-in;
+}
+
+/* Card image → hero morph */
+::view-transition-old(card-hero) {
+  animation: 400ms ease both fade-out;
+  object-fit: cover;
+}
+
+::view-transition-new(card-hero) {
+  animation: 400ms ease both fade-in;
+  object-fit: cover;
+}
+
+/* Case study header content slides up after hero lands */
+::view-transition-new(cs-header) {
+  animation: 400ms 200ms ease both slide-up-in;
+}
+
 /* ── Card media ──────────────────────────────────────── */
 .card-media {
   position: relative;
