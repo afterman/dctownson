@@ -125,7 +125,7 @@ class ContactForm extends HTMLElement {
           <h2>Get in touch</h2>
           <p>Interested in working together? Send a message below or email me directly at <a href="mailto:dctownson@gmail.com?subject=Hi%20Daniel!">dctownson@gmail.com</a>.</p>
         </div>
-        <form class="contact-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+        <form class="contact-form" action="https://formspree.io/f/mdajeejo" method="POST">
           <div class="form-row">
             <div class="form-field">
               <label class="form-label" for="cf-name">Name</label>
