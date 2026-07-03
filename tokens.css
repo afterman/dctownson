@@ -1,93 +1,104 @@
 /* ============================================================
-   dct design tokens — generated from dct.design Figma file
-   Architecture: primitives → sys aliases → component usage
+   dct design tokens — Paper Grotesk direction
+   Architecture unchanged: primitives → sys aliases → component usage
+   Only VALUES were retuned. Every token name/reference is preserved
+   so style.css and components.js keep resolving.
+
+   What changed vs. the previous system:
+   • gray ramp   → warm stone / paper neutrals
+   • blue ramp   → terracotta accent (token name kept as "blue")
+   • font family → added --font-family-display (Space Grotesk),
+                   wired into --font-heading
+   • light mode  = paper (default); dark mode = warm ink
+   Load Space Grotesk in index.html alongside Inter:
+   family=Space+Grotesk:wght@400;500;600;700
    ============================================================ */
 
 /* ------------------------------------------------------------
-   PRIMITIVES — Color scale (Radix-based)
+   PRIMITIVES — Color scale
    ------------------------------------------------------------ */
 :root {
 
-  /* Blue */
-  --color-blue-50:       #fdfdfe;
-  --color-blue-100:      #f7f9ff;
-  --color-blue-200:      #edf2fe;
-  --color-blue-300:      #dfeaff;
-  --color-blue-400:      #d0dfff;
-  --color-blue-500:      #bdd1ff;
-  --color-blue-600:      #a6bff9;
-  --color-blue-700:      #87a5ef;
-  --color-blue-800:      #3d63dd;
-  --color-blue-900:      #3657c3;
-  --color-blue-950:      #395bc7;
-  --color-blue-default:  #1d2e5c;
-  --color-blue-contrast: #ffffff;
-  --color-blue-alpha-1:  rgba(0, 0, 128, 0.01);
-  --color-blue-alpha-2:  rgba(0, 117, 250, 0.09);
-  --color-blue-alpha-3:  rgba(0, 127, 254, 0.22);
-  --color-blue-alpha-4:  rgba(0, 124, 254, 0.33);
-  --color-blue-alpha-5:  rgba(0, 135, 255, 0.41);
-  --color-blue-alpha-6:  rgba(0, 144, 253, 0.49);
-  --color-blue-alpha-7:  rgba(28, 154, 255, 0.58);
-  --color-blue-alpha-8:  rgba(31, 156, 254, 0.71);
-  --color-blue-alpha-9:  rgba(3, 145, 253, 0.49);
-  --color-blue-alpha-10: rgba(0, 134, 255, 0.4);
+  /* Blue → Terracotta (accent). Name kept for reference stability. */
+  --color-blue-50:       #fef7f4;
+  --color-blue-100:      #fbe9e1;
+  --color-blue-200:      #f6d3c4;
+  --color-blue-300:      #eeb39b;
+  --color-blue-400:      #e39172;
+  --color-blue-500:      #d6704e;
+  --color-blue-600:      #bc4b2f;
+  --color-blue-700:      #a23e24;
+  --color-blue-800:      #85311c;
+  --color-blue-900:      #6a2716;
+  --color-blue-950:      #431810;
+  --color-blue-default:  #bc4b2f;
+  --color-blue-contrast: #fbfaf6;
+  --color-blue-alpha-1:  rgba(188, 75, 47, 0.02);
+  --color-blue-alpha-2:  rgba(188, 75, 47, 0.09);
+  --color-blue-alpha-3:  rgba(188, 75, 47, 0.22);
+  --color-blue-alpha-4:  rgba(188, 75, 47, 0.33);
+  --color-blue-alpha-5:  rgba(188, 75, 47, 0.41);
+  --color-blue-alpha-6:  rgba(188, 75, 47, 0.49);
+  --color-blue-alpha-7:  rgba(188, 75, 47, 0.58);
+  --color-blue-alpha-8:  rgba(188, 75, 47, 0.71);
+  --color-blue-alpha-9:  rgba(188, 75, 47, 0.49);
+  --color-blue-alpha-10: rgba(188, 75, 47, 0.40);
 
-  /* Gray */
-  --color-gray-50:       #f9f9fa;
-  --color-gray-100:      #f4f4f5;
-  --color-gray-200:      #e4e4e7;
-  --color-gray-300:      #d1d1d6;
-  --color-gray-400:      #a09fa7;
-  --color-gray-500:      #6d6d77;
-  --color-gray-600:      #504f56;
-  --color-gray-700:      #3a393f;
-  --color-gray-800:      #252529;
-  --color-gray-900:      #18181c;
-  --color-gray-950:      #09090c;
-  --color-gray-default:  #1e1f24;
-  --color-gray-alpha-5:  rgba(0, 9, 50, 0.12);
+  /* Gray → warm stone / paper neutrals */
+  --color-gray-50:       #fbfaf6;
+  --color-gray-100:      #f3eee4;
+  --color-gray-200:      #eae4d9;
+  --color-gray-300:      #ded7c8;
+  --color-gray-400:      #b8b0a0;
+  --color-gray-500:      #8a8478;
+  --color-gray-600:      #6b6257;
+  --color-gray-700:      #4a453c;
+  --color-gray-800:      #2a2620;
+  --color-gray-900:      #1b1712;
+  --color-gray-950:      #120f0b;
+  --color-gray-default:  #1b1712;
+  --color-gray-alpha-5:  rgba(27, 23, 18, 0.12);
 
-  /* Red */
-  --color-red-50:        #fff5f5;
-  --color-red-100:       #ffe3e3;
-  --color-red-200:       #ffc9c9;
-  --color-red-300:       #ffa8a8;
-  --color-red-400:       #ff8787;
-  --color-red-500:       #ff6b6b;
-  --color-red-600:       #fa5252;
-  --color-red-700:       #f03e3e;
-  --color-red-800:       #e03131;
-  --color-red-900:       #c92a2a;
-  --color-red-950:       #a61e1e;
+  /* Red — warmed slightly to sit with the paper palette */
+  --color-red-50:        #fff5f3;
+  --color-red-100:       #ffe4de;
+  --color-red-200:       #ffc9bf;
+  --color-red-300:       #ffa694;
+  --color-red-400:       #fa7f66;
+  --color-red-500:       #ef5f42;
+  --color-red-600:       #de4a2d;
+  --color-red-700:       #c43a22;
+  --color-red-800:       #a12f1c;
+  --color-red-900:       #822719;
+  --color-red-950:       #4f150c;
   --color-red-contrast:  #ffffff;
 
-  /* Green */
-  --color-green-50:       #f0fdf4;
-  --color-green-100:      #dcfce7;
-  --color-green-200:      #bbf7d0;
-  --color-green-300:      #86efac;
-  --color-green-400:      #4ade80;
-  --color-green-500:      #22c55e;
-  --color-green-600:      #16a34a;
-  --color-green-700:      #15803d;
-  --color-green-800:      #166534;
-  --color-green-900:      #14532d;
-  --color-green-950:      #052e16;
+  /* Green — muted olive-leaning (secondary accent family) */
+  --color-green-50:       #f4f7ee;
+  --color-green-100:      #e6eed6;
+  --color-green-200:      #cddcae;
+  --color-green-300:      #adc482;
+  --color-green-400:      #8cab5e;
+  --color-green-500:      #6f9047;
+  --color-green-600:      #567237;
+  --color-green-700:      #46603f;
+  --color-green-800:      #384c26;
+  --color-green-900:      #2c3b1f;
+  --color-green-950:      #16210f;
   --color-green-contrast: #ffffff;
 
-  /* Yellow */
-  --color-yellow-50:       #fffbeb;
-  --color-yellow-100:      #fef3c7;
-  --color-yellow-200:      #fde68a;
-  --color-yellow-300:      #fcd34d;
-  --color-yellow-400:      #fbbf24;
-  --color-yellow-500:      #f59e0b;
-  --color-yellow-600:      #d97706;
-  --color-yellow-700:      #b45309;
-  --color-yellow-800:      #92400e;
-  --color-yellow-900:      #78350f;
-  --color-yellow-950:      #451a03;
+  /* Yellow — warm ochre */
+  --color-yellow-50:       #fdf8ec;
+  --color-yellow-100:      #f9edcd;
+  --color-yellow-200:      #f2d99a;
+  --color-yellow-300:      #e9c266;
+  --color-yellow-400:      #dda838;
+  --color-yellow-500:      #c98f1c;
+  --color-yellow-600:      #a97316;
+  --color-yellow-700:      #855813;
+  --color-yellow-800:      #6a4614;
+  --color-yellow-900:      #573a15;
+  --color-yellow-950:      #331f07;
   --color-yellow-contrast: #000000;
 
   /* ------------------------------------------------------------
@@ -95,8 +106,9 @@
      ------------------------------------------------------------ */
 
   /* Family */
-  --font-family-sans: 'Inter', sans-serif;
-  --font-family-mono: 'Inconsolata', monospace;
+  --font-family-sans:    'Inter', sans-serif;
+  --font-family-display: 'Space Grotesk', 'Inter', sans-serif;
+  --font-family-mono:    'Inconsolata', monospace;
 
   /* Size scale */
   --font-size-xs:   12px;
@@ -133,12 +145,12 @@
   --font-leading-loose:   2;
 
   /* Tracking */
-  --font-tracking-tighter: -0.8px;
-  --font-tracking-tight:   -0.4px;
+  --font-tracking-tighter: -1.2px;
+  --font-tracking-tight:   -0.6px;
   --font-tracking-normal:   0px;
   --font-tracking-wide:     0.4px;
-  --font-tracking-wider:    0.8px;
-  --font-tracking-widest:   1.6px;
+  --font-tracking-wider:    1.6px;
+  --font-tracking-widest:   2.4px;
 
   /* ------------------------------------------------------------
      PRIMITIVES — Border radius
@@ -203,20 +215,20 @@
 }
 
 /* ------------------------------------------------------------
-   SYS TOKENS — LIGHT MODE (default)
+   SYS TOKENS — LIGHT MODE (default) = PAPER
    All values reference primitives via var()
    ------------------------------------------------------------ */
 :root,
 [data-theme="light"] {
 
   /* Background */
-  --color-bg-default:       var(--color-gray-50);
-  --color-bg-subtle:        var(--color-gray-100);
+  --color-bg-default:       var(--color-gray-100);
+  --color-bg-subtle:        var(--color-gray-50);
   --color-bg-muted:         var(--color-gray-200);
 
   /* Foreground */
-  --color-fg-default:       var(--color-gray-950);
-  --color-fg-muted:         var(--color-gray-800);
+  --color-fg-default:       var(--color-gray-900);
+  --color-fg-muted:         var(--color-gray-700);
   --color-fg-subtle:        var(--color-gray-600);
   --color-fg-disabled:      var(--color-gray-400);
   --color-fg-on-accent:     var(--color-blue-contrast);
@@ -225,28 +237,28 @@
   --color-border-default:   var(--color-gray-300);
   --color-border-strong:    var(--color-gray-400);
   --color-border-muted:     var(--color-gray-200);
-  --color-border-accent:    var(--color-blue-700);
+  --color-border-accent:    var(--color-blue-600);
 
   /* Accent */
-  --color-accent-default:   var(--color-blue-900);
-  --color-accent-hover:     var(--color-blue-950);
+  --color-accent-default:   var(--color-blue-600);
+  --color-accent-hover:     var(--color-blue-700);
   --color-accent-muted:     var(--color-blue-100);
   --color-accent-subtle:    var(--color-blue-50);
-  --color-accent-fg:        var(--color-blue-900);
+  --color-accent-fg:        var(--color-blue-700);
 
   /* Surface */
   --color-surface-default:  var(--color-gray-50);
-  --color-surface-raised:   var(--color-gray-100);
+  --color-surface-raised:   var(--color-gray-50);
   --color-surface-overlay:  var(--color-gray-200);
 
   /* State */
-  --color-focus:            var(--color-blue-700);
-  --color-disabled-bg:      var(--color-gray-400);
-  --color-disabled-text:    var(--color-gray-900);
+  --color-focus:            var(--color-blue-600);
+  --color-disabled-bg:      var(--color-gray-300);
+  --color-disabled-text:    var(--color-gray-500);
 
   /* Danger */
-  --color-danger-default:   var(--color-red-800);
-  --color-danger-hover:     var(--color-red-900);
+  --color-danger-default:   var(--color-red-700);
+  --color-danger-hover:     var(--color-red-800);
   --color-danger-muted:     var(--color-red-100);
   --color-danger-fg:        var(--color-red-700);
   --color-danger-on-danger: var(--color-red-contrast);
@@ -278,7 +290,7 @@
   --color-error-solid:       var(--color-red-600);
   --color-error-on-solid:    var(--color-red-contrast);
 
-  /* Status — Info */
+  /* Status — Info (now terracotta family) */
   --color-info-bg:           var(--color-blue-100);
   --color-info-bg-subtle:    var(--color-blue-50);
   --color-info-border:       var(--color-blue-300);
@@ -293,7 +305,7 @@
   --color-icon-subtle:       var(--color-gray-400);
   --color-icon-disabled:     var(--color-gray-300);
   --color-icon-on-accent:    var(--color-blue-contrast);
-  --color-icon-accent:       var(--color-blue-900);
+  --color-icon-accent:       var(--color-blue-600);
   --color-icon-success:      var(--color-green-600);
   --color-icon-warning:      var(--color-yellow-600);
   --color-icon-error:        var(--color-red-600);
@@ -301,7 +313,7 @@
 
   /* Sys — Font aliases */
   --font-body:              var(--font-family-sans);
-  --font-heading:           var(--font-family-sans);
+  --font-heading:           var(--font-family-display);
   --font-mono:              var(--font-family-mono);
   --font-size-caption:      var(--font-size-xs);
   --font-size-label:        var(--font-size-sm);
@@ -316,8 +328,8 @@
   --font-weight-body:       var(--font-weight-normal);
   --font-weight-label:      var(--font-weight-medium);
   --font-weight-emphasis:   var(--font-weight-semibold);
-  --font-weight-heading:    var(--font-weight-bold);
-  --font-weight-display:    var(--font-weight-extrabold);
+  --font-weight-heading:    var(--font-weight-medium);
+  --font-weight-display:    var(--font-weight-semibold);
   --font-leading-tight-sys: var(--font-leading-tight);
   --font-leading-snug-sys:  var(--font-leading-snug);
   --font-leading-body:      var(--font-leading-normal);
@@ -329,19 +341,19 @@
 }
 
 /* ------------------------------------------------------------
-   SYS TOKENS — DARK MODE
+   SYS TOKENS — DARK MODE = WARM INK
    ------------------------------------------------------------ */
 [data-theme="dark"] {
 
   /* Background */
   --color-bg-default:       var(--color-gray-900);
-  --color-bg-subtle:        var(--color-gray-900);
-  --color-bg-muted:         var(--color-gray-800);
+  --color-bg-subtle:        var(--color-gray-800);
+  --color-bg-muted:         var(--color-gray-700);
 
   /* Foreground */
-  --color-fg-default:       var(--color-gray-200);
+  --color-fg-default:       var(--color-gray-100);
   --color-fg-muted:         var(--color-gray-400);
-  --color-fg-subtle:        var(--color-gray-600);
+  --color-fg-subtle:        var(--color-gray-500);
   --color-fg-disabled:      var(--color-gray-700);
   --color-fg-on-accent:     var(--color-blue-contrast);
 
@@ -349,11 +361,11 @@
   --color-border-default:   var(--color-gray-700);
   --color-border-strong:    var(--color-gray-500);
   --color-border-muted:     var(--color-gray-800);
-  --color-border-accent:    var(--color-blue-400);
+  --color-border-accent:    var(--color-blue-500);
 
   /* Accent */
-  --color-accent-default:   var(--color-blue-800);
-  --color-accent-hover:     var(--color-blue-alpha-9);
+  --color-accent-default:   var(--color-blue-500);
+  --color-accent-hover:     var(--color-blue-400);
   --color-accent-muted:     var(--color-blue-900);
   --color-accent-subtle:    var(--color-blue-950);
   --color-accent-fg:        var(--color-blue-400);
@@ -369,8 +381,8 @@
   --color-disabled-text:    var(--color-gray-700);
 
   /* Danger */
-  --color-danger-default:   var(--color-red-800);
-  --color-danger-hover:     var(--color-red-900);
+  --color-danger-default:   var(--color-red-700);
+  --color-danger-hover:     var(--color-red-800);
   --color-danger-muted:     var(--color-red-950);
   --color-danger-fg:        var(--color-red-200);
   --color-danger-on-danger: var(--color-red-contrast);
@@ -402,7 +414,7 @@
   --color-error-solid:       var(--color-red-500);
   --color-error-on-solid:    var(--color-red-contrast);
 
-  /* Status — Info */
+  /* Status — Info (terracotta family) */
   --color-info-bg:           var(--color-blue-950);
   --color-info-bg-subtle:    var(--color-blue-900);
   --color-info-border:       var(--color-blue-700);

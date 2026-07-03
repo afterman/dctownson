@@ -37,7 +37,7 @@
   }
   /* ── Layout ──────────────────────────────────────────── */
   .page {
-    max-width: 960px;
+    max-width: 1080px;
     margin: 0 auto;
     padding: 0 24px;
   }
@@ -102,7 +102,8 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 32px 0 24px;
+    padding: 24px 0 20px;
+    background: var(--color-bg-default);
     border-bottom: 1px solid var(--color-border-default);
     margin-bottom: 72px;
   }
@@ -241,16 +242,30 @@
   [data-theme="light"] .icon-moon { display: none; }
   
   /* ── Hero ────────────────────────────────────────────── */
-  .hero { margin-bottom: 64px; }
-  
+  .hero { margin-bottom: 80px; padding-top: 40px; }
+
+  .hero-eyebrow {
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: var(--font-tracking-wider);
+    text-transform: uppercase;
+    color: var(--color-accent-default);
+    margin-bottom: 24px;
+  }
+
   .hero h1 {
-    font-size: var(--font-size-5xl);
-    font-weight: var(--font-weight-bold);
-    line-height: var(--font-leading-tight);
+    font-family: var(--font-heading);
+    font-size: clamp(34px, 5.5vw, 60px);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.08;
     letter-spacing: var(--font-tracking-tight);
     color: var(--color-fg-default);
-    margin-bottom: 16px;
+    max-width: none;
+    margin-bottom: 32px;
   }
+
+  .hero h1 .accent { color: var(--color-accent-default); }
   
   .hero p {
     font-size: var(--font-size-lg);
@@ -294,8 +309,8 @@
   /* ── Card grid ───────────────────────────────────────── */
   .card-grid {
     display: grid;
-    grid-template-columns: 1fr;
-    gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 24px;
     margin-bottom: 80px;
   }
   
@@ -324,9 +339,7 @@
   }
   
   .card.disabled {
-    opacity: 0.4;
-    cursor: default;
-    pointer-events: none;
+    display: none;
   }
   
   /* ── View Transitions ────────────────────────────────── */
@@ -416,11 +429,11 @@
   
   /* ── Card body ───────────────────────────────────────── */
   .card-body {
-    padding: 14px 16px 16px;
+    padding: 18px 18px 20px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 4px;
+    gap: 10px;
   }
   
   .card-type {
@@ -433,6 +446,7 @@
   }
   
   .card-title {
+    font-family: var(--font-heading);
     font-size: var(--font-size-base);
     font-weight: var(--font-weight-semibold);
     line-height: var(--font-leading-snug);
@@ -457,6 +471,7 @@
   }
   
   .contact-header h2 {
+    font-family: var(--font-heading);
     font-size: var(--font-size-2xl);
     font-weight: var(--font-weight-bold);
     letter-spacing: var(--font-tracking-tight);
@@ -535,7 +550,7 @@
   .form-input:focus,
   .form-textarea:focus {
     border-color: var(--color-focus);
-    box-shadow: 0 0 0 3px rgba(135, 165, 239, 0.15);
+    box-shadow: 0 0 0 3px var(--color-blue-alpha-4);
   }
   
   .form-textarea {
