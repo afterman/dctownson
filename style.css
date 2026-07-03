@@ -611,3 +611,18 @@
     font-size: var(--font-size-sm);
     color: var(--color-fg-subtle);
   }
+
+  /* ── Paper type treatment — case study & resume subpages ── */
+  html .cs-title,
+  html .resume-header-left h1,
+  html .cs-section h2,
+  html .contact-header h2 {
+    font-family: var(--font-heading);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: var(--font-tracking-tight);
+  }
+
+  html .cs-section h2,
+  html .contact-header h2 {
+    font-weight: var(--font-weight-semibold);
+  }
