@@ -270,9 +270,8 @@
     font-weight: var(--font-weight-medium);
     letter-spacing: var(--font-tracking-wider);
     text-transform: uppercase;
-    color: var(--color-accent-default);
-    margin-bottom: 24px;
-  }
+    color: var(--color-fg-default);
+    }
 
   .hero h1 {
     font-family: var(--font-heading);
@@ -620,3 +619,41 @@
   html .contact-header h2 {
     font-weight: var(--font-weight-semibold);
   }
+
+  /* ── dct-chip ────────────────────────────────────────── */
+dct-chip { display: inline-block; }
+
+.dct-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 24px;
+  padding: 0 12px;
+  border-radius: 12px;
+  background: var(--color-bg-subtle);
+  font-family: var(--font-family-mono);
+  font-size: 11px;
+  font-weight: var(--font-weight-normal);
+  line-height: 16px;
+  color: var(--color-fg-default);
+  white-space: nowrap;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.dct-chip--linked {
+  cursor: pointer;
+}
+
+.dct-chip:hover,
+.dct-chip--linked:hover {
+  background: var(--color-bg-muted);
+}
+
+.dct-chip.chip--highlighted {
+  background: var(--color-accent-default);
+  color: var(--color-accent-contrast);
+}
+
+.dct-chip.chip--dimmed {
+  opacity: 0.35;
+}

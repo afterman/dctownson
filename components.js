@@ -8,6 +8,10 @@
  *
  * Theme preference is persisted in localStorage under 'dct-theme'.
  * The component reads and writes that key, and sets data-theme on <html>.
+ * 
+ *  <a href="/" data-tip="Home">
+          <img class="nav-logo" src="${depth}assets/images/DCT-Selfie-BW.png" alt="Daniel Townson" />
+        </a>
  */
 
 class SiteNav extends HTMLElement {
@@ -43,10 +47,8 @@ class SiteNav extends HTMLElement {
   _homeNav(depth) {
     return `
       <nav class="home-nav anim anim-1">
-        <a href="/" data-tip="Home">
-          <img class="nav-logo" src="${depth}assets/images/DCT-Selfie-BW.png" alt="Daniel Townson" />
-        </a>
-
+       
+<p class="hero-eyebrow anim anim-2"> Hello, I'm Daniel.</p>
         <div class="nav-right">
           <div class="nav-links">
             <a href="https://www.linkedin.com/in/danieltownson/" target="_blank" rel="noopener" data-tip="LinkedIn" class="nav-icon-btn">
@@ -146,3 +148,30 @@ class ContactForm extends HTMLElement {
 }
 
 customElements.define('contact-form', ContactForm);
+
+/**
+ * <dct-chip> — skill/tag chip component
+ *
+ * Usage:
+ *   <dct-chip>Design Systems</dct-chip>
+ *   <dct-chip data-projects="ua-baselayer,olysense">Token Architecture</dct-chip>
+ *
+ * Attributes:
+ *   data-projects  — comma-separated project IDs this chip links to
+ *                    (used by the resume page chip→project hover interaction)
+ */
+class DctChip extends HTMLElement {
+  connectedCallback() {
+    const label = this.textContent.trim();
+    const projects = this.getAttribute('data-projects') || '';
+
+    this.innerHTML = `
+      <span class="dct-chip${projects ? ' dct-chip--linked' : ''}"
+            ${projects ? `data-projects="${projects}"` : ''}>
+        ${label}
+      </span>
+    `;
+  }
+}
+
+customElements.define('dct-chip', DctChip);
