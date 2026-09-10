@@ -56,7 +56,7 @@ class SiteNav extends HTMLElement {
               <a href="mailto:dctownson@gmail.com?subject=Hi%20Daniel!" data-tip="Email Me" class="nav-icon-btn">
                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M19.7975 4H3.79749C2.69749 4 1.80749 4.9 1.80749 6L1.79749 18C1.79749 19.1 2.69749 20 3.79749 20H19.7975C20.8975 20 21.7975 19.1 21.7975 18V6C21.7975 4.9 20.8975 4 19.7975 4ZM19.7975 18H3.79749V8L11.7975 13L19.7975 8V18ZM11.7975 11L3.79749 6H19.7975L11.7975 11Z" fill="currentColor"/></svg>
               </a>
-              <a href="${depth}resume" data-tip="Résumé" class="nav-icon-btn">
+              <a href="${depth}assets/Daniel_C_Townson_-_Sr_Product_Designer_-_Resume_01Sep26.pdf" target="_blank" rel="noopener" data-tip="Résumé" class="nav-icon-btn">
                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 2V8H20" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 13H8" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 17H8" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 9H9H8" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
               </a>
             </div>
