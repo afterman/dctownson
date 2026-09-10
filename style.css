@@ -637,7 +637,7 @@ dct-chip { display: inline-block; }
   border-radius: 12px;
   background: var(--color-bg-subtle);
   font-family: var(--font-family-mono);
-  font-size: 11px;
+  font-size: var(--font-size-caption);
   font-weight: var(--font-weight-normal);
   line-height: 16px;
   color: var(--color-fg-default);

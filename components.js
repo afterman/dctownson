@@ -1,23 +1,24 @@
 /**
- * dctownson.com — site-nav web component
+ * dctownson.com — web components
+ *
+ * Components:
+ *   <site-nav>    — sitewide navigation, two variants
+ *   <contact-form> — reusable contact section
+ *   <dct-chip>    — skill/tag chip with optional project linking
  *
  * Usage:
- *   Homepage:    <site-nav type="home"></site-nav>
- *   Case study:  <site-nav type="casestudy" title="UA × Samsung Galaxy Watch Active2"></site-nav>
- *   Resume:      <site-nav type="home"></site-nav>
+ *   Homepage:    <site-nav type="home" depth=""></site-nav>
+ *   Case study:  <site-nav type="casestudy" title="UA × Samsung" depth="../"></site-nav>
+ *   Resume:      <site-nav type="casestudy" title="Résumé" depth="../"></site-nav>
  *
  * Theme preference is persisted in localStorage under 'dct-theme'.
- * The component reads and writes that key, and sets data-theme on <html>.
  */
 
 class SiteNav extends HTMLElement {
   connectedCallback() {
     const type  = this.getAttribute('type') || 'home';
     const title = this.getAttribute('title') || '';
-
-    // Determine asset path depth based on type
-    // Home and resume pages are at root; case study pages are one level deep
-    const depth = this.getAttribute('depth') || (type === 'casestudy' ? '../' : '');
+    const depth = this.getAttribute('depth') || '';
 
     this.innerHTML = type === 'home'
       ? this._homeNav(depth)
@@ -44,7 +45,9 @@ class SiteNav extends HTMLElement {
     return `
       <nav class="home-nav anim anim-1">
         <div class="nav-inner">
-       <p class="hero-eyebrow anim anim-2"> Hello, I'm Daniel.</p>
+          <a href="/" data-tip="Home">
+            <img class="nav-logo" src="${depth}assets/images/DCT-Selfie-BW.png" alt="Daniel Townson" />
+          </a>
           <div class="nav-right">
             <div class="nav-links">
               <a href="https://www.linkedin.com/in/danieltownson/" target="_blank" rel="noopener" data-tip="LinkedIn" class="nav-icon-btn">
@@ -56,9 +59,8 @@ class SiteNav extends HTMLElement {
               <a href="${depth}resume" data-tip="Résumé" class="nav-icon-btn">
                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 2V8H20" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 13H8" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 17H8" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 9H9H8" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
               </a>
-                 ${this._themeToggleHTML()}
             </div>
-         
+            ${this._themeToggleHTML()}
           </div>
         </div>
       </nav>
@@ -69,14 +71,14 @@ class SiteNav extends HTMLElement {
     return `
       <nav class="cs-nav">
         <div class="nav-inner">
-          <a class="nav-back anim anim-2" href="${depth === '../' ? '/' : '/'}">
+          <a class="nav-back" href="/">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M19 12H5M12 5l-7 7 7 7"/>
             </svg>
-            HOME
+            Work
           </a>
-          <span class="nav-title anim anim-3">${title}</span>
-          <div class="nav-right anim anim-4">
+          <span class="nav-title">${title}</span>
+          <div class="nav-right">
             ${this._themeToggleHTML()}
           </div>
         </div>
@@ -85,8 +87,8 @@ class SiteNav extends HTMLElement {
   }
 
   _initTheme() {
-    const html   = document.documentElement;
-    const saved  = localStorage.getItem('dct-theme');
+    const html  = document.documentElement;
+    const saved = localStorage.getItem('dct-theme');
     if (saved) html.setAttribute('data-theme', saved);
 
     const btn = this.querySelector('#themeToggle');
@@ -101,13 +103,11 @@ class SiteNav extends HTMLElement {
 
 customElements.define('site-nav', SiteNav);
 
-/**
- * <contact-form> — reusable contact section
- *
- * Usage: <contact-form></contact-form>
- *
- * Replace YOUR_FORM_ID with your Formspree endpoint.
- */
+/* ============================================================
+   <contact-form> — reusable contact section
+   Replace YOUR_FORM_ID with your Formspree endpoint.
+   Usage: <contact-form></contact-form>
+   ============================================================ */
 
 class ContactForm extends HTMLElement {
   connectedCallback() {
@@ -146,3 +146,29 @@ class ContactForm extends HTMLElement {
 }
 
 customElements.define('contact-form', ContactForm);
+
+/* ============================================================
+   <dct-chip> — skill/tag chip component
+   Attributes:
+     data-projects  — comma-separated project IDs this chip
+                      links to (used by resume page interaction)
+   Usage:
+     <dct-chip>Design Systems</dct-chip>
+     <dct-chip data-projects="ua-baselayer,olysense">Token Architecture</dct-chip>
+   ============================================================ */
+
+class DctChip extends HTMLElement {
+  connectedCallback() {
+    const label    = this.textContent.trim();
+    const projects = this.getAttribute('data-projects') || '';
+
+    this.innerHTML = `
+      <span class="dct-chip${projects ? ' dct-chip--linked' : ''}"
+            ${projects ? `data-projects="${projects}"` : ''}>
+        ${label}
+      </span>
+    `;
+  }
+}
+
+customElements.define('dct-chip', DctChip);
