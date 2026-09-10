@@ -37,7 +37,7 @@
   }
   /* ── Layout ──────────────────────────────────────────── */
   .page {
-    max-width: 1080px;
+    max-width: var(--grid-max);
     margin: 0 auto;
     padding: 0 24px;
   }
@@ -99,18 +99,10 @@
   
   /* ── Homepage nav ────────────────────────────────────── */
   nav.home-nav {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 24px 0 20px;
+    position: sticky;
+    top: 0;
+    z-index: 50;
     background: var(--color-bg-default);
-    margin-bottom: 72px;
-  }
-  
-  /* ── Case study nav ──────────────────────────────────── */
-  nav.cs-nav {
-    background: var(--color-bg-default);
-    border-bottom: 1px solid var(--color-border-default);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     transition: background-color 0.2s ease;
@@ -118,12 +110,25 @@
     margin-bottom: 0;
   }
   
+  /* ── Case study nav ──────────────────────────────────── */
+  nav.cs-nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--color-bg-default);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    transition: background-color 0.2s ease;
+    padding: 0;
+    margin-bottom: 0;
+  }
+
   /* ── Shared nav inner ────────────────────────────────── */
   .nav-inner {
-    max-width: 960px;
+    max-width: var(--grid-max);
     margin: 0 auto;
-    padding: 0 24px;
-    height: 56px;
+    padding: 0px;
+    height: 72px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -214,12 +219,12 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    color: var(--color-fg-muted);
+    font-family: var(--font-family-mono);
     font-size: var(--font-size-sm);
     font-weight: var(--font-weight-medium);
-    transition: color 0.15s ease;
-    flex-shrink: 0;
-    text-decoration: none;
+    letter-spacing: var(--font-tracking-wider);
+    text-transform: uppercase;
+    color: var(--color-fg-default);
   }
   
   .nav-back:hover { color: var(--color-fg-default); }
@@ -650,10 +655,79 @@ dct-chip { display: inline-block; }
 }
 
 .dct-chip.chip--highlighted {
-  background: var(--color-accent-default);
-  color: var(--color-accent-contrast);
+  background: var(--color-bg-muted);
+  color: var(--color-fg-default);
 }
 
 .dct-chip.chip--dimmed {
   opacity: 0.35;
 }
+
+    /* ── Reading progress bar ──────────────────────── */
+    #progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 2px;
+      width: 0%;
+      background: var(--color-accent-default);
+      z-index: 100;
+      transition: width 0.1s linear;
+    }
+
+        /* ── Hero — full bleed ─────────────────────────── */
+        .hero-bleed {
+          width: 100%;
+          max-height: 520px;
+          overflow: hidden;
+          background: var(--color-bg-muted);
+          border-radius: var(--radius-xl);
+        }
+    
+        .hero-bleed img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          display: block;
+        }
+
+           /* ── Content column ────────────────────────────── */
+    .content {
+      max-width: var(--grid-max);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+        /* ── Case study header ─────────────────────────── */
+        .cs-header {
+          padding: 48px 0 40px;
+          border-bottom: 1px solid var(--color-border-default);
+          margin-bottom: 48px;
+        }
+    
+        .cs-type {
+          font-family: var(--font-family-mono);
+          font-size: var(--font-size-xs);
+          font-weight: var(--font-weight-medium);
+          letter-spacing: var(--font-tracking-widest);
+          text-transform: uppercase;
+          color: var(--color-fg-subtle);
+          margin-bottom: 12px;
+        }
+    
+        .cs-title {
+          font-size: var(--font-size-4xl);
+          font-weight: var(--font-weight-bold);
+          line-height: var(--font-leading-tight);
+          letter-spacing: var(--font-tracking-tight);
+          color: var(--color-fg-default);
+          margin-bottom: 16px;
+          max-width: var(--grid-max);
+        }
+    
+        .cs-summary {
+          font-size: var(--font-size-lg);
+          font-weight: var(--font-weight-normal);
+          line-height: var(--font-leading-relaxed);
+          color: var(--color-fg-muted);
+          max-width: 640px;
+        }

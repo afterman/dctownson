@@ -3,566 +3,489 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="view-transition" content="same-origin" />
   <title>Résumé — dctownson.com</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=Inconsolata:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Inconsolata:wght@400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../tokens.css" />
   <link rel="stylesheet" href="../style.css" />
   <script src="../components.js" defer></script>
   <style>
-    /* ── Resume page specific styles ─────────────────── */
+    /* ── 12-column grid system ───────────────────────── */
+    :root {
+      --grid-cols: 12;
+      --grid-gutter: 32px;
+      --grid-margin: 0px;
+      --grid-max: 100%;
+    }
+
+    .grid-container {
+      width: 100%;
+      max-width: var(--grid-max);
+      margin: 0 auto;
+      padding: 0 var(--grid-margin);
+      box-sizing: border-box;
+    }
+
+    .grid-row {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: var(--grid-gutter);
+    }
+
+    .col-8  { grid-column: span 8; }
+    .col-4  { grid-column: span 4; }
+    .col-12 { grid-column: span 12; }
+
+    @media (max-width: 900px) {
+      .col-8, .col-4 { grid-column: span 12; }
+    }
+
+    /* ── Resume layout ───────────────────────────────── */
+    .resume-page {
+      padding-bottom: 80px;
+    }
+
+    /* ── Header ──────────────────────────────────────── */
     .resume-header {
-      padding: 48px 0 40px;
-      border-bottom: 1px solid var(--color-border-default);
-      margin-bottom: 48px;
+      padding: 64px 0 40px;
       display: flex;
+      flex-direction: column;
+      gap: 12px;
       align-items: flex-start;
-      justify-content: space-between;
-      gap: 24px;
-      flex-wrap: wrap;
     }
 
-    .resume-header-left h1 {
-      font-size: var(--font-size-4xl);
-      font-weight: var(--font-weight-bold);
-      line-height: var(--font-leading-tight);
-      letter-spacing: var(--font-tracking-tight);
+    .resume-name {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 36px;
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
       color: var(--color-fg-default);
-      margin-bottom: 8px;
     }
 
-    .resume-header-left p {
-      font-size: var(--font-size-lg);
+    .resume-tagline {
+      font-family: 'Inter', sans-serif;
+      font-size: var(--font-size-base);
       font-weight: var(--font-weight-normal);
+      line-height: 1.62;
       color: var(--color-fg-muted);
-      line-height: var(--font-leading-relaxed);
-      max-width: 520px;
+      max-width: 620px;
     }
 
-    .download-btn {
+    .resume-download {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      padding: 10px 18px;
+      gap: 6px;
+      margin-top: 8px;
+      padding: 6px 16px;
       border-radius: var(--radius-lg);
       border: 1px solid var(--color-border-default);
       background: var(--color-bg-subtle);
-      color: var(--color-fg-default);
-      font-family: var(--font-family-mono);
+      font-family: 'Inter', sans-serif;
       font-size: var(--font-size-sm);
-      font-weight: var(--font-weight-medium);
-      letter-spacing: var(--font-tracking-wide);
+      font-weight: var(--font-weight-semibold);
+      color: var(--color-fg-muted);
       text-decoration: none;
-      white-space: nowrap;
-      transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
-      flex-shrink: 0;
+      transition: background 0.15s ease, border-color 0.15s ease;
+      width: fit-content;
     }
 
-    .download-btn:hover {
+    .resume-download:hover {
       background: var(--color-bg-muted);
       border-color: var(--color-border-strong);
-      transform: translateY(-1px);
     }
 
-    .download-btn svg {
-      width: 15px;
-      height: 15px;
-      flex-shrink: 0;
-    }
-
-    /* ── Resume body ──────────────────────────────────── */
-    .resume-body {
-      display: grid;
-      grid-template-columns: 1fr 280px;
-      gap: 64px;
-      margin-bottom: 80px;
-      align-items: start;
-    }
-
-    @media (max-width: 680px) {
-      .resume-body { grid-template-columns: 1fr; }
-    }
-
-    /* ── Sections ─────────────────────────────────────── */
-    .resume-section {
-      margin-bottom: 48px;
-    }
-
-    .resume-section:last-child {
-      margin-bottom: 0;
-    }
-
+    /* ── Section label ───────────────────────────────── */
     .resume-section-label {
-      font-family: var(--font-family-mono);
-      font-size: var(--font-size-xs);
-      font-weight: var(--font-weight-medium);
-      letter-spacing: var(--font-tracking-widest);
+      font-family: 'Inconsolata', monospace;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
       text-transform: uppercase;
       color: var(--color-fg-subtle);
-      margin-bottom: 24px;
-      padding-bottom: 10px;
+      padding-bottom: 12px;
       border-bottom: 1px solid var(--color-border-default);
+      margin-bottom: 24px;
     }
 
-    /* ── Experience entries ───────────────────────────── */
+    /* ── Experience ──────────────────────────────────── */
     .exp-entry {
-      margin-bottom: 36px;
-    }
-
-    .exp-entry:last-child {
-      margin-bottom: 0;
-    }
-
-    .exp-header {
-      margin-bottom: 12px;
+      margin-bottom: 32px;
     }
 
     .exp-company {
-      font-size: var(--font-size-base);
-      font-weight: var(--font-weight-semibold);
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
       color: var(--color-fg-default);
-      margin-bottom: 2px;
+      margin-bottom: 4px;
     }
 
     .exp-meta {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .exp-title {
-      font-size: var(--font-size-sm);
-      font-weight: var(--font-weight-medium);
-      color: var(--color-fg-muted);
-    }
-
-    .exp-dot {
-      width: 3px;
-      height: 3px;
-      border-radius: 50%;
-      background: var(--color-fg-subtle);
-      flex-shrink: 0;
-    }
-
-    .exp-date {
-      font-family: var(--font-family-mono);
-      font-size: var(--font-size-xs);
-      font-weight: var(--font-weight-medium);
+      font-family: 'Inconsolata', monospace;
+      font-size: 12px;
+      font-weight: 400;
       color: var(--color-fg-subtle);
-      letter-spacing: var(--font-tracking-wide);
-    }
-
-    .exp-location {
-      font-family: var(--font-family-mono);
-      font-size: var(--font-size-xs);
-      color: var(--color-fg-subtle);
-      letter-spacing: var(--font-tracking-wide);
+      margin-bottom: 16px;
     }
 
     .exp-projects {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 16px;
+      padding-left: 12px;
+    }
+
+
+    .exp-project-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 4px;
+      min-height: 28px;
     }
 
     .exp-project-name {
-      font-size: var(--font-size-sm);
-      font-weight: var(--font-weight-semibold);
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
       color: var(--color-fg-default);
-      margin-bottom: 3px;
-    }
-
-    .exp-project-desc {
-      font-size: var(--font-size-sm);
-      font-weight: var(--font-weight-normal);
-      line-height: var(--font-leading-relaxed);
-      color: var(--color-fg-muted);
-    }
-
-    /* ── Sidebar ──────────────────────────────────────── */
-    .resume-sidebar {
-      position: sticky;
-      top: 80px;
-    }
-
-    .sidebar-section {
-      margin-bottom: 36px;
-    }
-
-    .sidebar-section:last-child {
-      margin-bottom: 0;
-    }
-
-    .sidebar-label {
-      font-family: var(--font-family-mono);
-      font-size: var(--font-size-xs);
-      font-weight: var(--font-weight-medium);
-      letter-spacing: var(--font-tracking-widest);
-      text-transform: uppercase;
-      color: var(--color-fg-subtle);
-      margin-bottom: 12px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid var(--color-border-default);
-    }
-
-    .skill-group {
-      margin-bottom: 16px;
-    }
-
-    .skill-group:last-child {
-      margin-bottom: 0;
-    }
-
-    .skill-group-name {
-      font-size: var(--font-size-xs);
-      font-weight: var(--font-weight-semibold);
-      color: var(--color-fg-default);
-      margin-bottom: 6px;
-      text-transform: uppercase;
-      letter-spacing: var(--font-tracking-wide);
-      font-family: var(--font-family-mono);
-    }
-
-    .skill-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 4px;
-    }
-
-    .skill-tag {
-      font-family: var(--font-family-mono);
-      font-size: 11px;
-      font-weight: var(--font-weight-medium);
-      color: var(--color-fg-muted);
-      padding: 2px 8px;
-      border-radius: var(--radius-full);
-      background: var(--color-bg-subtle);
       white-space: nowrap;
     }
 
-    .edu-entry {
-      margin-bottom: 16px;
+    .exp-project-link {
+      font-family: 'Inconsolata', monospace;
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--color-accent-default);
+      text-decoration: none;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      white-space: nowrap;
     }
 
-    .edu-entry:last-child {
-      margin-bottom: 0;
+    .exp-project:hover .exp-project-link {
+      opacity: 1;
+    }
+
+    .exp-project-desc {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 400;
+      line-height: 1.62;
+      color: var(--color-fg-muted);
+    }
+
+    .exp-project-desc strong {
+      font-weight: 700;
+      color: var(--color-fg-default);
+    }
+
+    /* ── Sidebar ─────────────────────────────────────── */
+    .sidebar {
+      padding-top: 0;
+    }
+
+    .skill-group {
+      margin-bottom: 20px;
+    }
+
+    .skill-group-label {
+      font-family: 'Inconsolata', monospace;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-fg-subtle);
+      margin-bottom: 8px;
+    }
+
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    /* ── Chip ────────────────────────────────────────── */
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 24px;
+      padding: 0 12px;
+      border-radius: 12px;
+      background: var(--color-bg-subtle);
+      font-family: 'Inconsolata', monospace;
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--color-fg-default);
+      white-space: nowrap;
+      cursor: default;
+      transition: background 0.15s ease, color 0.15s ease, outline 0.15s ease;
+    }
+
+    /* Linked chips get a pointer and accent on highlight */
+    .chip[data-projects] {
+      cursor: pointer;
+    }
+
+    .chip.chip--highlighted {
+      background: var(--color-accent-default);
+      color: var(--color-accent-contrast);
+    }
+
+    .chip.chip--dimmed {
+      opacity: 0.35;
+    }
+
+    /* Project entries get highlighted when a linked chip is hovered */
+    .exp-project.project--highlighted .exp-project-name {
+      color: var(--color-accent-default);
+    }
+
+    .exp-project.project--highlighted .exp-project-link {
+      opacity: 1;
+    }
+
+    /* ── Education ───────────────────────────────────── */
+    .edu-entries {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      margin-top: 24px;
     }
 
     .edu-school {
-      font-size: var(--font-size-sm);
-      font-weight: var(--font-weight-semibold);
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
       color: var(--color-fg-default);
       margin-bottom: 2px;
     }
 
     .edu-degree {
-      font-size: var(--font-size-sm);
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 400;
+      line-height: 1.5;
       color: var(--color-fg-muted);
-      line-height: var(--font-leading-snug);
     }
 
-    /* ── Contact form ─────────────────────────────────── */
-    .contact-section {
-      padding: 48px 0;
-      border-top: 1px solid var(--color-border-default);
-      margin-bottom: 0;
-    }
-
-    .contact-header {
-      margin-bottom: 32px;
-    }
-
-    .contact-header h2 {
-      font-size: var(--font-size-2xl);
-      font-weight: var(--font-weight-bold);
-      letter-spacing: var(--font-tracking-tight);
-      color: var(--color-fg-default);
-      margin-bottom: 8px;
-    }
-
-    .contact-header p {
-      font-size: var(--font-size-base);
-      color: var(--color-fg-muted);
-      line-height: var(--font-leading-relaxed);
-    }
-
-    .contact-header a {
-      color: var(--color-fg-muted);
-      border-bottom: 1px solid var(--color-border-default);
-      transition: color 0.15s ease;
-    }
-
-    .contact-header a:hover {
-      color: var(--color-fg-default);
-    }
-
-    .contact-form {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      max-width: 560px;
-    }
-
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }
-
-    @media (max-width: 480px) {
-      .form-row { grid-template-columns: 1fr; }
-    }
-
-    .form-field {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .form-label {
-      font-family: var(--font-family-mono);
-      font-size: var(--font-size-xs);
-      font-weight: var(--font-weight-medium);
-      letter-spacing: var(--font-tracking-wider);
-      text-transform: uppercase;
-      color: var(--color-fg-subtle);
-    }
-
-    .form-input,
-    .form-textarea {
-      font-family: var(--font-family-sans);
-      font-size: var(--font-size-sm);
-      font-weight: var(--font-weight-normal);
-      color: var(--color-fg-default);
-      background: var(--color-bg-subtle);
-      border: 1px solid var(--color-border-default);
-      border-radius: var(--radius-lg);
-      padding: 10px 14px;
-      outline: none;
-      transition: border-color 0.15s ease, box-shadow 0.15s ease;
-      width: 100%;
-    }
-
-    .form-input::placeholder,
-    .form-textarea::placeholder {
-      color: var(--color-fg-subtle);
-    }
-
-    .form-input:focus,
-    .form-textarea:focus {
-      border-color: var(--color-focus);
-      box-shadow: 0 0 0 3px rgba(135, 165, 239, 0.15);
-    }
-
-    .form-textarea {
-      resize: vertical;
-      min-height: 120px;
-    }
-
-    .form-submit {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 11px 20px;
-      border-radius: var(--radius-lg);
+    /* ── Divider between companies ───────────────────── */
+    .exp-divider {
       border: none;
-      background: var(--color-fg-default);
-      color: var(--color-bg-default);
-      font-family: var(--font-family-mono);
-      font-size: var(--font-size-sm);
-      font-weight: var(--font-weight-semibold);
-      letter-spacing: var(--font-tracking-wide);
-      cursor: pointer;
-      transition: opacity 0.15s ease, transform 0.15s ease;
-      align-self: flex-start;
+      border-top: 1px solid var(--color-border-default);
+      margin: 28px 0;
     }
 
-    .form-submit:hover {
-      opacity: 0.85;
-      transform: translateY(-1px);
+    /* ── Footer ──────────────────────────────────────── */
+    .resume-footer {
+      border-top: 1px solid var(--color-border-default);
+      padding-top: 24px;
+      margin-top: 48px;
+    }
+
+    .resume-footer p {
+      font-family: 'Inconsolata', monospace;
+      font-size: 13px;
+      color: var(--color-fg-subtle);
     }
   </style>
 </head>
 <body>
   <div class="page">
 
-    <!-- Nav -->
-    <site-nav type="home" title="Resume" depth="../"></site-nav>
+  <!-- Nav -->
+  <site-nav type="casestudy" title="Résumé" depth="../"></site-nav>
 
-    <!-- Resume header -->
-    <header class="resume-header anim anim-2">
-      <div class="resume-header-left">
-        <h1>Daniel C Townson</h1>
-        <p>Senior Product Designer with nearly a decade at Under Armour designing experiences for MapMyFitness, MapMyRun & MyFitnessPal — followed by a deep dive into design systems at Olympus. Currently building projects with AI-integrated workflows. Available for hire.</p>
-      </div>
-      <a class="download-btn" href="../assets/Daniel_C_Townson_-_Senior_Product_Designer.pdf" download>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+  <div class="grid-container resume-page anim anim-3">
+
+    <!-- Header -->
+    <div class="resume-header">
+      <h1 class="resume-name">Daniel C Townson</h1>
+      <p class="resume-tagline">Senior Product Designer with nearly a decade at Under Armour designing experiences for MapMyFitness, MapMyRun &amp; MyFitnessPal — followed by a deep dive into design systems at Olympus. Currently building projects with AI-integrated workflows. Available for hire.</p>
+      <a class="resume-download" href="../assets/Daniel_C_Townson_-_Senior_Product_Designer.pdf" download>
+        Download PDF
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
           <polyline points="7 10 12 15 17 10"/>
           <line x1="12" y1="15" x2="12" y2="3"/>
         </svg>
-        Download PDF
       </a>
-    </header>
+    </div>
 
-    <!-- Resume body -->
-    <div class="resume-body anim anim-3">
+    <!-- Body -->
+    <div class="grid-row">
 
-      <!-- Main column -->
-      <main>
-        <div class="resume-section">
-          <p class="resume-section-label">Experience</p>
+      <!-- Main column — Experience -->
+      <main class="col-8">
+        <p class="resume-section-label">Experience</p>
 
-          <div class="exp-entry">
-            <div class="exp-header">
-              <p class="exp-company">Olympus</p>
-              <div class="exp-meta">
-                <span class="exp-title">Sr Designer — Design Systems</span>
-                <span class="exp-dot"></span>
-                <span class="exp-date">Feb 2024 – Apr 2026</span>
-                <span class="exp-dot"></span>
-                <span class="exp-location">Remote · Asheville, NC</span>
+        <!-- Olympus -->
+        <div class="exp-entry">
+          <p class="exp-company">Olympus</p>
+          <p class="exp-meta">Sr Designer — Design Systems  ·  Feb 2024 – Apr 2026  ·  Remote · Asheville, NC</p>
+          <div class="exp-projects">
+            <div class="exp-project" data-project="olysense">
+              <div class="exp-project-header">
+                <span class="exp-project-name">OlySense</span>
               </div>
-            </div>
-            <div class="exp-projects">
-              <div>
-                <p class="exp-project-name">OLYSENSE</p>
-                <p class="exp-project-desc">Embedded design systems support for teams building endoscopic software products. Drove cross-team adoption of a shared component library and token-based design language, unifying up to 80% of existing interface elements across disparate products.</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="exp-entry">
-            <div class="exp-header">
-              <p class="exp-company">Under Armour</p>
-              <div class="exp-meta">
-                <span class="exp-title">Sr. Digital Product Designer</span>
-                <span class="exp-dot"></span>
-                <span class="exp-date">Jul 2014 – Jul 2023</span>
-                <span class="exp-dot"></span>
-                <span class="exp-location">Hybrid · Austin, TX</span>
-              </div>
-            </div>
-            <div class="exp-projects">
-              <div>
-                <p class="exp-project-name">UA Baselayer Design System</p>
-                <p class="exp-project-desc">Led the design and implementation of a design system for use across Under Armour fitness tracking apps. Component creation, variables, color systems, and font families.</p>
-              </div>
-              <div>
-                <p class="exp-project-name">MapMyRun</p>
-                <p class="exp-project-desc">Led design on social features including photo editing and the public activity feed, as well as connected footwear integrations, MVP Premium subscriptions, website redesigns and data visualizations.</p>
-              </div>
-              <div>
-                <p class="exp-project-name">MyFitnessPal</p>
-                <p class="exp-project-desc">Designed data viz for performance trends including a performance insight system. Lead designer on Premium upsell initiatives that resulted in the highest-grossing yearly subscription revenue in MFP history ($10M+).</p>
-              </div>
-              <div>
-                <p class="exp-project-name">Samsung Galaxy Watch Active2 — UA Edition</p>
-                <p class="exp-project-desc">Partnered with Samsung to design and launch a co-branded digital watch preloaded with UA MapMyRun apps and features, including connected footwear integrations and real-time form coaching.</p>
-              </div>
-              <div>
-                <p class="exp-project-name">Garmin Data Fields</p>
-                <p class="exp-project-desc">Designed custom data fields pairing with UA Connected Footwear to provide deeper running data and real-time form coaching on Garmin watches, increasing engagement with Garmin users.</p>
-              </div>
-              <div>
-                <p class="exp-project-name">UA Record</p>
-                <p class="exp-project-desc">Designed and launched a 24/7 health and fitness tracking app that aggregated data from multiple sources into an easy-to-read dashboard with actionable insights.</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="exp-entry">
-            <div class="exp-header">
-              <p class="exp-company">CanWe Studios</p>
-              <div class="exp-meta">
-                <span class="exp-title">UX/UI Designer</span>
-                <span class="exp-dot"></span>
-                <span class="exp-date">Mar 2013 – Jun 2014</span>
-                <span class="exp-dot"></span>
-                <span class="exp-location">Austin, TX</span>
-              </div>
-            </div>
-            <div class="exp-projects">
-              <div>
-                <p class="exp-project-name">CanWeNetwork</p>
-                <p class="exp-project-desc">Lead designer for a mobile networking app using LinkedIn profiles and real-time location data to connect people professionally during hyper-local events.</p>
-              </div>
+              <p class="exp-project-desc">Embedded design systems support for teams building endoscopic software products. Drove cross-team adoption of a shared component library and token-based design language, <strong>unifying up to 80%</strong> of existing interface elements across disparate products.</p>
             </div>
           </div>
         </div>
+
+        <hr class="exp-divider" />
+
+        <!-- Under Armour -->
+        <div class="exp-entry">
+          <p class="exp-company">Under Armour</p>
+          <p class="exp-meta">Sr. Digital Product Designer  ·  Jul 2014 – Jul 2023  ·  Hybrid · Austin, TX</p>
+          <div class="exp-projects">
+
+            <div class="exp-project" data-project="ua-baselayer">
+              <div class="exp-project-header">
+                <span class="exp-project-name">UA Baselayer Design System</span>
+                <a class="exp-project-link" href="/ua-baselayer">View Project →</a>
+              </div>
+              <p class="exp-project-desc">Led the design and implementation of a design system for use across Under Armour fitness tracking apps. Component creation, variables, color systems, and font families.</p>
+            </div>
+
+            <div class="exp-project" data-project="mapmyrun">
+              <div class="exp-project-header">
+                <span class="exp-project-name">MapMyRun</span>
+              </div>
+              <p class="exp-project-desc">Led design on social features, connected footwear integrations, MVP Premium subscriptions, website redesigns and data visualizations.</p>
+            </div>
+
+            <div class="exp-project" data-project="mfp">
+              <div class="exp-project-header">
+                <span class="exp-project-name">MyFitnessPal</span>
+                <a class="exp-project-link" href="/mfpinsights">View Project →</a>
+              </div>
+              <p class="exp-project-desc">Lead designer on Premium upsell initiatives resulting in the <strong>highest-grossing yearly subscription revenue in MFP history ($10M+)</strong>.</p>
+            </div>
+
+            <div class="exp-project" data-project="ua-samsung">
+              <div class="exp-project-header">
+                <span class="exp-project-name">Samsung Galaxy Watch Active2 — UA Edition</span>
+                <a class="exp-project-link" href="/ua-samsung">View Project →</a>
+              </div>
+              <p class="exp-project-desc">Partnered with Samsung to design and launch a <strong>co-branded digital watch</strong> with connected footwear integrations &amp; real-time form coaching.</p>
+            </div>
+
+            <div class="exp-project" data-project="garmin">
+              <div class="exp-project-header">
+                <span class="exp-project-name">Garmin Data Fields</span>
+              </div>
+              <p class="exp-project-desc">Designed <strong>custom data fields</strong> pairing with UA Connected Footwear for deeper running data and real-time form coaching on Garmin watches.</p>
+            </div>
+
+            <div class="exp-project" data-project="ua-record">
+              <div class="exp-project-header">
+                <span class="exp-project-name">UA Record</span>
+              </div>
+              <p class="exp-project-desc">Designed and launched a <strong>24/7 health and fitness tracking</strong> app aggregating data from multiple sources into an easy-to-read dashboard.</p>
+            </div>
+
+          </div>
+        </div>
+
+        <hr class="exp-divider" />
+
+        <!-- CanWe Studios -->
+        <div class="exp-entry">
+          <p class="exp-company">CanWe Studios</p>
+          <p class="exp-meta">UX/UI Designer  ·  Mar 2013 – Jun 2014  ·  Austin, TX</p>
+          <div class="exp-projects">
+            <div class="exp-project" data-project="canwe">
+              <div class="exp-project-header">
+                <span class="exp-project-name">CanWeNetwork</span>
+              </div>
+              <p class="exp-project-desc">Lead designer for a mobile networking app using LinkedIn profiles and <strong>real-time location data to connect people professionally</strong> during hyper-local events.</p>
+            </div>
+          </div>
+        </div>
+
       </main>
 
       <!-- Sidebar -->
-      <aside class="resume-sidebar">
+      <aside class="col-4 sidebar">
 
-        <div class="sidebar-section">
-          <p class="sidebar-label">Skills</p>
+        <!-- Skills -->
+        <p class="resume-section-label">Skills</p>
 
-          <div class="skill-group">
-            <p class="skill-group-name">Design</p>
-            <div class="skill-list">
-              <span class="skill-tag">End-to-end product design</span>
-              <span class="skill-tag">Design systems</span>
-              <span class="skill-tag">Token architecture</span>
-              <span class="skill-tag">Interaction design</span>
-              <span class="skill-tag">WCAG accessibility</span>
-            </div>
-          </div>
-
-          <div class="skill-group">
-            <p class="skill-group-name">AI Workflows</p>
-            <div class="skill-list">
-              <span class="skill-tag">Figma MCP</span>
-              <span class="skill-tag">Claude</span>
-              <span class="skill-tag">Cursor</span>
-            </div>
-          </div>
-
-          <div class="skill-group">
-            <p class="skill-group-name">Technical</p>
-            <div class="skill-list">
-              <span class="skill-tag">HTML/CSS/JS</span>
-              <span class="skill-tag">Style Dictionary</span>
-              <span class="skill-tag">Azure DevOps</span>
-              <span class="skill-tag">Jira/Confluence</span>
-              <span class="skill-tag">Agile</span>
-            </div>
-          </div>
-
-          <div class="skill-group">
-            <p class="skill-group-name">Research</p>
-            <div class="skill-list">
-              <span class="skill-tag">User interviews</span>
-              <span class="skill-tag">Usability testing</span>
-              <span class="skill-tag">Competitive analysis</span>
-              <span class="skill-tag">A/B analysis</span>
-              <span class="skill-tag">Funnel review</span>
-            </div>
-          </div>
-
-          <div class="skill-group">
-            <p class="skill-group-name">Leadership</p>
-            <div class="skill-list">
-              <span class="skill-tag">Mentorship</span>
-              <span class="skill-tag">Design reviews</span>
-              <span class="skill-tag">Cross-functional</span>
-              <span class="skill-tag">Stakeholder comms</span>
-              <span class="skill-tag">Design strategy</span>
-            </div>
+        <div class="skill-group">
+          <p class="skill-group-label">Design</p>
+          <div class="chip-row">
+            <dct-chip data-projects="ua-baselayer,olysense">B2B / B2C Product Design</dct-chip>
+            <dct-chip data-projects="ua-baselayer,olysense">Design systems</dct-chip>
+            <dct-chip data-projects="ua-baselayer">Interaction design</dct-chip>
+            <dct-chip data-projects="ua-baselayer,olysense">Token Architecture</dct-chip>
+            <dct-chip>WCAG Standards</dct-chip>
+            <dct-chip>A11y</dct-chip>
+            <dct-chip>n10n</dct-chip>
           </div>
         </div>
 
-        <div class="sidebar-section">
-          <p class="sidebar-label">Education</p>
-          <div class="edu-entry">
-            <p class="edu-school">St Bonaventure University</p>
-            <p class="edu-degree">MS Integrated Marketing Communications</p>
+        <div class="skill-group">
+          <p class="skill-group-label">AI Workflows</p>
+          <div class="chip-row">
+            <dct-chip>Figma Make/MCP</dct-chip>
+            <dct-chip>Claude Code/Design</dct-chip>
+            <dct-chip>Cursor</dct-chip>
+            <dct-chip>Agents</dct-chip>
           </div>
-          <div class="edu-entry">
-            <p class="edu-school">SUNY Buffalo</p>
-            <p class="edu-degree">BS Communication Design</p>
+        </div>
+
+        <div class="skill-group">
+          <p class="skill-group-label">Technical</p>
+          <div class="chip-row">
+            <dct-chip>HTML/CSS/JS</dct-chip>
+            <dct-chip data-projects="ua-baselayer,olysense">Style Dictionary</dct-chip>
+            <dct-chip>Azure DevOps</dct-chip>
+            <dct-chip>Jira/Confluence</dct-chip>
+            <dct-chip>Agile</dct-chip>
+          </div>
+        </div>
+
+        <div class="skill-group">
+          <p class="skill-group-label">UX / Research</p>
+          <div class="chip-row">
+            <dct-chip>User / Stakeholder Interviews</dct-chip>
+            <dct-chip>Usability Testing</dct-chip>
+            <dct-chip>Competitive Analysis</dct-chip>
+            <dct-chip>A/B Testing</dct-chip>
+            <dct-chip>Funnel / Dropoff Reviews</dct-chip>
+          </div>
+        </div>
+
+        <div class="skill-group">
+          <p class="skill-group-label">Leadership &amp; Teamwork</p>
+          <div class="chip-row">
+            <dct-chip>Mentorship</dct-chip>
+            <dct-chip>Design Reviews</dct-chip>
+            <dct-chip>Cross-Functional Collaboration</dct-chip>
+            <dct-chip>Design Strategies</dct-chip>
+            <dct-chip>Roadmapping</dct-chip>
+            <dct-chip>Stakeholder Communications</dct-chip>
+          </div>
+        </div>
+
+        <!-- Education -->
+        <div style="margin-top: 32px;">
+          <p class="resume-section-label">Education</p>
+          <div class="edu-entries">
+            <div>
+              <p class="edu-school">St Bonaventure University</p>
+              <p class="edu-degree">MS Integrated Marketing Communications</p>
+            </div>
+            <div>
+              <p class="edu-school">SUNY Buffalo</p>
+              <p class="edu-degree">BS Communication Design</p>
+            </div>
           </div>
         </div>
 
@@ -570,27 +493,67 @@
     </div>
 
     <!-- Contact form -->
-     <contact-form></contact-form>
-   <!-- Footer -->
-    <footer class="anim anim-5">
-      <p class="footer-built">
-        Built with <a href="https://claude.ai" target="_blank" rel="noopener">Claude Design</a> and <a href="https://dct.design" target="_blank" rel="noopener">dct tokens</a>.
-      </p>
-      <p class="footer-copy">© 2026 Daniel C Townson</p>
+    <contact-form></contact-form>
+
+    <!-- Footer -->
+    <footer class="resume-footer">
+      <p>Built with <a href="https://fonts.google.com/specimen/Inter" target="_blank" rel="noopener" style="color: var(--color-fg-muted); border-bottom: 1px solid var(--color-border-default);">Inter</a> and <a href="https://dct.design" target="_blank" rel="noopener" style="color: var(--color-fg-muted); border-bottom: 1px solid var(--color-border-default);">dct tokens</a>.</p>
+      <p style="margin-top: 4px;">© 2026 Daniel C Townson</p>
     </footer>
 
   </div>
 
   <script>
-    const toggle = document.getElementById('themeToggle');
-    const html = document.documentElement;
-    const saved = localStorage.getItem('dct-theme');
-    if (saved) html.setAttribute('data-theme', saved);
-    toggle.addEventListener('click', () => {
-      const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-      html.setAttribute('data-theme', next);
-      localStorage.setItem('dct-theme', next);
+    // ── Chip → Project hover interaction ─────────────────
+    // dct-chip renders an inner .dct-chip span — query those
+    // after components.js has had a chance to upgrade all elements
+    window.addEventListener('DOMContentLoaded', () => {
+      const allChipEls  = document.querySelectorAll('dct-chip');
+      const allProjects = document.querySelectorAll('.exp-project[data-project]');
+
+      allChipEls.forEach(chipEl => {
+        const projects = chipEl.getAttribute('data-projects');
+        if (!projects) return;
+        const linked = projects.split(',').map(s => s.trim());
+
+        chipEl.addEventListener('mouseenter', () => {
+          allChipEls.forEach(c => {
+            const cProjects = c.getAttribute('data-projects');
+            if (!cProjects) {
+              c.querySelector('.dct-chip')?.classList.add('chip--dimmed');
+              return;
+            }
+            const cLinked = cProjects.split(',').map(s => s.trim());
+            const overlap = cLinked.some(p => linked.includes(p));
+            const inner = c.querySelector('.dct-chip');
+            if (overlap) {
+              inner?.classList.add('chip--highlighted');
+              inner?.classList.remove('chip--dimmed');
+            } else {
+              inner?.classList.add('chip--dimmed');
+              inner?.classList.remove('chip--highlighted');
+            }
+          });
+
+          allProjects.forEach(proj => {
+            if (linked.includes(proj.dataset.project)) {
+              proj.classList.add('project--highlighted');
+            }
+          });
+        });
+
+        chipEl.addEventListener('mouseleave', () => {
+          allChipEls.forEach(c => {
+            const inner = c.querySelector('.dct-chip');
+            inner?.classList.remove('chip--highlighted', 'chip--dimmed');
+          });
+          allProjects.forEach(proj => {
+            proj.classList.remove('project--highlighted');
+          });
+        });
+      });
     });
   </script>
+</div>
 </body>
 </html>
