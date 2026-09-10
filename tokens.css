@@ -336,7 +336,7 @@
       --font-body:                var(--font-family-sans);
       --font-heading:             var(--font-family-display);
       --font-mono:                var(--font-family-mono);
-      --font-size-caption:        var(--font-size-xs);
+      --font-size-caption:        var(--font-size-caption);
       --font-size-label:          var(--font-size-sm);
       --font-size-body:           var(--font-size-base);
       --font-size-body-lg:        var(--font-size-lg);
