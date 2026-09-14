@@ -81,7 +81,7 @@
     font-weight: var(--font-weight-semibold);
     letter-spacing: var(--font-tracking-wide);
     white-space: nowrap;
-    padding: 4px 12px;
+    padding: 0 8px;
     border-radius: var(--radius-md);
     border: none;
     backdrop-filter: blur(8px);
@@ -186,7 +186,6 @@
     border-radius: var(--radius-md);
     border: none;
     outline: none;
-    background: transparent;
     color: var(--color-fg-muted);
     transition: color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
   }
@@ -206,7 +205,7 @@
   }
   .nav-links a:hover {
     color: var(--color-fg-default);
-    background-color: var(--color-bg-subtle);
+    background-color: var(--color-bg-muted);
   }
   
   .nav-links a svg {
