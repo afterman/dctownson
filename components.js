@@ -84,7 +84,7 @@ class SiteNav extends HTMLElement {
   _caseStudyNav(title, depth) {
     return `
       <nav class="cs-nav">
-        <div class="nav-inner">
+        <div class="nav-inner anim anim-1">
         <dct-button variant="ghost" size="sm" href="/">
             <svg slot="leading" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
               <path d="M5 12l14 0" />
