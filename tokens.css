@@ -248,38 +248,38 @@
       --color-bg-muted:        var(--color-gray-200);
     
       /* Foreground */
-      --color-fg-default:      var(--color-gray-900);
-      --color-fg-muted:        var(--color-gray-700);
+      --color-fg-default:      var(--color-gray-950);
+      --color-fg-muted:        var(--color-gray-800);
       --color-fg-subtle:       var(--color-gray-600);
       --color-fg-disabled:     var(--color-gray-400);
       --color-fg-on-accent:    var(--color-accent-contrast);
     
       /* Border */
       --color-border-default:  var(--color-gray-300);
-      --color-border-strong:   var(--color-gray-400);
+      --color-border-strong:   var(--color-gray-500);
       --color-border-muted:    var(--color-gray-200);
       --color-border-accent:   var(--color-accent-600);
     
       /* Accent */
       --color-accent-default:  var(--color-accent-600);
       --color-accent-hover:    var(--color-accent-700);
-      --color-accent-muted:    var(--color-accent-100);
-      --color-accent-subtle:   var(--color-accent-50);
-      --color-accent-fg:       var(--color-accent-700);
+      --color-accent-muted:    var(--color-accent-300);
+      --color-accent-subtle:   var(--color-accent-100);
+      --color-accent-fg:       var(--color-accent-600);
     
       /* Surface */
       --color-surface-default: var(--color-gray-50);
-      --color-surface-raised:  var(--color-gray-50);
+      --color-surface-raised:  var(--color-gray-100);
       --color-surface-overlay: var(--color-gray-200);
     
       /* State */
       --color-focus:           var(--color-accent-600);
-      --color-disabled-bg:     var(--color-gray-300);
-      --color-disabled-text:   var(--color-gray-500);
+      --color-disabled-bg:     var(--color-bg-muted);
+      --color-disabled-text:   var(--color-fg-subtle);
     
       /* Danger */
-      --color-danger-default:  var(--color-red-700);
-      --color-danger-hover:    var(--color-red-800);
+      --color-danger-default:  var(--color-red-800);
+      --color-danger-hover:    var(--color-red-900);
       --color-danger-muted:    var(--color-red-100);
       --color-danger-fg:       var(--color-red-700);
       --color-danger-on:       var(--color-red-contrast);
@@ -288,49 +288,55 @@
       --color-success-bg:        var(--color-green-100);
       --color-success-bg-subtle: var(--color-green-50);
       --color-success-border:    var(--color-green-300);
-      --color-success-text:      var(--color-gray-default);
-      --color-success-icon:      var(--color-green-700);
+      --color-success-text:      var(--color-green-950);
+      --color-success-text-muted:var(--color-green-700);
+      --color-success-icon:      var(--color-green-600);
       --color-success-solid:     var(--color-green-600);
       --color-success-on-solid:  var(--color-green-contrast);
+
     
       /* Status — Warning */
       --color-warning-bg:        var(--color-yellow-100);
       --color-warning-bg-subtle: var(--color-yellow-50);
       --color-warning-border:    var(--color-yellow-300);
-      --color-warning-text:      var(--color-gray-default);
+      --color-warning-text:      var(--color-yellow-950);
+      --color-warning-text-muted:var(--color-yellow-900);
       --color-warning-icon:      var(--color-yellow-700);
       --color-warning-solid:     var(--color-yellow-500);
       --color-warning-on-solid:  var(--color-yellow-contrast);
+   
     
       /* Status — Error */
       --color-error-bg:          var(--color-red-100);
       --color-error-bg-subtle:   var(--color-red-50);
       --color-error-border:      var(--color-red-300);
-      --color-error-text:        var(--color-gray-default);
+      --color-error-text:        var(--color-red-default);
+      --color-error-text-muted:  var(--color-red-900);
       --color-error-icon:        var(--color-red-700);
       --color-error-solid:       var(--color-red-600);
       --color-error-on-solid:    var(--color-red-contrast);
     
       /* Status — Info */
-      --color-info-bg:           var(--color-accent-100);
-      --color-info-bg-subtle:    var(--color-accent-50);
-      --color-info-border:       var(--color-accent-300);
-      --color-info-text:         var(--color-gray-default);
-      --color-info-icon:         var(--color-accent-700);
-      --color-info-solid:        var(--color-accent-600);
-      --color-info-on-solid:     var(--color-accent-contrast);
+      --color-info-bg:           var(--color-blue-100);
+      --color-info-bg-subtle:    var(--color-blue-50);
+      --color-info-border:       var(--color-blue-300);
+      --color-info-text:         var(--color-blue-default);
+      --color-info-text-muted:   var(--color-blue-900);
+      --color-info-icon:         var(--color-blue-700);
+      --color-info-solid:        var(--color-blue-600);
+      --color-info-on-solid:     var(--color-blue-contrast);
     
       /* Icon */
       --color-icon-default:      var(--color-gray-default);
       --color-icon-muted:        var(--color-gray-500);
       --color-icon-subtle:       var(--color-gray-400);
       --color-icon-disabled:     var(--color-gray-300);
-      --color-icon-on-accent:    var(--color-accent-contrast);
+      --color-icon-on-accent:    var(--color-gray-50);
       --color-icon-accent:       var(--color-accent-600);
       --color-icon-success:      var(--color-green-600);
       --color-icon-warning:      var(--color-yellow-600);
       --color-icon-error:        var(--color-red-600);
-      --color-icon-info:         var(--color-accent-600);
+      --color-icon-info:         var(--color-blue-950);
     
       /* Font aliases */
       --font-body:                var(--font-family-sans);
@@ -367,15 +373,15 @@
     [data-theme="dark"] {
     
       /* Background */
-      --color-bg-default:      var(--color-gray-900);
-      --color-bg-subtle:       var(--color-gray-800);
-      --color-bg-muted:        var(--color-gray-700);
+      --color-bg-default:      var(--color-gray-950);
+      --color-bg-subtle:       var(--color-gray-900);
+      --color-bg-muted:        var(--color-gray-800);
     
       /* Foreground */
-      --color-fg-default:      var(--color-gray-100);
-      --color-fg-muted:        var(--color-gray-400);
-      --color-fg-subtle:       var(--color-gray-500);
-      --color-fg-disabled:     var(--color-gray-700);
+      --color-fg-default:      var(--color-gray-200);
+      --color-fg-muted:        var(--color-gray-300);
+      --color-fg-subtle:       var(--color-gray-400);
+      --color-fg-disabled:     var(--color-gray-500);
       --color-fg-on-accent:    var(--color-accent-contrast);
     
       /* Border */
@@ -386,7 +392,7 @@
     
       /* Accent */
       --color-accent-default:  var(--color-accent-500);
-      --color-accent-hover:    var(--color-accent-400);
+      --color-accent-hover:    var(--color-accent-700);
       --color-accent-muted:    var(--color-accent-900);
       --color-accent-subtle:   var(--color-accent-950);
       --color-accent-fg:       var(--color-accent-400);
@@ -398,12 +404,12 @@
     
       /* State */
       --color-focus:           var(--color-accent-400);
-      --color-disabled-bg:     var(--color-gray-alpha-5);
-      --color-disabled-text:   var(--color-gray-700);
+      --color-disabled-bg:     var(--color-bg-muted);
+      --color-disabled-text:   var(--color-fg-disabled);
     
       /* Danger */
-      --color-danger-default:  var(--color-red-700);
-      --color-danger-hover:    var(--color-red-800);
+      --color-danger-default:  var(--color-red-800);
+      --color-danger-hover:    var(--color-red-900);
       --color-danger-muted:    var(--color-red-950);
       --color-danger-fg:       var(--color-red-200);
       --color-danger-on:       var(--color-red-contrast);
@@ -412,7 +418,8 @@
       --color-success-bg:        var(--color-green-950);
       --color-success-bg-subtle: var(--color-green-900);
       --color-success-border:    var(--color-green-700);
-      --color-success-text:      var(--color-gray-50);
+      --color-success-text:      var(--color-green-50);
+      --color-success-text-muted:var(--color-green-100);
       --color-success-icon:      var(--color-green-400);
       --color-success-solid:     var(--color-green-500);
       --color-success-on-solid:  var(--color-green-contrast);
@@ -421,7 +428,8 @@
       --color-warning-bg:        var(--color-yellow-950);
       --color-warning-bg-subtle: var(--color-yellow-900);
       --color-warning-border:    var(--color-yellow-700);
-      --color-warning-text:      var(--color-gray-50);
+      --color-warning-text:      var(--color-yellow-50);
+      --color-warning-text-muted:var(--color-yellow-100);
       --color-warning-icon:      var(--color-yellow-400);
       --color-warning-solid:     var(--color-yellow-400);
       --color-warning-on-solid:  var(--color-yellow-contrast);
@@ -436,23 +444,24 @@
       --color-error-on-solid:    var(--color-red-contrast);
     
       /* Status — Info */
-      --color-info-bg:           var(--color-accent-950);
-      --color-info-bg-subtle:    var(--color-accent-900);
-      --color-info-border:       var(--color-accent-700);
-      --color-info-text:         var(--color-gray-50);
-      --color-info-icon:         var(--color-accent-400);
-      --color-info-solid:        var(--color-accent-500);
-      --color-info-on-solid:     var(--color-accent-contrast);
+      --color-info-bg:           var(--color-blue-950);
+      --color-info-bg-subtle:    var(--color-blue-900);
+      --color-info-border:       var(--color-blue-700);
+      --color-info-text:         var(--color-blue-50);
+      --color-info-text-muted:   var(--color-blue-300);
+      --color-info-icon:         var(--color-blue-400);
+      --color-info-solid:        var(--color-blue-500);
+      --color-info-on-solid:     var(--color-blue-contrast);
     
       /* Icon */
       --color-icon-default:      var(--color-gray-50);
-      --color-icon-muted:        var(--color-gray-600);
-      --color-icon-subtle:       var(--color-gray-700);
+      --color-icon-muted:        var(--color-gray-400);
+      --color-icon-subtle:       var(--color-gray-600);
       --color-icon-disabled:     var(--color-gray-700);
-      --color-icon-on-accent:    var(--color-accent-contrast);
+      --color-icon-on-accent:    var(--color-gray-contrast);
       --color-icon-accent:       var(--color-accent-400);
       --color-icon-success:      var(--color-green-400);
       --color-icon-warning:      var(--color-yellow-400);
       --color-icon-error:        var(--color-red-400);
-      --color-icon-info:         var(--color-accent-400);
+      --color-icon-info:         var(--color-blue-800);
     }
