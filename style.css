@@ -71,7 +71,7 @@
   [data-tip]::after {
     content: attr(data-tip);
     position: absolute;
-    bottom: calc(75%);
+    bottom: calc(100%);
     left: 50%;
     transform: translateX(-50%) translateY(2px);
     background: transparent;
@@ -670,6 +670,146 @@ dct-chip { display: inline-block; }
 
 .dct-chip.chip--dimmed {
   opacity: 0.35;
+}
+
+  /* ── dct-button ──────────────────────────────────────── */
+dct-button { display: inline-flex; }
+
+.dct-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-2);
+  border: 1px solid transparent;
+  border-radius: var(--radius-lg);
+  font-family: var(--font-family-sans);
+  font-weight: var(--font-weight-medium);
+  line-height: 1;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease,
+              color 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
+}
+
+.dct-btn:active {
+  transform: translateY(1px);
+}
+
+.dct-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--color-accent-alpha-4);
+}
+
+.dct-btn-label--hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.dct-btn svg {
+  flex-shrink: 0;
+}
+
+/* Sizes — 8px radius is constant across all three */
+.dct-btn--sm {
+  height: 32px;
+  padding: 0 var(--spacing-3);
+  gap: var(--spacing-1-5);
+  font-size: var(--font-size-sm);
+}
+.dct-btn--sm svg { width: var(--icon-sm); height: var(--icon-sm); }
+
+.dct-btn--md {
+  height: 36px;
+  padding: 0 var(--spacing-4);
+  font-size: var(--font-size-sm);
+}
+.dct-btn--md svg { width: var(--icon-md); height: var(--icon-md); }
+
+.dct-btn--lg {
+  height: 40px;
+  padding: 0 var(--spacing-6);
+  font-size: var(--font-size-base);
+}
+.dct-btn--lg svg { width: var(--icon-lg); height: var(--icon-lg); }
+
+/* Icon-only — square footprint, no horizontal padding */
+.dct-btn--icon-only { padding: 0; }
+.dct-btn--icon-only.dct-btn--sm { width: 32px; }
+.dct-btn--icon-only.dct-btn--md { width: 36px; }
+.dct-btn--icon-only.dct-btn--lg { width: 40px; }
+
+/* Variant — Primary (filled) */
+.dct-btn--primary {
+  background: var(--color-accent-default);
+  color: var(--color-fg-on-accent);
+}
+.dct-btn--primary:hover:not(:disabled):not([aria-disabled="true"]) {
+  background: var(--color-accent-hover);
+}
+
+/* Variant — Secondary (subtle outline) */
+.dct-btn--secondary {
+  background: transparent;
+  border-color: var(--color-border-default);
+  color: var(--color-fg-default);
+}
+.dct-btn--secondary:hover:not(:disabled):not([aria-disabled="true"]) {
+  background: var(--color-bg-subtle);
+  border-color: var(--color-border-strong);
+}
+
+/* Variant — Ghost */
+.dct-btn--ghost {
+  background: transparent;
+  color: var(--color-fg-muted);
+}
+.dct-btn--ghost:hover:not(:disabled):not([aria-disabled="true"]) {
+  background: var(--color-bg-muted);
+  color: var(--color-fg-default);
+}
+
+/* Variant — Destructive */
+.dct-btn--destructive {
+  background: var(--color-danger-default);
+  color: var(--color-danger-on);
+}
+.dct-btn--destructive:hover:not(:disabled):not([aria-disabled="true"]) {
+  background: var(--color-danger-hover);
+}
+
+/* Disabled — same flat treatment regardless of variant */
+.dct-btn:disabled,
+.dct-btn[aria-disabled="true"] {
+  cursor: not-allowed;
+  pointer-events: none;
+  background: var(--color-disabled-bg);
+  border-color: transparent;
+  color: var(--color-disabled-text);
+}
+.dct-btn:disabled:active,
+.dct-btn[aria-disabled="true"]:active {
+  transform: none;
+}
+
+/* Loading */
+.dct-btn--loading {
+  cursor: wait;
+}
+
+.dct-btn-spinner {
+  animation: dct-btn-spin 0.7s linear infinite;
+}
+
+@keyframes dct-btn-spin {
+  to { transform: rotate(360deg); }
 }
 
     /* ── Reading progress bar ──────────────────────── */

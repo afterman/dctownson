@@ -5,6 +5,7 @@
  *   <site-nav>     — sitewide navigation, two variants
  *   <contact-form> — reusable contact section
  *   <dct-chip>     — skill/tag chip with optional project linking
+ *   <dct-button>   — button, 4 variants × 3 sizes, icons + loading state
  *
  * Usage:
  *   Homepage:    <site-nav type="home" depth=""></site-nav>
@@ -187,3 +188,121 @@ class DctChip extends HTMLElement {
 }
 
 customElements.define('dct-chip', DctChip);
+
+/* ============================================================
+   <dct-button> — button component
+   Variants:    primary | secondary | ghost | destructive
+   Sizes:       sm | md | lg
+   Attributes:
+     variant     — primary (default) | secondary | ghost | destructive
+     size        — sm | md (default) | lg
+     href        — renders an <a> instead of a <button>
+     type        — button (default) | submit | reset
+     icon-only   — square icon button (requires aria-label)
+     loading     — shows a spinner in place of the leading icon,
+                   disables the button
+     disabled    — disables the button
+     aria-label  — required when icon-only; forwarded either way
+
+   Icons are passed as child elements marked slot="leading" /
+   slot="trailing" — real SVG markup, captured once on connect.
+   Everything else in the light DOM becomes the label text.
+
+   Usage:
+     <dct-button>Default primary</dct-button>
+
+     <dct-button variant="secondary" size="sm">
+       <svg slot="leading">...</svg>
+       Download
+     </dct-button>
+
+     <dct-button variant="ghost" icon-only aria-label="Close">
+       <svg slot="leading">...</svg>
+     </dct-button>
+
+     <dct-button variant="destructive">Delete project</dct-button>
+
+   Scripting a loading state (e.g. while a fetch is in flight):
+     const btn = document.querySelector('#send-btn');
+     btn.setLoading(true);
+     // ...await the request...
+     btn.setLoading(false);
+   ============================================================ */
+
+class DctButton extends HTMLElement {
+  static get observedAttributes() {
+    return ['variant', 'size', 'loading', 'disabled', 'icon-only', 'href', 'type', 'aria-label'];
+  }
+
+  connectedCallback() {
+    if (!this._captured) {
+      const leadingEl  = this.querySelector('[slot="leading"]');
+      const trailingEl = this.querySelector('[slot="trailing"]');
+      if (leadingEl)  leadingEl.removeAttribute('slot');
+      if (trailingEl) trailingEl.removeAttribute('slot');
+
+      this._leadingHTML  = leadingEl  ? leadingEl.outerHTML  : '';
+      this._trailingHTML = trailingEl ? trailingEl.outerHTML : '';
+      this._label        = this.textContent.trim();
+      this._captured      = true;
+    }
+    this._render();
+  }
+
+  attributeChangedCallback() {
+    if (this._captured) this._render();
+  }
+
+  setLoading(isLoading)   { this.toggleAttribute('loading', !!isLoading); }
+  setDisabled(isDisabled) { this.toggleAttribute('disabled', !!isDisabled); }
+
+  _spinnerHTML() {
+    return `<svg class="dct-btn-spinner" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9" /></svg>`;
+  }
+
+  _render() {
+    const variant    = this.getAttribute('variant') || 'primary';
+    const size       = this.getAttribute('size') || 'md';
+    const type       = this.getAttribute('type') || 'button';
+    const href       = this.getAttribute('href');
+    const iconOnly   = this.hasAttribute('icon-only');
+    const isLoading  = this.hasAttribute('loading');
+    const isDisabled = this.hasAttribute('disabled') || isLoading;
+    const ariaLabel  = this.getAttribute('aria-label');
+
+    if (iconOnly && !ariaLabel) {
+      console.warn('<dct-button icon-only> needs an aria-label — screen readers have nothing else to announce.');
+    }
+
+    const classes = [
+      'dct-btn',
+      `dct-btn--${variant}`,
+      `dct-btn--${size}`,
+      iconOnly ? 'dct-btn--icon-only' : '',
+      isLoading ? 'dct-btn--loading' : '',
+    ].filter(Boolean).join(' ');
+
+    const leading  = isLoading ? this._spinnerHTML() : this._leadingHTML;
+    const trailing = isLoading ? '' : this._trailingHTML;
+    const label    = this._label
+      ? `<span class="dct-btn-label${iconOnly ? ' dct-btn-label--hidden' : ''}">${this._label}</span>`
+      : '';
+    const inner = `${leading}${label}${trailing}`;
+
+    const attrs = [`class="${classes}"`];
+    if (ariaLabel) attrs.push(`aria-label="${ariaLabel}"`);
+    if (isLoading) attrs.push('aria-busy="true"');
+
+    if (href) {
+      if (isDisabled) attrs.push('aria-disabled="true"', 'tabindex="-1"');
+      else attrs.push(`href="${href}"`);
+      this.innerHTML = `<a ${attrs.join(' ')}>${inner}</a>`;
+    } else {
+      attrs.push(`type="${type}"`);
+      if (isDisabled) attrs.push('disabled', 'aria-disabled="true"');
+      this.innerHTML = `<button ${attrs.join(' ')}>${inner}</button>`;
+    }
+  }
+}
+
+customElements.define('dct-button', DctButton);
