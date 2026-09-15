@@ -71,7 +71,7 @@
   [data-tip]::after {
     content: attr(data-tip);
     position: absolute;
-    bottom: calc(100%);
+    bottom: calc(100% + 2px);
     left: 50%;
     transform: translateX(-50%) translateY(2px);
     background: transparent;
@@ -673,7 +673,7 @@ dct-button { display: inline-flex; }
 /* Sizes — 8px radius is constant across all three */
 .dct-btn--sm {
   height: 32px;
-  padding: 0 var(--spacing-3);
+  padding: 0 var(--spacing-2);
   gap: var(--spacing-1-5);
   font-size: var(--font-size-sm);
 }
@@ -681,14 +681,14 @@ dct-button { display: inline-flex; }
 
 .dct-btn--md {
   height: 36px;
-  padding: 0 var(--spacing-4);
+  padding: 0 var(--spacing-3);
   font-size: var(--font-size-sm);
 }
 .dct-btn--md svg { width: var(--icon-md); height: var(--icon-md); }
 
 .dct-btn--lg {
   height: 40px;
-  padding: 0 var(--spacing-6);
+  padding: 0 var(--spacing-4);
   font-size: var(--font-size-base);
 }
 .dct-btn--lg svg { width: var(--icon-lg); height: var(--icon-lg); }
