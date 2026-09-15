@@ -49,30 +49,30 @@ class SiteNav extends HTMLElement {
           <p class="hero-eyebrow anim anim-2">Hello, I'm Daniel.</p>
           <div class="nav-right">
             <div class="nav-links">
-              <a href="https://www.linkedin.com/in/danieltownson/" target="_blank" rel="noopener" data-tip="LinkedIn" class="nav-icon-btn">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <dct-button variant="ghost" size="md" icon-only href="https://www.linkedin.com/in/danieltownson/" target="_blank" rel="noopener" data-tip="LinkedIn" aria-label="LinkedIn">
+                <svg slot="leading" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M8 11v5" />
                   <path d="M8 8v.01" />
                   <path d="M12 16v-5" />
                   <path d="M16 16v-3a2 2 0 1 0 -4 0" />
                   <path d="M3 7a4 4 0 0 1 4 -4h10a4 4 0 0 1 4 4v10a4 4 0 0 1 -4 4h-10a4 4 0 0 1 -4 -4l0 -10" />
                 </svg>
-              </a>
-              <a href="mailto:dctownson@gmail.com?subject=Hi%20Daniel!" data-tip="Email Me" class="nav-icon-btn">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              </dct-button>
+              <dct-button variant="ghost" size="md" icon-only href="mailto:dctownson@gmail.com?subject=Hi%20Daniel!" data-tip="Email Me" aria-label="Email Me">
+                <svg slot="leading" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10" />
                   <path d="M3 7l9 6l9 -6" />
                 </svg>
-              </a>
-              <a href="${depth}assets/Daniel_C_Townson_-_Sr_Product_Designer_-_Resume_01Sep26.pdf" target="_blank" rel="noopener" data-tip="Résumé" class="nav-icon-btn">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              </dct-button>
+              <dct-button variant="ghost" size="md" icon-only href="${depth}assets/Daniel_C_Townson_-_Sr_Product_Designer_-_Resume_01Sep26.pdf" target="_blank" rel="noopener" data-tip="Résumé" aria-label="Résumé">
+                <svg slot="leading" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M14 3v4a1 1 0 0 0 1 1h4" />
                   <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2" />
                   <path d="M9 9l1 0" />
                   <path d="M9 13l6 0" />
                   <path d="M9 17l6 0" />
                 </svg>
-              </a>
+              </dct-button>
               ${this._themeToggleHTML()}
             </div>
           </div>
@@ -197,6 +197,8 @@ customElements.define('dct-chip', DctChip);
      variant     — primary (default) | secondary | ghost | destructive
      size        — sm | md (default) | lg
      href        — renders an <a> instead of a <button>
+     target      — forwarded to the <a> when href is set
+     rel         — forwarded to the <a> when href is set
      type        — button (default) | submit | reset
      icon-only   — square icon button (requires aria-label)
      loading     — shows a spinner in place of the leading icon,
@@ -231,7 +233,7 @@ customElements.define('dct-chip', DctChip);
 
 class DctButton extends HTMLElement {
   static get observedAttributes() {
-    return ['variant', 'size', 'loading', 'disabled', 'icon-only', 'href', 'type', 'aria-label'];
+    return ['variant', 'size', 'loading', 'disabled', 'icon-only', 'href', 'type', 'aria-label', 'target', 'rel'];
   }
 
   connectedCallback() {
@@ -265,6 +267,8 @@ class DctButton extends HTMLElement {
     const size       = this.getAttribute('size') || 'md';
     const type       = this.getAttribute('type') || 'button';
     const href       = this.getAttribute('href');
+    const target     = this.getAttribute('target');
+    const rel        = this.getAttribute('rel');
     const iconOnly   = this.hasAttribute('icon-only');
     const isLoading  = this.hasAttribute('loading');
     const isDisabled = this.hasAttribute('disabled') || isLoading;
@@ -296,6 +300,8 @@ class DctButton extends HTMLElement {
     if (href) {
       if (isDisabled) attrs.push('aria-disabled="true"', 'tabindex="-1"');
       else attrs.push(`href="${href}"`);
+      if (target) attrs.push(`target="${target}"`);
+      if (rel) attrs.push(`rel="${rel}"`);
       this.innerHTML = `<a ${attrs.join(' ')}>${inner}</a>`;
     } else {
       attrs.push(`type="${type}"`);
