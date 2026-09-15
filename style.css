@@ -232,8 +232,8 @@
   .hero { margin-bottom: 80px; padding-top: 40px; }
 
   .hero-eyebrow {
-    font-family: var(--font-family-mono);
-    font-size: var(--font-size-sm);
+    font-family: var(--font-family-sans);
+    font-size: var(--font-size-xs);
     font-weight: var(--font-weight-medium);
     letter-spacing: var(--font-tracking-wider);
     text-transform: uppercase;
@@ -736,6 +736,52 @@ dct-button { display: inline-flex; }
 }
 .dct-btn--destructive:hover:not(:disabled):not([aria-disabled="true"]) {
   background: var(--color-danger-hover);
+}
+
+/* Variant — Link (inline text link, no button box — for links dropped
+   into prose/body copy, not a standalone action). Matches the site's
+   existing inline-link treatment (.footer-built a): muted-to-default text
+   color with a hairline border-bottom instead of an underline, rather
+   than the accent color — reads as quiet body copy, not another CTA.
+   The .dct-btn.dct-btn--link double-class form is deliberate: it keeps
+   this variant winning over the plain .dct-btn box styles regardless of
+   where this block sits in the file. */
+.dct-btn.dct-btn--link {
+  display: inline-flex;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  color: var(--color-fg-muted);
+  border-bottom: 1px solid var(--color-border-default);
+  line-height: inherit;
+  white-space: normal;
+  vertical-align: baseline;
+}
+.dct-btn--link:hover:not(:disabled):not([aria-disabled="true"]) {
+  color: var(--color-fg-default);
+  border-bottom-color: var(--color-border-strong);
+}
+/* Neutral on size — no fixed height/padding, font-size inherits from
+   wherever the link sits (a heading, a paragraph, a caption, etc.) */
+.dct-btn--link.dct-btn--sm,
+.dct-btn--link.dct-btn--md,
+.dct-btn--link.dct-btn--lg {
+  height: auto;
+  padding: 0;
+  gap: var(--spacing-1);
+  font-size: inherit;
+}
+.dct-btn--link.dct-btn--sm svg,
+.dct-btn--link.dct-btn--md svg,
+.dct-btn--link.dct-btn--lg svg {
+  width: 1em;
+  height: 1em;
+}
+.dct-btn.dct-btn--link:disabled,
+.dct-btn.dct-btn--link[aria-disabled="true"] {
+  background: transparent;
+  border-bottom-color: transparent;
+  color: var(--color-disabled-text);
 }
 
 /* Disabled — same flat treatment regardless of variant */

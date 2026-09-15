@@ -85,16 +85,40 @@ class SiteNav extends HTMLElement {
     return `
       <nav class="cs-nav">
         <div class="nav-inner">
-          <a class="nav-back" href="/">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+        <dct-button variant="ghost" size="sm" href="/">
+            <svg slot="leading" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
               <path d="M5 12l14 0" />
               <path d="M5 12l6 6" />
               <path d="M5 12l6 -6" />
             </svg>
-            Work
-          </a>
-          <span class="nav-title">${title}</span>
+            <span slot="leading">Back to Work</span>
+          </dct-button>
           <div class="nav-right">
+            <div class="nav-links">
+              <dct-button variant="ghost" size="md" icon-only href="https://www.linkedin.com/in/danieltownson/" target="_blank" rel="noopener" data-tip="LinkedIn" aria-label="LinkedIn">
+                <svg slot="leading" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M8 11v5" />
+                  <path d="M8 8v.01" />
+                  <path d="M12 16v-5" />
+                  <path d="M16 16v-3a2 2 0 1 0 -4 0" />
+                  <path d="M3 7a4 4 0 0 1 4 -4h10a4 4 0 0 1 4 4v10a4 4 0 0 1 -4 4h-10a4 4 0 0 1 -4 -4l0 -10" />
+                </svg>
+              </dct-button>
+              <dct-button variant="ghost" size="md" icon-only href="mailto:dctownson@gmail.com?subject=Hi%20Daniel!" data-tip="Email Me" aria-label="Email Me">
+                <svg slot="leading" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10" />
+                  <path d="M3 7l9 6l9 -6" />
+                </svg>
+              </dct-button>
+              <dct-button variant="ghost" size="md" icon-only href="${depth}assets/Daniel_C_Townson_-_Sr_Product_Designer_-_Resume_01Sep26.pdf" target="_blank" rel="noopener" data-tip="Résumé" aria-label="Résumé">
+                <svg slot="leading" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 3v4a1 1 0 0 0 1 1h4" />
+                  <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2" />
+                  <path d="M9 9l1 0" />
+                  <path d="M9 13l6 0" />
+                  <path d="M9 17l6 0" />
+                </svg>
+              </dct-button>
             ${this._themeToggleHTML()}
           </div>
         </div>
@@ -191,10 +215,10 @@ customElements.define('dct-chip', DctChip);
 
 /* ============================================================
    <dct-button> — button component
-   Variants:    primary | secondary | ghost | destructive
-   Sizes:       sm | md | lg
+   Variants:    primary | secondary | ghost | destructive | link
+   Sizes:       sm | md | lg (link ignores height/padding, see below)
    Attributes:
-     variant     — primary (default) | secondary | ghost | destructive
+     variant     — primary (default) | secondary | ghost | destructive | link
      size        — sm | md (default) | lg
      href        — renders an <a> instead of a <button>
      target      — forwarded to the <a> when href is set
@@ -223,6 +247,13 @@ customElements.define('dct-chip', DctChip);
      </dct-button>
 
      <dct-button variant="destructive">Delete project</dct-button>
+
+   variant="link" drops the button box entirely — no background, no
+   fixed height/padding, font-size inherits from context — so it reads
+   as an inline text link dropped into a sentence, not another CTA:
+
+     <p>Read more in the <dct-button variant="link" href="/case-study">
+       full case study</dct-button>.</p>
 
    Scripting a loading state (e.g. while a fetch is in flight):
      const btn = document.querySelector('#send-btn');
