@@ -1,593 +1,264 @@
 /* ============================================================
    dctownson.com — component & layout styles
    Depends on: tokens.css
+
+   Section order: reset/base → layout primitives → motion →
+   utilities → components (nav, chip, button) → shared cross-page
+   typography → page-specific (home, case study) → contact → footer.
    ============================================================ */
 
-   *, *::before, *::after {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-  }
-  
-  html {
-    font-size: 16px;
-    -webkit-font-smoothing: antialiased;
-    scroll-behavior: auto;
-    overflow-anchor: none;
-  }
-  
-  body {
-    font-family: var(--font-family-sans);
-    background-color: var(--color-bg-default);
-    color: var(--color-fg-default);
-    min-height: 100vh;
-    transition: background-color 0.2s ease, color 0.2s ease;
-  }
-  
-  a { color: inherit; text-decoration: none; }
-  img { display: block; max-width: 100%; }
-  
-  /* ── Web components ──────────────────────────────────── */
- 
-  site-nav {
-    display: block;
-    position: sticky;
-    top: 0;
-    z-index: 50;
-  }
-  /* ── Layout ──────────────────────────────────────────── */
-  .page {
-    max-width: var(--grid-max);
-    margin: 0 auto;
-    padding: 0 24px;
-  }
-  
-  /* ── Staggered fade-up animation ─────────────────────── */
-  .anim {
-    opacity: 0;
-    transform: translateY(16px);
-    animation: fade-up 0.5s ease forwards;
-    will-change: transform, opacity;
-    backface-visibility: hidden;
-  }
-  
-  @keyframes fade-up {
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  .anim-1 { animation-delay: 0.05s; }
-  .anim-2 { animation-delay: 0.15s; }
-  .anim-3 { animation-delay: 0.25s; }
-  .anim-4 { animation-delay: 0.35s; }
-  .anim-5 { animation-delay: 0.45s; }
-  .anim-6 { animation-delay: 0.55s; }
-  
-  /* ── Ghost tooltip ────────────────────────────────────── */
-  [data-tip] { position: relative; }
-  
-  [data-tip]::after {
-    content: attr(data-tip);
-    position: absolute;
-    bottom: calc(100% + 2px);
-    left: 50%;
-    transform: translateX(-50%) translateY(2px);
-    background: transparent;
-    color: var(--color-fg-muted);
-    font-family: var(--font-family-mono);
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-semibold);
-    letter-spacing: var(--font-tracking-wide);
-    white-space: nowrap;
-    padding: 0 8px;
-    border-radius: var(--radius-md);
-    border: none;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.15s ease, transform 0.15s ease;
-    z-index: 10;
-  }
-  
-  [data-tip]:hover::after {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-  
-  /* ── Homepage nav ────────────────────────────────────── */
-  nav.home-nav {
-    position: sticky;
-    top: 0;
-    z-index: 50;
-    background: var(--color-bg-default);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    transition: background-color 0.2s ease;
-    padding: 0;
-    margin-bottom: 0;
-  }
-  
-  /* ── Case study nav ──────────────────────────────────── */
-  nav.cs-nav {
-    position: sticky;
-    top: 0;
-    z-index: 50;
-    background: var(--color-bg-default);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    transition: background-color 0.2s ease;
-    padding: 0;
-    margin-bottom: 0;
-  }
-
-  /* ── Shared nav inner ────────────────────────────────── */
-  .nav-inner {
-    max-width: var(--grid-max);
-    margin: 0 auto;
-    padding: 0px;
-    height: 72px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-  }
-  
-  .nav-left {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-  }
-  
-  .nav-logo {
-    width: 36px;
-    height: 36px;
-    border-radius: var(--radius-full);
-    object-fit: cover;
-    transition: transform 0.25s ease;
-    cursor: pointer;
-  }
-  
-  .nav-logo:hover {
-    transform: scale(1.12);
-  }
-  
-  .nav-divider {
-    width: 1px;
-    height: 20px;
-    background: var(--color-border-default);
-    flex-shrink: 0;
-  }
-  
-  .nav-links {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .nav-right {
-    display: flex;
-    align-items: center;
-    flex-shrink: 0;
-  }
-  
-  .nav-back {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-family: var(--font-family-mono);
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-medium);
-    letter-spacing: var(--font-tracking-wider);
-    text-transform: uppercase;
-    color: var(--color-fg-default);
-  }
-  
-  .nav-back:hover { color: var(--color-fg-default); }
-  .nav-back svg { width: 16px; height: 16px; flex-shrink: 0; }
-  
-  .nav-title {
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-medium);
-    color: var(--color-fg-subtle);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  
-  /* ── Theme Toggle ────────────────────────────────────── */
-  .theme-toggle {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 36px;
-    height: 36px;
-    border-radius: var(--radius-md);
-    border: none;
-    outline: none;
-    background: transparent;
-    color: var(--color-fg-muted);
-    cursor: pointer;
-    transition: color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
-  }
-
-  .theme-toggle:hover {
-    color: var(--color-fg-default);
-    background-color: var(--color-bg-muted);
-  }
-
-  .theme-toggle:focus-visible {
-    box-shadow: 0 0 0 3px var(--color-accent-alpha-4);
-  }
-
-  .theme-toggle svg { width: 16px; height: 16px; }
-  
-  .icon-sun  { display: none; }
-  .icon-moon { display: flex; }
-  [data-theme="light"] .icon-sun  { display: flex; }
-  [data-theme="light"] .icon-moon { display: none; }
-  
-  /* ── Hero ────────────────────────────────────────────── */
-  .hero { margin-bottom: 80px; padding-top: 40px; }
-
-  .hero-eyebrow {
-    font-family: var(--font-family-sans);
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-medium);
-    letter-spacing: var(--font-tracking-wider);
-    text-transform: uppercase;
-    color: var(--color-fg-default);
-    }
-
-  .hero h1 {
-    font-family: var(--font-heading);
-    font-size: clamp(34px, 5.5vw, 60px);
-    font-weight: var(--font-weight-medium);
-    line-height: 1.08;
-    letter-spacing: var(--font-tracking-tight);
-    color: var(--color-fg-default);
-    max-width: none;
-    margin-bottom: 32px;
-  }
-
-  .hero h1 .accent { color: var(--color-accent-default); }
-  
-  .hero p {
-    font-size: var(--font-size-lg);
-    font-weight: var(--font-weight-normal);
-    line-height: var(--font-leading-relaxed);
-    color: var(--color-fg-muted);
-    max-width: 480px;
-    margin-bottom: 20px;
-  }
-  
-  .hero-tags {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
-  
-  /* ── Pills ───────────────────────────────────────────── */
-  .tag {
-    font-family: var(--font-family-mono);
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-medium);
-    letter-spacing: var(--font-tracking-wide);
-    color: var(--color-fg-muted);
-    padding: 4px 10px;
-    border-radius: var(--radius-full);
-    background: var(--color-bg-subtle);
-    white-space: nowrap;
-  }
-  
-  /* ── Section label ───────────────────────────────────── */
-  .section-label {
-    font-family: var(--font-family-mono);
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-medium);
-    letter-spacing: var(--font-tracking-widest);
-    color: var(--color-fg-subtle);
-    text-transform: uppercase;
-    margin-bottom: 24px;
-  }
-  
-  /* ── Card grid ───────────────────────────────────────── */
-  /* ── Card grid ───────────────────────────────────────── */
-  .card-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 72px;
-    margin-bottom: 80px;
-  }
-  
-  .card {
-    display: block;
-    position: relative;
-    width: 100%;
-    aspect-ratio: 16 / 7;
-    overflow: hidden;
-    text-decoration: none;
-    color: inherit;
-    cursor: pointer;
-    border-radius: var(--radius-2xl);
-    background-color: #000;
-
-  }
-
-.card.disabled {
-  display: none;
+/* ── Reset & base ─────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-/* ── Card media ──────────────────────────────────────── */
-.card-media {
-  position: relative;
-  width: 100%;
-  height: 100%;
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  scroll-behavior: auto;
+  overflow-anchor: none;
 }
 
-.card-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+body {
+  font-family: var(--font-family-sans);
+  background-color: var(--color-bg-default);
+  color: var(--color-fg-default);
+  min-height: 100vh;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+a { color: inherit; text-decoration: none; }
+img { display: block; max-width: 100%; }
+
+/* ── Layout primitives ────────────────────────────────── */
+/* .page and .content are identical wrappers under two names —
+   .page is used on the homepage, .content on case study pages.
+   Worth collapsing to one name later; left separate for now since
+   that touches markup across every page. */
+.page {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* .content used to duplicate .page's own max-width/margin/padding.
+   Since .page already applies that box model to the whole page,
+   nesting the same values in .content silently doubled the side
+   gutter (24px + 24px = 48px) for anything inside both — which is
+   exactly why case study pages that kept the header/hero outside
+   .content (24px gutter) visually misaligned against the body
+   content inside it (48px gutter). .content is now just a plain
+   grouping wrapper; .page is the single source of page width. */
+.content {
+}
+
+cs-hero {
   display: block;
-  transition: transform 0.6s ease, opacity 0.6s ease;
 }
 
-.card:hover .card-image,
-.card.is-hovered .card-image {
-  transform: scale(1.04);
-  opacity: 0.5;
-
+/* ── Motion — staggered fade-up ───────────────────────── */
+.anim {
+  opacity: 0;
+  transform: translateY(16px);
+  animation: fade-up 0.5s ease forwards;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
 }
 
-/* ── Scrim ───────────────────────────────────────────── */
-.card-scrim {
+@keyframes fade-up {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.anim-1 { animation-delay: 0.05s; }
+.anim-2 { animation-delay: 0.15s; }
+.anim-3 { animation-delay: 0.25s; }
+.anim-4 { animation-delay: 0.35s; }
+.anim-5 { animation-delay: 0.45s; }
+.anim-6 { animation-delay: 0.55s; }
+
+/* ── Utilities — ghost tooltip ─────────────────────────── */
+[data-tip] { position: relative; }
+
+[data-tip]::after {
+  content: attr(data-tip);
   position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    to top,
-    rgba(0, 0, 0, 0.6) 0%,
-    rgba(0, 0, 0, 0.1) 50%,
-    rgba(0, 0, 0, 0) 100%
-  );
-  transition: opacity 0.4s ease;
+  bottom: calc(100% + 2px);
+  left: 50%;
+  transform: translateX(-50%) translateY(2px);
+  background: transparent;
+  color: var(--color-fg-muted);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--font-tracking-wide);
+  white-space: nowrap;
+  padding: 0 8px;
+  border-radius: var(--radius-md);
+  border: none;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  z-index: 10;
 }
 
-.card:hover .card-scrim,
-.card.is-hovered .card-scrim {
-  opacity: 1.3;
+[data-tip]:hover::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
 }
 
-/* ── Logo watermark ──────────────────────────────────── */
-.card-logo-watermark {
-  position: absolute;
-  inset: 0;
+/* ============================================================
+   Components
+   ============================================================ */
+
+/* ── Navigation — <site-nav> host + shared inner layout ── */
+site-nav {
+  display: block;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  width: 100%;
+}
+
+nav.home-nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--color-bg-default);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: background-color 0.2s ease;
+  padding: 0;
+  margin-bottom: 0;
+}
+
+nav.cs-nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--color-bg-default);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: background-color 0.2s ease;
+  padding: 0;
+  margin-bottom: 0;
+}
+
+.nav-inner {
+  /* Nav intentionally ignores .page's max-width. <site-nav> sits
+     outside .page (full-bleed bar), and unlike the page content
+     below it, the left/right actions run all the way to the
+     viewport edges too — inset only by a fixed side padding, not
+     centered into the same 1280px column as the page content. */
+  padding: 0 24px;
+  height: 72px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transition: opacity 0.4s ease, transform 0.4s ease;
-  transform: scale(0.92);
-  pointer-events: none;
+  justify-content: space-between;
+  gap: 16px;
 }
 
-.card:hover .card-logo-watermark,
-.card.is-hovered .card-logo-watermark {
-  opacity: 1;
-  transform: scale(1);
-}
-
-.card-logo-watermark img {
-  height: 48px;
-  width: auto;
-  filter: brightness(0) invert(1);
-  opacity: 0.9;
-}
-
-/* ── Overlay text ────────────────────────────────────── */
-.card-overlay-text {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 24px 28px;
+.nav-left {
   display: flex;
-  flex-direction: column;
-  gap: 6px;
+  align-items: center;
+  gap: 20px;
 }
 
-.card-type {
+.nav-logo {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+  transition: transform 0.25s ease;
+  cursor: pointer;
+}
+
+.nav-logo:hover {
+  transform: scale(1.12);
+}
+
+.nav-divider {
+  width: 1px;
+  height: 20px;
+  background: var(--color-border-default);
+  flex-shrink: 0;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.nav-back {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   font-family: var(--font-family-mono);
-  font-size: 11px;
+  font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
   letter-spacing: var(--font-tracking-wider);
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--color-fg-default);
 }
 
-.card-title {
-  font-family: var(--font-heading);
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-medium);
-  line-height: var(--font-leading-snug);
-  color: #ffffff;
-}
+.nav-back:hover { color: var(--color-fg-default); }
+.nav-back svg { width: 16px; height: 16px; flex-shrink: 0; }
 
-.card-desc {
+.nav-title {
   font-size: var(--font-size-sm);
-  color: rgba(255, 255, 255, 0.6);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-fg-subtle);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-  
-  /* ── Contact form ────────────────────────────────────── */
-  contact-form { display: block; }
-  
-  .contact-section {
-    padding: 48px 0;
-    border-top: 1px solid var(--color-border-default);
-  }
-  
-  .contact-header {
-    margin-bottom: 32px;
-  }
-  
-  .contact-header h2 {
-    font-family: var(--font-heading);
-    font-size: var(--font-size-2xl);
-    font-weight: var(--font-weight-bold);
-    letter-spacing: var(--font-tracking-tight);
-    color: var(--color-fg-default);
-    margin-bottom: 8px;
-  }
-  
-  .contact-header p {
-    font-size: var(--font-size-base);
-    color: var(--color-fg-muted);
-    line-height: var(--font-leading-relaxed);
-  }
-  
-  .contact-header a {
-    color: var(--color-fg-muted);
-    border-bottom: 1px solid var(--color-border-default);
-    transition: color 0.15s ease;
-  }
-  
-  .contact-header a:hover {
-    color: var(--color-fg-default);
-  }
-  
-  .contact-form {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    max-width: 560px;
-  }
-  
-  .form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-  }
-  
-  @media (max-width: 480px) {
-    .form-row { grid-template-columns: 1fr; }
-  }
-  
-  .form-field {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-  
-  .form-label {
-    font-family: var(--font-family-mono);
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-medium);
-    letter-spacing: var(--font-tracking-wider);
-    text-transform: uppercase;
-    color: var(--color-fg-subtle);
-  }
-  
-  .form-input,
-  .form-textarea {
-    font-family: var(--font-family-sans);
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-normal);
-    color: var(--color-fg-default);
-    background: var(--color-bg-subtle);
-    border: 1px solid var(--color-border-default);
-    border-radius: var(--radius-lg);
-    padding: 10px 14px;
-    outline: none;
-    transition: border-color 0.15s ease, box-shadow 0.15s ease;
-    width: 100%;
-  }
-  
-  .form-input::placeholder,
-  .form-textarea::placeholder {
-    color: var(--color-fg-subtle);
-  }
-  
-  .form-input:focus,
-  .form-textarea:focus {
-    border-color: var(--color-focus);
-    box-shadow: 0 0 0 3px var(--color-accent-alpha-4);  }
-  
-  .form-textarea {
-    resize: vertical;
-    min-height: 120px;
-  }
-  
-  .form-submit {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 11px 20px;
-    border-radius: var(--radius-lg);
-    border: none;
-    background: var(--color-fg-default);
-    color: var(--color-bg-default);
-    font-family: var(--font-family-mono);
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-semibold);
-    letter-spacing: var(--font-tracking-wide);
-    cursor: pointer;
-    transition: opacity 0.15s ease, transform 0.15s ease;
-    align-self: flex-start;
-  }
-  
-  .form-submit:hover {
-    opacity: 0.85;
-    transform: translateY(-1px);
-  }
-  
-  /* ── Footer ──────────────────────────────────────────── */
-  footer {
-    padding: 32px 0 48px;
-    border-top: 1px solid var(--color-border-default);
-  }
-  
-  .footer-built {
-    font-family: var(--font-family-mono);
-    font-size: var(--font-size-sm);
-    line-height: var(--font-leading-relaxed);
-    color: var(--color-fg-subtle);
-    margin-bottom: 4px;
-  }
-  
-  .footer-built a {
-    color: var(--color-fg-muted);
-    border-bottom: 1px solid var(--color-border-default);
-    transition: color 0.15s ease, border-color 0.15s ease;
-  }
-  
-  .footer-built a:hover {
-    color: var(--color-fg-default);
-    border-color: var(--color-border-strong);
-  }
-  
-  .footer-copy {
-    font-family: var(--font-family-mono);
-    font-size: var(--font-size-sm);
-    color: var(--color-fg-subtle);
-  }
 
-  /* ── Paper type treatment — case study & resume subpages ── */
-  html .cs-title,
-  html .resume-header-left h1,
-  html .cs-section h2,
-  html .contact-header h2 {
-    font-family: var(--font-heading);
-    font-weight: var(--font-weight-medium);
-    letter-spacing: var(--font-tracking-tight);
-  }
+/* ── Navigation — theme toggle ────────────────────────── */
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--color-fg-muted);
+  cursor: pointer;
+  transition: color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+}
 
-  html .cs-section h2,
-  html .contact-header h2 {
-    font-weight: var(--font-weight-semibold);
-  }
+.theme-toggle:hover {
+  color: var(--color-fg-default);
+  background-color: var(--color-bg-muted);
+}
 
-  /* ── dct-chip ────────────────────────────────────────── */
+.theme-toggle:focus-visible {
+  box-shadow: 0 0 0 3px var(--color-accent-alpha-4);
+}
+
+.theme-toggle svg { width: 16px; height: 16px; }
+
+.icon-sun  { display: none; }
+.icon-moon { display: flex; }
+[data-theme="light"] .icon-sun  { display: flex; }
+[data-theme="light"] .icon-moon { display: none; }
+
+/* ── dct-chip ──────────────────────────────────────────── */
 dct-chip { display: inline-block; }
 
 .dct-chip {
@@ -625,7 +296,7 @@ dct-chip { display: inline-block; }
   opacity: 0.35;
 }
 
-  /* ── dct-button ──────────────────────────────────────── */
+/* ── dct-button ────────────────────────────────────────── */
 dct-button { display: inline-flex; }
 
 .dct-btn {
@@ -811,71 +482,796 @@ dct-button { display: inline-flex; }
   to { transform: rotate(360deg); }
 }
 
-    /* ── Reading progress bar ──────────────────────── */
-    #progress-bar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      height: 2px;
-      width: 0%;
-      background: var(--color-accent-default);
-      z-index: 100;
-      transition: width 0.1s linear;
-    }
+/* ============================================================
+   Shared cross-page typography
+   ============================================================ */
 
-        /* ── Hero — full bleed ─────────────────────────── */
-        .hero-bleed {
-          width: 100%;
-          max-height: 520px;
-          overflow: hidden;
-          background: var(--color-bg-muted);
-          border-radius: var(--radius-xl);
-        }
-    
-        .hero-bleed img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          display: block;
-        }
+/* "Paper" heading treatment shared by case study & resume subpages.
+   Touches .cs-title / .cs-section h2 (Case study section below) and
+   .contact-header h2 (Contact form section below) — those rules also
+   set their own font-size/color/margin; font-family, font-weight and
+   letter-spacing for those three win here instead, via the higher
+   `html .selector` specificity. .resume-header-left h1's other
+   properties currently live in resume/index.html's own <style> block. */
+html .cs-title,
+html .resume-header-left h1,
+html .cs-section h2,
+html .contact-header h2 {
+  font-family: var(--font-heading);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--font-tracking-tight);
+  text-wrap: balance;
+}
 
-           /* ── Content column ────────────────────────────── */
-    .content {
-      max-width: var(--grid-max);
-      margin: 0 auto;
-      padding: 0 24px;
-    }
-        /* ── Case study header ─────────────────────────── */
-        .cs-header {
-          padding: 48px 0 40px;
-          border-bottom: 1px solid var(--color-border-default);
-          margin-bottom: 48px;
-        }
-    
-        .cs-type {
-          font-family: var(--font-family-mono);
-          font-size: var(--font-size-xs);
-          font-weight: var(--font-weight-medium);
-          letter-spacing: var(--font-tracking-widest);
-          text-transform: uppercase;
-          color: var(--color-fg-subtle);
-          margin-bottom: 12px;
-        }
-    
-        .cs-title {
-          font-size: var(--font-size-4xl);
-          font-weight: var(--font-weight-bold);
-          line-height: var(--font-leading-tight);
-          letter-spacing: var(--font-tracking-tight);
-          color: var(--color-fg-default);
-          margin-bottom: 16px;
-          max-width: var(--grid-max);
-        }
-    
-        .cs-summary {
-          font-size: var(--font-size-lg);
-          font-weight: var(--font-weight-normal);
-          line-height: var(--font-leading-relaxed);
-          color: var(--color-fg-muted);
-          max-width: 640px;
-        }
+html .cs-section h2,
+html .contact-header h2 {
+  font-weight: var(--font-weight-semibold);
+}
+
+/* ============================================================
+   Page — Home
+   ============================================================ */
+
+/* ── Hero ──────────────────────────────────────────────── */
+.hero { margin-bottom: 120px; padding-top: 120px; max-width: 80%;}
+
+.hero-eyebrow {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--font-tracking-wider);
+  text-transform: uppercase;
+  color: var(--color-fg-default);
+}
+
+.hero h1 {
+  font-family: var(--font-heading);
+  font-size: clamp(34px, 5.5vw, 60px);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.08;
+  letter-spacing: var(--font-tracking-tight);
+  color: var(--color-fg-default);
+  max-width: none;
+  margin-bottom: 32px;
+  text-wrap: balance;
+}
+
+.hero h1 .accent { color: var(--color-accent-default); }
+
+.hero h2 {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--font-leading-relaxed);
+  color: var(--color-fg-muted);
+  max-width: 480px;
+  margin-bottom: 20px;
+  text-wrap: pretty;
+}
+
+.hero p {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--font-leading-relaxed);
+  color: var(--color-fg-muted);
+  max-width: 480px;
+  margin-bottom: 20px;
+  text-wrap: pretty;
+}
+
+.hero-tags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* ── Pills ─────────────────────────────────────────────── */
+.tag {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--font-tracking-wide);
+  color: var(--color-fg-muted);
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  background: var(--color-bg-subtle);
+  white-space: nowrap;
+}
+
+/* ── Section label ─────────────────────────────────────── */
+.section-label {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--font-tracking-widest);
+  color: var(--color-fg-subtle);
+  text-transform: uppercase;
+  margin-bottom: 24px;
+}
+
+/* ── Card grid ─────────────────────────────────────────── */
+.card-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  margin-bottom: 80px;
+}
+
+.card {
+  display: block;
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 7;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  border-radius: var(--radius-2xl);
+  background-color: #000;
+}
+
+.card.disabled {
+  display: none;
+}
+
+/* Card media */
+.card-media {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s ease, opacity 0.6s ease;
+}
+
+.card:hover .card-image,
+.card.is-hovered .card-image {
+  transform: scale(1.04);
+  opacity: 0.5;
+}
+
+/* Scrim */
+.card-scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.6) 0%,
+    rgba(0, 0, 0, 0.1) 50%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  transition: opacity 0.4s ease;
+}
+
+.card:hover .card-scrim,
+.card.is-hovered .card-scrim {
+  opacity: 1.3;
+}
+
+/* Logo watermark */
+.card-logo-watermark {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  transform: scale(0.92);
+  pointer-events: none;
+}
+
+.card:hover .card-logo-watermark,
+.card.is-hovered .card-logo-watermark {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.card-logo-watermark img {
+  height: auto;
+  width: 320px;
+  filter: brightness(0) invert(1);
+  opacity: 0.9;
+}
+
+/* Overlay text */
+.card-overlay-text {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 24px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.card-type {
+  font-family: var(--font-family-mono);
+  font-size: 11px;
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--font-tracking-wider);
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.card-title {
+  font-family: var(--font-heading);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--font-leading-snug);
+  color: #ffffff;
+  text-wrap: balance;
+}
+
+.card-desc {
+  font-size: var(--font-size-sm);
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* ── Locked case study cards ──────────────────────────────
+   Sits on the same dark photo scrim as .card-title/.card-type, so
+   colors are hardcoded to rgba(255,255,255,…) like the rest of the
+   overlay rather than pulled from theme tokens — the scrim itself
+   doesn't change with light/dark mode, so these shouldn't either. */
+.card-type--locked {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.card-lock-icon {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+}
+
+.card-lock-form {
+  gap: 12px;
+}
+
+.card-lock-message {
+  font-size: var(--font-size-sm);
+  color: rgba(255, 255, 255, 0.85);
+  max-width: 420px;
+}
+
+.card-lock-fields {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.card-lock-input {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-sm);
+  color: #fff;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: var(--radius-md);
+  padding: 8px 12px;
+  outline: none;
+  min-width: 160px;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.card-lock-input::placeholder { color: rgba(255, 255, 255, 0.55); }
+
+.card-lock-input:focus {
+  border-color: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.18);
+}
+
+/* Reuse dct-button's structure (sizing, focus ring, interaction) but
+   override its token-driven color — a theme-aware color would be
+   wrong here since it sits on a fixed-dark scrim regardless of theme. */
+.card-lock-fields .dct-btn {
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.card-lock-fields .dct-btn:hover:not(:disabled):not([aria-disabled="true"]) {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
+
+.card-lock-error {
+  font-size: var(--font-size-xs);
+  color: #ff9d8a;
+  margin: 0;
+}
+
+/* ============================================================
+   Page — Case study
+   ============================================================ */
+
+/* ── Reading progress bar ──────────────────────────────── */
+#progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  width: 0%;
+  background: var(--color-accent-default);
+  z-index: 100;
+  transition: width 0.1s linear;
+}
+
+/* ── Hero — full bleed ─────────────────────────────────── */
+.hero-bleed {
+  width: 100%;
+  aspect-ratio: 16 / 7;
+  overflow: hidden;
+  background: var(--color-bg-muted);
+  border-radius: var(--radius-xl);
+}
+
+.hero-bleed img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ── Case study header ─────────────────────────────────── */
+.cs-header {
+  padding: 120px 0 24px;
+}
+
+.cs-type {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--font-tracking-widest);
+  text-transform: uppercase;
+  color: var(--color-fg-subtle);
+  margin-bottom: 12px;
+}
+
+.cs-title {
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--font-leading-tight);
+  letter-spacing: var(--font-tracking-tight);
+  color: var(--color-fg-default);
+  max-width: 72%;
+}
+
+.cs-summary {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--font-leading-relaxed);
+  color: var(--color-fg-muted);
+  max-width: 80%;
+  text-wrap: pretty;
+}
+
+/* ── Body sections ──────────────────────────────────────── */
+.cs-body {
+  display: flex;
+  flex-direction: column;
+  gap: 64px;
+  margin-bottom: 80px;
+}
+
+.cs-section-label {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--font-tracking-widest);
+  text-transform: uppercase;
+  color: var(--color-accent-default);
+  margin-bottom: 12px;
+}
+
+[data-theme="light"] .cs-section-label {
+  color: var(--color-accent-fg);
+}
+
+.cs-section h2 {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--font-leading-tight);
+  letter-spacing: var(--font-tracking-tight);
+  color: var(--color-fg-default);
+  margin-bottom: 16px;
+}
+
+.cs-section p {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--font-leading-relaxed);
+  color: var(--color-fg-muted);
+  max-width: 80%;
+  margin-bottom: 16px;
+  text-wrap: pretty;
+}
+
+.cs-section p:last-of-type { margin-bottom: 0; }
+
+.cs-section ul {
+  margin: 0 0 16px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cs-section ul li {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--font-leading-relaxed);
+  color: var(--color-fg-muted);
+  max-width: 80%;
+}
+
+/* ── Image grid ────────────────────────────────── */
+.img-grid {
+  display: grid;
+  gap: 12px;
+  margin-top: 32px;
+}
+
+.img-grid.cols-1 { grid-template-columns: 1fr; }
+.img-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+.img-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+.img-grid.cols-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+
+@media (max-width: 600px) {
+  .img-grid.cols-2,
+  .img-grid.cols-3 { grid-template-columns: 1fr; }
+}
+
+.img-wrap {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background: transparent;
+}
+
+.img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.img-grid .img-caption {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+  color: var(--color-fg-subtle);
+  margin-top: 8px;
+  padding-left: 2px;
+}
+
+/* ── <meta-tile> — icon/label/value tile ──────────
+   Ported from the Figma redesign (meta-grid/tile component) —
+   see components.js for the <meta-tile> element that renders one
+   of these. As of Sep 2026 every case study page renders its four
+   tiles (Role, Timeframe, Responsibilities, Keywords) via <cs-hero>
+   (components.js), which also owns the .meta-grid wrapper below —
+   don't hand-author meta-tile markup or the .meta-grid wrapper in
+   a page's own <style> block anymore; add/change fields on <cs-hero>
+   instead so every page stays in sync. */
+meta-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 24px 16px;
+  min-width: 180px;
+  max-width: 320px;
+}
+
+.meta-tile-icon {
+  width: 24px;
+  height: 24px;
+  color: var(--color-accent-default);
+  flex-shrink: 0;
+}
+
+.meta-tile-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.meta-tile-label {
+  font-family: var(--font-family-sans);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-caption);
+  letter-spacing: var(--font-tracking-wider);
+  text-transform: uppercase;
+  color: var(--color-fg-subtle);
+}
+
+.meta-tile-value {
+  font-family: var(--font-family-sans);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-sm);
+  line-height: var(--font-leading-relaxed);
+  color: var(--color-fg-default);
+}
+
+/* ── Meta grid ─────────────────────────────────── */
+/* Hug layout, not equal-width columns: each tile sizes to its own
+   content (Role is narrow, Keywords is wide) and they sit evenly
+   spaced next to each other, wrapping to a new row when they run
+   out of horizontal room. Below 600px (matching .img-grid's own
+   breakpoint) each tile drops to full width, one per row. */
+.meta-grid {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 48px;
+  margin-bottom: 64px;
+  max-width: 100%;
+  margin-top: 120px;
+}
+
+@media (max-width: 600px) {
+  .meta-grid meta-tile {
+    flex: 1 1 100%;
+  }
+}
+
+/* ── Lightbox ──────────────────────────────────── */
+.lightbox {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(0, 0, 0, 0.88);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  cursor: zoom-out;
+}
+
+.lightbox.active {
+  display: flex;
+  animation: lb-in 0.2s ease;
+}
+
+@keyframes lb-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.lightbox-img {
+  max-width: 100%;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 32px 80px rgba(0,0,0,0.6);
+  animation: lb-scale 0.2s ease;
+  cursor: default;
+}
+
+@keyframes lb-scale {
+  from { transform: scale(0.96); opacity: 0; }
+  to   { transform: scale(1);    opacity: 1; }
+}
+
+.lightbox-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.lightbox-close:hover { background: rgba(255,255,255,0.2); }
+.lightbox-close svg { width: 16px; height: 16px; }
+
+.lightbox-caption {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+  color: rgba(255,255,255,0.5);
+  letter-spacing: var(--font-tracking-wide);
+  white-space: nowrap;
+}
+
+/* ── Shared case study elements ────────────────────────────
+   .img-grid / .img-wrap / .img-caption are shared here and used
+   directly in each page's .cs-body content — that part stays
+   hand-authored per page, on purpose, since it's the actual case
+   study writeup.
+
+   The header/hero/meta-grid block above .cs-body is NOT hand-
+   authored anymore — every case study page (mfpinsights,
+   ua-baselayer, ua-samsung, ods) now renders that whole block from
+   a single <cs-hero> tag (see components.js). If a page's hero
+   section still has its own .cs-header/.hero-bleed/.meta-grid
+   markup instead of a <cs-hero> tag, it's drifted from the other
+   pages and should be converted.
+
+   .lightbox* below is DORMANT — no page renders a <dct-lightbox>
+   tag as of Sep 2026 (disabled: the enlarged image often came out
+   smaller than the inline one). Left in place in case the sizing
+   gets fixed and it's worth re-enabling; safe to delete along with
+   the DctLightbox class in components.js if not. */
+
+/* ============================================================
+   Contact form
+   ============================================================ */
+contact-form { display: block; }
+
+.contact-section {
+  padding: 48px 0;
+  border-top: 1px solid var(--color-border-default);
+}
+
+.contact-header {
+  margin-bottom: 32px;
+}
+
+.contact-header h2 {
+  font-family: var(--font-heading);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--font-tracking-tight);
+  color: var(--color-fg-default);
+  margin-bottom: 8px;
+}
+
+.contact-header p {
+  font-size: var(--font-size-base);
+  color: var(--color-fg-muted);
+  line-height: var(--font-leading-relaxed);
+  text-wrap: pretty;
+}
+
+.contact-header a {
+  color: var(--color-fg-muted);
+  border-bottom: 1px solid var(--color-border-default);
+  transition: color 0.15s ease;
+}
+
+.contact-header a:hover {
+  color: var(--color-fg-default);
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 560px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+@media (max-width: 480px) {
+  .form-row { grid-template-columns: 1fr; }
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-label {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--font-tracking-wider);
+  text-transform: uppercase;
+  color: var(--color-fg-subtle);
+}
+
+.form-input,
+.form-textarea {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-normal);
+  color: var(--color-fg-default);
+  background: var(--color-bg-subtle);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-lg);
+  padding: 10px 14px;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  width: 100%;
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder {
+  color: var(--color-fg-subtle);
+}
+
+.form-input:focus,
+.form-textarea:focus {
+  border-color: var(--color-focus);
+  box-shadow: 0 0 0 3px var(--color-accent-alpha-4);
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.form-submit {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 20px;
+  border-radius: var(--radius-lg);
+  border: none;
+  background: var(--color-fg-default);
+  color: var(--color-bg-default);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--font-tracking-wide);
+  cursor: pointer;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  align-self: flex-start;
+}
+
+.form-submit:hover {
+  opacity: 0.85;
+  transform: translateY(-1px);
+}
+
+/* ============================================================
+   Footer
+   ============================================================ */
+footer {
+  padding: 32px 0 48px;
+  margin-top: 120px;
+  border-top: 1px solid var(--color-border-default);
+}
+
+.footer-built {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+  line-height: var(--font-leading-relaxed);
+  color: var(--color-fg-subtle);
+  margin-bottom: 8px;
+}
+
+.footer-built a {
+  color: var(--color-fg-muted);
+  border-bottom: 1px solid var(--color-border-default);
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.footer-built a:hover {
+  color: var(--color-fg-default);
+  border-color: var(--color-border-strong);
+}
+
+.footer-copy {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+  color: var(--color-fg-subtle);
+}
+
+site-footer {
+  display: block;
+  margin-top: 120px;
+  padding-bottom: 120px;
+}

@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="view-transition" content="same-origin" />
+  <title>Design Tokens — dctownson.com</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Inconsolata:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../tokens.css" />
+  <link rel="stylesheet" href="../style.css" />
+  <script src="../components.js" defer></script>
+  <style>
+    /* ── Jump nav ──────────────────────────────────── */
+    .token-jumpnav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 24px;
+    }
+
+    .token-jumpnav .tag {
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+
+    .token-jumpnav .tag:hover {
+      background: var(--color-bg-muted);
+      color: var(--color-fg-default);
+    }
+
+    /* ── Sections ──────────────────────────────────── */
+    .token-section {
+      padding: 56px 0;
+      border-bottom: 1px solid var(--color-border-default);
+    }
+
+    .token-section:last-of-type { border-bottom: none; }
+
+    .token-section .section-label { margin-bottom: 8px; }
+
+    .token-section-title {
+      font-size: var(--font-size-3xl);
+      font-weight: var(--font-weight-bold);
+      line-height: var(--font-leading-tight);
+      letter-spacing: var(--font-tracking-tight);
+      color: var(--color-fg-default);
+      margin-bottom: 12px;
+      scroll-margin-top: 96px;
+    }
+
+    .token-section-desc {
+      font-size: var(--font-size-base);
+      line-height: var(--font-leading-relaxed);
+      color: var(--color-fg-muted);
+      max-width: 640px;
+      margin-bottom: 32px;
+    }
+
+    .token-section-desc code {
+      font-family: var(--font-family-mono);
+      font-size: 0.9em;
+      background: var(--color-bg-subtle);
+      padding: 1px 5px;
+      border-radius: var(--radius-sm);
+    }
+
+    .token-subhead {
+      font-family: var(--font-family-mono);
+      font-size: var(--font-size-xs);
+      font-weight: var(--font-weight-semibold);
+      letter-spacing: var(--font-tracking-wide);
+      text-transform: uppercase;
+      color: var(--color-fg-subtle);
+      margin: 28px 0 12px;
+    }
+
+    .token-subhead:first-of-type { margin-top: 0; }
+
+    /* ── Shared tile button reset ──────────────────── */
+    .token-tile,
+    .token-row {
+      appearance: none;
+      background: none;
+      border: none;
+      padding: 8px;
+      margin: -8px;
+      font: inherit;
+      color: inherit;
+      cursor: pointer;
+      border-radius: var(--radius-md);
+      transition: background 0.15s ease;
+      text-align: left;
+    }
+
+    .token-tile:hover,
+    .token-row:hover {
+      background: var(--color-bg-subtle);
+    }
+
+    .token-tile:focus-visible,
+    .token-row:focus-visible {
+      outline: 2px solid var(--color-focus);
+      outline-offset: 2px;
+    }
+
+    [data-tip].show-tip::after {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* ── Color ramp strips ────────────────────────── */
+    .token-ramp-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-bottom: 8px;
+    }
+
+    .token-tile {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      width: 76px;
+    }
+
+    .token-tile-swatch {
+      width: 64px;
+      height: 64px;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--color-border-default);
+      background-image:
+        linear-gradient(45deg, var(--color-border-muted) 25%, transparent 25%),
+        linear-gradient(-45deg, var(--color-border-muted) 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, var(--color-border-muted) 75%),
+        linear-gradient(-45deg, transparent 75%, var(--color-border-muted) 75%);
+      background-size: 10px 10px;
+      background-position: 0 0, 0 5px, 5px -5px, -5px 0;
+    }
+
+    .token-tile-swatch-fill {
+      width: 100%;
+      height: 100%;
+      border-radius: calc(var(--radius-lg) - 1px);
+    }
+
+    .token-tile-name {
+      font-family: var(--font-family-mono);
+      font-size: 11px;
+      font-weight: var(--font-weight-semibold);
+      color: var(--color-fg-default);
+      white-space: nowrap;
+    }
+
+    .token-tile-value {
+      font-family: var(--font-family-mono);
+      font-size: 10px;
+      color: var(--color-fg-subtle);
+      white-space: nowrap;
+    }
+
+    /* ── Semantic color groups ────────────────────── */
+    .token-sys-groups {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 32px 24px;
+    }
+
+    .token-sys-group-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    .token-sys-group-strip .token-tile { width: 84px; }
+    .token-sys-group-strip .token-tile-swatch { width: 40px; height: 40px; }
+
+    /* ── Typography ────────────────────────────────── */
+    .font-family-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      background: var(--color-border-default);
+      border: 1px solid var(--color-border-default);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+
+    .font-family-card {
+      background: var(--color-bg-default);
+      padding: 20px 20px 16px;
+      display: block;
+    }
+
+    .font-family-sample {
+      font-size: var(--font-size-2xl);
+      line-height: var(--font-leading-snug);
+      color: var(--color-fg-default);
+      margin-bottom: 8px;
+    }
+
+    .font-family-meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-family: var(--font-family-mono);
+      font-size: var(--font-size-xs);
+      color: var(--color-fg-subtle);
+      flex-wrap: wrap;
+    }
+
+    .token-row {
+      display: flex;
+      align-items: baseline;
+      gap: 20px;
+      width: 100%;
+      padding: 10px 8px;
+      border-bottom: 1px solid var(--color-border-muted);
+    }
+
+    .token-row:last-child { border-bottom: none; }
+
+    .token-row-label {
+      font-family: var(--font-family-mono);
+      font-size: var(--font-size-xs);
+      color: var(--color-fg-subtle);
+      width: 168px;
+      flex-shrink: 0;
+    }
+
+    .token-row-label strong {
+      color: var(--color-fg-default);
+      font-weight: var(--font-weight-semibold);
+    }
+
+    .font-size-sample {
+      font-family: var(--font-family-sans);
+      color: var(--color-fg-default);
+      line-height: 1;
+    }
+
+    .font-weight-sample {
+      font-family: var(--font-family-sans);
+      font-size: var(--font-size-2xl);
+      color: var(--color-fg-default);
+    }
+
+    .leading-sample {
+      font-size: var(--font-size-sm);
+      color: var(--color-fg-muted);
+      max-width: 300px;
+    }
+
+    .tracking-sample {
+      font-family: var(--font-family-mono);
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-semibold);
+      text-transform: uppercase;
+      color: var(--color-fg-default);
+    }
+
+    .token-sys-list {
+      border: 1px solid var(--color-border-default);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+
+    .token-sys-list .token-row { padding: 10px 14px; }
+    .token-sys-list .token-row-label { width: 220px; }
+
+    .token-sys-value {
+      font-family: var(--font-family-mono);
+      font-size: var(--font-size-xs);
+      color: var(--color-fg-muted);
+    }
+
+    /* ── Spacing ───────────────────────────────────── */
+    .spacing-rows { display: flex; flex-direction: column; }
+
+    .spacing-bar-track { flex: 1; min-width: 0; }
+
+    .spacing-bar {
+      height: 10px;
+      max-width: 100%;
+      background: var(--color-accent-subtle);
+      border: 1px solid var(--color-accent-muted);
+      border-radius: var(--radius-sm);
+    }
+
+    /* ── Radius / Icon grids ───────────────────────── */
+    .token-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+      gap: 4px;
+    }
+
+    .radius-tile-swatch,
+    .icon-tile-swatch {
+      width: 100%;
+      aspect-ratio: 1;
+      background: var(--color-bg-subtle);
+      border: 1px solid var(--color-border-default);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .radius-tile-swatch { max-width: 72px; }
+
+    .icon-tile-dot {
+      background: var(--color-accent-default);
+      border-radius: var(--radius-sm);
+    }
+
+    @media (max-width: 640px) {
+      .token-row { flex-direction: column; gap: 8px; }
+      .token-row-label { width: auto; }
+      .token-sys-list .token-row-label { width: auto; }
+    }
+  </style>
+</head>
+<body>
+<site-nav type="casestudy" title="Design Tokens" depth="../"></site-nav>
+
+<div class="page">
+
+  <div id="progress-bar"></div>
+
+  <div class="content anim anim-5">
+
+    <header class="cs-header">
+      <p class="cs-type">dct Design System · Reference</p>
+      <h1 class="cs-title">Design tokens</h1>
+      <p class="cs-summary">Every primitive and semantic token behind this site and the dct component library — color, type, spacing, radius and icon sizing — read live from <code>tokens.css</code>. Click any swatch or row to copy its CSS variable. Toggle light/dark up top and watch the semantic layer resolve in real time.</p>
+      <nav class="token-jumpnav" aria-label="Jump to token category">
+        <a class="tag" href="#color-primitives">Color · Primitives</a>
+        <a class="tag" href="#color-semantic">Color · Semantic</a>
+        <a class="tag" href="#typography">Typography</a>
+        <a class="tag" href="#spacing">Spacing</a>
+        <a class="tag" href="#radius">Radius</a>
+        <a class="tag" href="#icon-sizes">Icon sizes</a>
+      </nav>
+    </header>
+
+    <section class="token-section" id="architecture">
+      <p class="section-label">Architecture</p>
+      <h2 class="token-section-title">Primitives → system → components</h2>
+      <p class="token-section-desc">Tokens are layered in three tiers. <strong>Primitives</strong> are raw values — six full color ramps, a type scale, a spacing scale — named by position, not intent (<code>--color-gray-500</code>). <strong>System aliases</strong> give those primitives intent (<code>--color-bg-default</code>, <code>--color-fg-muted</code>) and are the only layer redefined between light and dark mode. <strong>Components</strong> — buttons, chips, cards — consume system aliases exclusively, never primitives directly, so re-theming the whole site is a one-file edit in <code>tokens.css</code>.</p>
+    </section>
+
+    <section class="token-section" id="color-primitives">
+      <p class="section-label">Color</p>
+      <h2 class="token-section-title">Primitives</h2>
+      <p class="token-section-desc">Six ramps, eleven steps each (50 → 950), plus a <code>default</code> and <code>contrast</code> alias per ramp. Accent also carries a ten-step alpha ramp for overlays and focus states.</p>
+      <div id="color-primitives-mount"></div>
+    </section>
+
+    <section class="token-section" id="color-semantic">
+      <p class="section-label">Color</p>
+      <h2 class="token-section-title">Semantic aliases</h2>
+      <p class="token-section-desc">What components actually reference, grouped by role. Every value here is theme-aware — these are the tokens that flip when you hit the toggle.</p>
+      <div id="color-semantic-mount"></div>
+    </section>
+
+    <section class="token-section" id="typography">
+      <p class="section-label">Type</p>
+      <h2 class="token-section-title">Typography</h2>
+      <p class="token-section-desc">Three families, a 14-step type scale, nine weights, six line-heights and six letter-spacing values — plus the semantic aliases components actually call, like <code>--font-heading</code> and <code>--font-size-title</code>.</p>
+
+      <div id="font-family-mount"></div>
+
+      <h3 class="token-subhead">Size</h3>
+      <div id="font-size-mount"></div>
+
+      <h3 class="token-subhead">Weight</h3>
+      <div id="font-weight-mount"></div>
+
+      <h3 class="token-subhead">Line height</h3>
+      <div id="font-leading-mount"></div>
+
+      <h3 class="token-subhead">Letter spacing</h3>
+      <div id="font-tracking-mount"></div>
+
+      <h3 class="token-subhead">Semantic aliases</h3>
+      <div class="token-sys-list" id="font-sys-mount"></div>
+    </section>
+
+    <section class="token-section" id="spacing">
+      <p class="section-label">Layout</p>
+      <h2 class="token-section-title">Spacing</h2>
+      <p class="token-section-desc">A 34-step scale from 1px to 384px, used for gaps, padding and layout rhythm across every component on the site.</p>
+      <div class="spacing-rows" id="spacing-mount"></div>
+    </section>
+
+    <section class="token-section" id="radius">
+      <p class="section-label">Layout</p>
+      <h2 class="token-section-title">Border radius</h2>
+      <div class="token-grid" id="radius-mount"></div>
+    </section>
+
+    <section class="token-section" id="icon-sizes">
+      <p class="section-label">Layout</p>
+      <h2 class="token-section-title">Icon sizes</h2>
+      <div class="token-grid" id="icon-size-mount"></div>
+    </section>
+
+  </div>
+
+  <contact-form></contact-form>
+  <site-footer class="anim anim-6" depth="../"></site-footer>
+
+</div>
+
+<script>
+  // ── Reading progress ─────────────────────────────
+  const bar = document.getElementById('progress-bar');
+  window.addEventListener('scroll', () => {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.width = (docHeight > 0 ? (scrollTop / docHeight) * 100 : 0) + '%';
+  });
+
+  // ── Token data ────────────────────────────────────
+  // Values are never hand-copied — every tile reads its token's
+  // live computed value from the CSS custom property, so this page
+  // can never drift from tokens.css and stays correct across the
+  // light/dark toggle automatically.
+
+  const COLOR_RAMPS = [
+    { label: 'Gray',   prefix: '--color-gray',   steps: ['50','100','200','300','400','500','600','700','800','900','950'], extra: ['default', 'contrast'] },
+    { label: 'Accent', prefix: '--color-accent', steps: ['50','100','200','300','400','500','600','700','800','900','950'], extra: ['default', 'contrast'], alphaSteps: 10 },
+    { label: 'Blue',   prefix: '--color-blue',   steps: ['50','100','200','300','400','500','600','700','800','900','950'], extra: ['default', 'contrast'] },
+    { label: 'Red',    prefix: '--color-red',    steps: ['50','100','200','300','400','500','600','700','800','900','950'], extra: ['contrast'] },
+    { label: 'Green',  prefix: '--color-green',  steps: ['50','100','200','300','400','500','600','700','800','900','950'], extra: ['contrast'] },
+    { label: 'Yellow', prefix: '--color-yellow', steps: ['50','100','200','300','400','500','600','700','800','900','950'], extra: ['contrast'] },
+  ];
+
+  const COLOR_SYS_GROUPS = [
+    { label: 'Background', tokens: ['bg-default', 'bg-subtle', 'bg-muted'] },
+    { label: 'Foreground', tokens: ['fg-default', 'fg-muted', 'fg-subtle', 'fg-disabled', 'fg-on-accent'] },
+    { label: 'Border', tokens: ['border-default', 'border-strong', 'border-muted', 'border-accent'] },
+    { label: 'Accent', tokens: ['accent-default', 'accent-hover', 'accent-muted', 'accent-subtle', 'accent-fg'] },
+    { label: 'Surface', tokens: ['surface-default', 'surface-raised', 'surface-overlay'] },
+    { label: 'State', tokens: ['focus', 'disabled-bg', 'disabled-text'] },
+    { label: 'Danger', tokens: ['danger-default', 'danger-hover', 'danger-muted', 'danger-fg', 'danger-on'] },
+    { label: 'Status — Success', tokens: ['success-bg', 'success-bg-subtle', 'success-border', 'success-text', 'success-text-muted', 'success-icon', 'success-solid', 'success-on-solid'] },
+    { label: 'Status — Warning', tokens: ['warning-bg', 'warning-bg-subtle', 'warning-border', 'warning-text', 'warning-text-muted', 'warning-icon', 'warning-solid', 'warning-on-solid'] },
+    { label: 'Status — Error', tokens: ['error-bg', 'error-bg-subtle', 'error-border', 'error-text', 'error-icon', 'error-solid', 'error-on-solid'] },
+    { label: 'Status — Info', tokens: ['info-bg', 'info-bg-subtle', 'info-border', 'info-text', 'info-text-muted', 'info-icon', 'info-solid', 'info-on-solid'] },
+    { label: 'Icon', tokens: ['icon-default', 'icon-muted', 'icon-subtle', 'icon-disabled', 'icon-on-accent', 'icon-accent', 'icon-success', 'icon-warning', 'icon-error', 'icon-info'] },
+  ];
+
+  const FONT_FAMILIES = [
+    { name: 'Sans · Inter', token: '--font-family-sans' },
+    { name: 'Display · Space Grotesk', token: '--font-family-display' },
+    { name: 'Mono · Inconsolata', token: '--font-family-mono' },
+  ];
+
+  const FONT_SIZES = ['caption', 'xs', 'sm', 'base', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl', '7xl', '8xl', '9xl'];
+  const FONT_WEIGHTS = ['thin', 'extralight', 'light', 'normal', 'medium', 'semibold', 'bold', 'extrabold', 'black'];
+  const FONT_LEADING = ['none', 'tight', 'snug', 'normal', 'relaxed', 'loose'];
+  const FONT_TRACKING = ['tighter', 'tight', 'normal', 'wide', 'wider', 'widest'];
+
+  const FONT_SYS_ALIASES = [
+    '--font-body', '--font-heading', '--font-mono',
+    '--font-size-caption', '--font-size-label', '--font-size-body', '--font-size-body-lg',
+    '--font-size-subtitle', '--font-size-title', '--font-size-h3', '--font-size-h2', '--font-size-h1', '--font-size-display',
+    '--font-weight-body', '--font-weight-label', '--font-weight-emphasis', '--font-weight-heading', '--font-weight-display',
+    '--font-leading-tight-sys', '--font-leading-snug-sys', '--font-leading-body', '--font-leading-relaxed-sys',
+    '--font-tracking-heading', '--font-tracking-body', '--font-tracking-label', '--font-tracking-caption',
+  ];
+
+  const RADIUS_STEPS = ['none', 'sm', 'default', 'md', 'lg', 'xl', '2xl', '3xl', 'full'];
+  const SPACING_STEPS = ['px', '0-5', '1', '1-5', '2', '2-5', '3', '3-5', '4', '5', '6', '7', '8', '9', '10', '11', '12', '14', '16', '20', '24', '28', '32', '36', '40', '44', '48', '52', '56', '60', '64', '72', '80', '96'];
+  const ICON_STEPS = ['xs', 'sm', 'md', 'lg', 'xl', '2xl'];
+
+  // ── Helpers ───────────────────────────────────────
+  const root = document.documentElement;
+  const cssVal = (name) => getComputedStyle(root).getPropertyValue(name).trim();
+
+  const copyableEls = [];
+
+  function copyToken(el, tokenName) {
+    const text = `var(${tokenName})`;
+    const revert = () => {
+      el.removeAttribute('data-tip');
+      el.classList.remove('show-tip');
+    };
+    const flash = () => {
+      el.setAttribute('data-tip', 'Copied!');
+      el.classList.add('show-tip');
+      setTimeout(revert, 1000);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(flash).catch(() => {});
+    }
+  }
+
+  function makeCopyable(el, tokenName, baseTip) {
+    el.dataset.token = tokenName;
+    el.setAttribute('data-tip', baseTip || 'Copy');
+    el.addEventListener('click', () => copyToken(el, tokenName));
+    copyableEls.push(el);
+    return el;
+  }
+
+  function el(tag, className, children) {
+    const node = document.createElement(tag);
+    if (className) node.className = className;
+    if (children) {
+      (Array.isArray(children) ? children : [children]).forEach((c) => {
+        if (c == null) return;
+        node.appendChild(typeof c === 'string' ? document.createTextNode(c) : c);
+      });
+    }
+    return node;
+  }
+
+  // ── Color primitive ramps ────────────────────────
+  function buildColorPrimitives() {
+    const mount = document.getElementById('color-primitives-mount');
+    COLOR_RAMPS.forEach((ramp) => {
+      mount.appendChild(el('h3', 'token-subhead', ramp.label));
+      const strip = el('div', 'token-ramp-strip');
+      const allSteps = [...ramp.steps, ...ramp.extra];
+      allSteps.forEach((step) => {
+        const varName = `${ramp.prefix}-${step}`;
+        const tile = el('button', 'token-tile');
+        tile.type = 'button';
+        const swatch = el('div', 'token-tile-swatch');
+        const fill = el('div', 'token-tile-swatch-fill');
+        fill.style.background = `var(${varName})`;
+        swatch.appendChild(fill);
+        const name = el('span', 'token-tile-name', step);
+        const value = el('span', 'token-tile-value', cssVal(varName) || '—');
+        value.dataset.liveToken = varName;
+        tile.append(swatch, name, value);
+        makeCopyable(tile, varName);
+        strip.appendChild(tile);
+      });
+      mount.appendChild(strip);
+
+      if (ramp.alphaSteps) {
+        mount.appendChild(el('h3', 'token-subhead', `${ramp.label} · alpha`));
+        const alphaStrip = el('div', 'token-ramp-strip');
+        for (let i = 1; i <= ramp.alphaSteps; i++) {
+          const varName = `${ramp.prefix}-alpha-${i}`;
+          const tile = el('button', 'token-tile');
+          tile.type = 'button';
+          const swatch = el('div', 'token-tile-swatch');
+          const fill = el('div', 'token-tile-swatch-fill');
+          fill.style.background = `var(${varName})`;
+          swatch.appendChild(fill);
+          const name = el('span', 'token-tile-name', String(i));
+          const value = el('span', 'token-tile-value', cssVal(varName) || '—');
+          value.dataset.liveToken = varName;
+          tile.append(swatch, name, value);
+          makeCopyable(tile, varName);
+          alphaStrip.appendChild(tile);
+        }
+        mount.appendChild(alphaStrip);
+      }
+    });
+  }
+
+  // ── Semantic color groups ────────────────────────
+  function buildColorSemantic() {
+    const mount = document.getElementById('color-semantic-mount');
+    const wrap = el('div', 'token-sys-groups');
+    COLOR_SYS_GROUPS.forEach((group) => {
+      const groupEl = el('div', 'token-sys-group');
+      groupEl.appendChild(el('h3', 'token-subhead', group.label));
+      const strip = el('div', 'token-sys-group-strip');
+      group.tokens.forEach((short) => {
+        const varName = `--color-${short}`;
+        const tile = el('button', 'token-tile');
+        tile.type = 'button';
+        const swatch = el('div', 'token-tile-swatch');
+        const fill = el('div', 'token-tile-swatch-fill');
+        fill.style.background = `var(${varName})`;
+        swatch.appendChild(fill);
+        const name = el('span', 'token-tile-name', short);
+        const value = el('span', 'token-tile-value', cssVal(varName) || '—');
+        value.dataset.liveToken = varName;
+        tile.append(swatch, name, value);
+        makeCopyable(tile, varName);
+        strip.appendChild(tile);
+      });
+      groupEl.appendChild(strip);
+      wrap.appendChild(groupEl);
+    });
+    mount.appendChild(wrap);
+  }
+
+  // ── Typography ────────────────────────────────────
+  function buildFontFamilies() {
+    const mount = document.getElementById('font-family-mount');
+    const grid = el('div', 'font-family-grid');
+    FONT_FAMILIES.forEach((f) => {
+      const card = el('button', 'token-tile font-family-card');
+      card.type = 'button';
+      const sample = el('div', 'font-family-sample', 'The quick brown fox jumps over the lazy dog');
+      sample.style.fontFamily = `var(${f.token})`;
+      const meta = el('div', 'font-family-meta', [
+        el('span', null, f.name),
+        el('span', null, cssVal(f.token) || '—'),
+      ]);
+      card.append(sample, meta);
+      makeCopyable(card, f.token);
+      grid.appendChild(card);
+    });
+    mount.appendChild(grid);
+  }
+
+  function buildFontSizes() {
+    const mount = document.getElementById('font-size-mount');
+    FONT_SIZES.forEach((step) => {
+      const varName = `--font-size-${step}`;
+      const row = el('button', 'token-row');
+      row.type = 'button';
+      const label = el('span', 'token-row-label', [el('strong', null, step), document.createTextNode(' · ' + (cssVal(varName) || '—'))]);
+      const sample = el('span', 'font-size-sample', 'Aa');
+      sample.style.fontSize = `var(${varName})`;
+      row.append(label, sample);
+      makeCopyable(row, varName);
+      mount.appendChild(row);
+    });
+  }
+
+  function buildFontWeights() {
+    const mount = document.getElementById('font-weight-mount');
+    FONT_WEIGHTS.forEach((step) => {
+      const varName = `--font-weight-${step}`;
+      const row = el('button', 'token-row');
+      row.type = 'button';
+      const label = el('span', 'token-row-label', [el('strong', null, step), document.createTextNode(' · ' + (cssVal(varName) || '—'))]);
+      const sample = el('span', 'font-weight-sample', 'Aa');
+      sample.style.fontWeight = `var(${varName})`;
+      row.append(label, sample);
+      makeCopyable(row, varName);
+      mount.appendChild(row);
+    });
+  }
+
+  function buildFontLeading() {
+    const mount = document.getElementById('font-leading-mount');
+    FONT_LEADING.forEach((step) => {
+      const varName = `--font-leading-${step}`;
+      const row = el('button', 'token-row');
+      row.type = 'button';
+      const label = el('span', 'token-row-label', [el('strong', null, step), document.createTextNode(' · ' + (cssVal(varName) || '—'))]);
+      const sample = el('span', 'leading-sample', 'Line height controls the vertical rhythm of stacked text — tight for headings, relaxed for long-form reading.');
+      sample.style.lineHeight = `var(${varName})`;
+      row.append(label, sample);
+      makeCopyable(row, varName);
+      mount.appendChild(row);
+    });
+  }
+
+  function buildFontTracking() {
+    const mount = document.getElementById('font-tracking-mount');
+    FONT_TRACKING.forEach((step) => {
+      const varName = `--font-tracking-${step}`;
+      const row = el('button', 'token-row');
+      row.type = 'button';
+      const label = el('span', 'token-row-label', [el('strong', null, step), document.createTextNode(' · ' + (cssVal(varName) || '—'))]);
+      const sample = el('span', 'tracking-sample', 'Tracking');
+      sample.style.letterSpacing = `var(${varName})`;
+      row.append(label, sample);
+      makeCopyable(row, varName);
+      mount.appendChild(row);
+    });
+  }
+
+  function buildFontSysAliases() {
+    const mount = document.getElementById('font-sys-mount');
+    FONT_SYS_ALIASES.forEach((varName) => {
+      const row = el('button', 'token-row');
+      row.type = 'button';
+      const label = el('span', 'token-row-label', varName);
+      const value = el('span', 'token-sys-value', cssVal(varName) || '—');
+      value.dataset.liveToken = varName;
+      row.append(label, value);
+      makeCopyable(row, varName);
+      mount.appendChild(row);
+    });
+  }
+
+  // ── Spacing ───────────────────────────────────────
+  function buildSpacing() {
+    const mount = document.getElementById('spacing-mount');
+    SPACING_STEPS.forEach((step) => {
+      const varName = `--spacing-${step}`;
+      const px = cssVal(varName) || '0px';
+      const row = el('button', 'token-row');
+      row.type = 'button';
+      const label = el('span', 'token-row-label', [el('strong', null, 'space-' + step), document.createTextNode(' · ' + px)]);
+      const track = el('div', 'spacing-bar-track');
+      const fillBar = el('div', 'spacing-bar');
+      fillBar.style.width = px;
+      track.appendChild(fillBar);
+      row.append(label, track);
+      makeCopyable(row, varName);
+      mount.appendChild(row);
+    });
+  }
+
+  // ── Radius / Icon grids ───────────────────────────
+  function buildRadius() {
+    const mount = document.getElementById('radius-mount');
+    RADIUS_STEPS.forEach((step) => {
+      const varName = `--radius-${step}`;
+      const tile = el('button', 'token-tile');
+      tile.type = 'button';
+      const swatch = el('div', 'radius-tile-swatch');
+      swatch.style.borderRadius = `var(${varName})`;
+      const name = el('span', 'token-tile-name', step);
+      const value = el('span', 'token-tile-value', cssVal(varName) || '—');
+      value.dataset.liveToken = varName;
+      tile.append(swatch, name, value);
+      makeCopyable(tile, varName);
+      mount.appendChild(tile);
+    });
+  }
+
+  function buildIconSizes() {
+    const mount = document.getElementById('icon-size-mount');
+    ICON_STEPS.forEach((step) => {
+      const varName = `--icon-${step}`;
+      const tile = el('button', 'token-tile');
+      tile.type = 'button';
+      const swatch = el('div', 'icon-tile-swatch');
+      const dot = el('div', 'icon-tile-dot');
+      dot.style.width = `var(${varName})`;
+      dot.style.height = `var(${varName})`;
+      swatch.appendChild(dot);
+      const name = el('span', 'token-tile-name', step);
+      const value = el('span', 'token-tile-value', cssVal(varName) || '—');
+      value.dataset.liveToken = varName;
+      tile.append(swatch, name, value);
+      makeCopyable(tile, varName);
+      mount.appendChild(tile);
+    });
+  }
+
+  // ── Live refresh on theme toggle ─────────────────
+  function refreshLiveValues() {
+    document.querySelectorAll('[data-live-token]').forEach((node) => {
+      node.textContent = cssVal(node.dataset.liveToken) || '—';
+    });
+  }
+
+  buildColorPrimitives();
+  buildColorSemantic();
+  buildFontFamilies();
+  buildFontSizes();
+  buildFontWeights();
+  buildFontLeading();
+  buildFontTracking();
+  buildFontSysAliases();
+  buildSpacing();
+  buildRadius();
+  buildIconSizes();
+
+  new MutationObserver(refreshLiveValues).observe(root, { attributes: true, attributeFilter: ['data-theme'] });
+</script>
+</body>
+</html>

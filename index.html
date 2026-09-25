@@ -13,22 +13,35 @@
   <script src="components.js" defer></script>
 </head>
 <body>
-  <div class="page">
+  <!-- Nav -->
+  <site-nav type="home"></site-nav>
 
-    <!-- Nav -->
-    <site-nav type="home"></site-nav>
+  <div class="page">
 
     <!-- Hero -->
     <section class="hero">
       
       <h1 class="anim anim-3">I design digital experiences that help everyday people live <span class="accent">happier, healthier</span> lives.</h1>
-      
     </section>
 
     <!-- Case Studies -->
     <p class="section-label anim anim-4">Selected work</p>
     <div class="card-grid anim anim-5">
-
+    <!-- OlySense Design System — not password-gated; the case study page
+         itself is noindex,nofollow so it stays out of search results -->
+    <a class="card" href="/ods" style="view-transition-name: hero-ods;">
+      <div class="card-media">
+        <img class="card-image" src="assets/images/card.hero.ods2.png" alt="OlySense Design System" />
+        <div class="card-scrim"></div>
+        <div class="card-logo-watermark">
+          <img src="assets/images/Olysense Design System.svg" alt="OlySense" />
+        </div>
+        <div class="card-overlay-text">
+          <span class="card-type">Design System</span>
+          <span class="card-title">Unifying the Endoscopic Workflow for industry leader Olympus</span>
+        </div>
+      </div>
+    </a>
       <!-- UA Samsung -->
       <a class="card" href="/ua-samsung" style="view-transition-name: hero-ua-samsung;">
         <div class="card-media">
@@ -39,7 +52,7 @@
           </div>
           <div class="card-overlay-text">
             <span class="card-type">Wearable</span>
-            <span class="card-title">Find Your Form with a co-branded smartwatch</span>
+            <span class="card-title">Find Your Form with a co-branded smartwatch by Under Armour and Samsung</span>
           </div>
         </div>
       </a>
@@ -53,7 +66,7 @@
           </div>
           <div class="card-overlay-text">
             <span class="card-type">Design System</span>
-            <span class="card-title">Unifying the product with a brand-right design system</span>
+            <span class="card-title">A brand-right design system for Under Armours fitness apps</span>
           </div>
         </div>
         </a>
@@ -68,19 +81,13 @@
           </div>
           <div class="card-overlay-text">
             <span class="card-type">Premium Feature</span>
-            <span class="card-title">Premium insights to help you hit your goals</span>
+            <span class="card-title">Premium insights to help you hit your goals using MyFitnessPal</span>
           </div>
         </div>
       </a>
     </div>
-
     <!-- Footer -->
-    <footer class="anim anim-6">
-      <p class="footer-built">
-        Built with <a href="https://claude.ai" target="_blank" rel="noopener">Claude Design</a> and <a href="https://dct.design" target="_blank" rel="noopener">dct tokens</a>.
-      </p>
-      <p class="footer-copy">© 2026 Daniel C Townson</p>
-    </footer>
+    <site-footer class="anim anim-6"></site-footer>
 
   </div>
 

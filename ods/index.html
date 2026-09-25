@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="view-transition" content="same-origin" />
+  <title>OlySense Design System — dctownson.com</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Inconsolata:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../tokens.css" />
+  <link rel="stylesheet" href="../style.css" />
+  <script src="../components.js" defer></script>
+  <style>
+
+    /* ── Divider ───────────────────────────────────── */
+    .cs-divider {
+      border: none;
+      border-top: 1px solid var(--color-border-default);
+    }
+
+  </style>
+</head>
+<body>
+  <!-- Nav -->
+  <site-nav type="casestudy" title="OlySense Design System" depth="../"></site-nav>
+
+  <div class="page">
+
+  <div id="progress-bar"></div>
+
+  <cs-hero
+    eyebrow="Design System"
+    title="OlySense Design System - bringing consistency to a suite of endoscopic workflow products."
+    summary="We believe good design will lead to better patient outcomes - by reducing cognitive load and UX disparities."
+    image="../assets/images/cs.ods.hero.png"
+    image-alt="OlySense Design System hero — dashboard cards, calendar, and button/tag variants"
+    transition-name="hero-ods"
+    role="Lead Designer"
+    timeframe="2024 – 2026"
+    responsibilities="Develop a design system for a suite of endoscopic workflow products."
+    keywords="Design System, tokens, color palette, components, patterns, guidance, resources">
+  </cs-hero>
+
+  <!-- Content -->
+  <div class="content anim anim-5">
+
+    <div class="cs-body">
+
+      <!-- Section 1 -->
+      <section class="cs-section">
+        <h2>Leading in hardware, falling behind in software.</h2>
+        <p>After dominating the endoscopic arena for years, Olympus was losing ground to newer, more user-friendly applications coming from competitors like Fuji and Epic. They needed to modernize how their software was built and use that to replace their outdated flagship application Endobase. Olympus has the best-in-class hardware and needed best-in-class software to match.</p>
+        <div class="img-grid cols-2" style="grid-template-columns: 1fr 2fr;">
+          <div>
+            <div class="img-wrap" data-caption="Olympus' endoscopic hardware in the procedure room">
+              <img src="../assets/images/cs.ods.endo1.png" alt="A clinician using Olympus endoscopic hardware during a procedure, guided by an onboard checklist display" />
+            </div>
+            <p class="img-caption">Olympus' endoscopic hardware in the procedure room</p>
+          </div>
+          <div>
+            <div class="img-wrap" data-caption="Endobase — the dated software reviewing procedure footage">
+              <img src="../assets/images/cs.ods.endo2.png" alt="A doctor reviewing procedure recordings in Endobase's dated interface" />
+            </div>
+            <p class="img-caption">Endobase — the dated software reviewing procedure footage</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 2 -->
+      <section class="cs-section">
+        <h2>Introducing OlySense</h2>
+        <p>The solution was an all-in-one endoscopic workflow management tool that syncs flawlessly with Olympus' cutting-edge endoscopic hardware devices - built from a foundation of modern software development methods: agile workflows and design system-led web-based development.</p>
+        <div class="img-grid cols-3">
+          <div>
+            <div class="img-wrap" data-caption="OlySense Report — patient procedure documentation">
+              <img src="../assets/images/cs.ods.oly1.png" alt="OlySense Report screen showing patient information and procedure images for a colonoscopy" />
+            </div>
+            <p class="img-caption">OlySense Report — patient procedure documentation</p>
+          </div>
+          <div>
+            <div class="img-wrap" data-caption="OlySense AssetCare — endoscope fleet and reprocessing status">
+              <img src="../assets/images/cs.ods.oly2.png" alt="OlySense AssetCare dashboard showing endoscope fleet status and reprocessing" />
+            </div>
+            <p class="img-caption">OlySense AssetCare — endoscope fleet and reprocessing status</p>
+          </div>
+          <div>
+            <div class="img-wrap" data-caption="OlySense Insights — procedure analytics dashboard">
+              <img src="../assets/images/cs.ods.oly3.png" alt="OlySense Insights dashboard charting colonoscopy procedure volume over time" />
+            </div>
+            <p class="img-caption">OlySense Insights — procedure analytics dashboard</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3 -->
+      <section class="cs-section">
+        <h2>One blueprint for an entire platform of products.</h2>
+        <p>In the beginning, OlySense was a collection of software products loosely held together by a similar aesthetic and a singular portal with role-based access. Multiple teams working in silos resulted in a hodge-podge of interfaces and experiences across a workflow that was meant to be comprehensive. Varying interface elements and layouts caused confusion from one screen to the next, disrupting the mental flow of doctors and nurses before, during and after routine and not-so-routine procedures. Alternating tech stacks meant no one product communicated effectively with the others. While technical teams worked out the backend systems, we built ODS to help product teams build cohesively from a single source of truth.</p>
+        <div class="img-grid cols-1">
+          <div>
+            <div class="img-wrap" data-caption="The blueprint connecting OlySense's design system to six product applications">
+              <img src="../assets/images/cs.ods.blueprint.png" alt="Diagram mapping the OlySense Design System, through Design and Develop, into six applications: Admin, Home Dashboard, Endo Settings, Fleet Management, Reprocessing UI, and Post Procedure UI" />
+            </div>
+            <p class="img-caption">The blueprint connecting OlySense's design system to six product applications</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4 -->
+      <section class="cs-section">
+        <h2>Foundations</h2>
+        <p>OlySense's design language was defined by core elements, captured as tokens and applied to components, layouts and transitions. Building from a basic pre-approved color palette we introduced new hues to better support modern web interfaces, and defined a dark mode theme for use in low-light environments. An established font family used in embedded software had to be updated to an open source web font, using a minor thirds type scale, optically-adjusted. A set of baseline layouts were created to keep everything structurally consistent from one screen to the next, with primary actions and navigation always present in the application bar plus an optional side menu navigation for quicker links. Elevations were defined using drop shadows in both light and dark modes. Transitions were defined using duration and easing variables. All of these tokens were first decided upon in Figma then exported and run through style dictionary for proper formatting in code.</p>
+        <div class="img-grid cols-1">
+          <div>
+            <div class="img-wrap" data-caption="OlySense color tokens and palette">
+              <img src="../assets/images/cs.ods.colors1.png" alt="OlySense color tokens and palette, including the dark mode theme" />
+            </div>
+            <p class="img-caption">OlySense color tokens and palette</p>
+          </div>
+        </div>
+        <div class="img-grid cols-1">
+          <div>
+            <div class="img-wrap" data-caption="Typography scale and font tokens">
+              <img src="../assets/images/cs.ods.fonts1.png" alt="OlySense typography scale and font tokens" />
+            </div>
+            <p class="img-caption">Typography scale and font tokens</p>
+          </div>
+        </div>
+        <div class="img-grid cols-1">
+          <div>
+            <div class="img-wrap" data-caption="Elevation tokens for light and dark mode">
+              <img src="../assets/images/cs.ods.elevations1.png" alt="OlySense elevation tokens, shown in light and dark mode" />
+            </div>
+            <p class="img-caption">Elevation tokens for light and dark mode</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 5 -->
+      <section class="cs-section">
+        <h2>Components</h2>
+        <p>Our components provided teams with consistency in their interfaces. Buttons were aligned, actions were consistent. We used a comprehensive set of standard components like tags, drop-down, cards, switches, input fields and more. We only added custom components after a rigorous vetting process to determine if they belonged in the system or remained one-offs within the specific application that introduced them.</p>
+        <div class="img-grid cols-1">
+          <div>
+            <div class="img-wrap" data-caption="The OlySense component library">
+              <img src="../assets/images/cs.ods.components1.png" alt="OlySense component library — cards, calendar, buttons, tags, menus, and form fields" />
+            </div>
+            <p class="img-caption">The OlySense component library</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 6 -->
+      <section class="cs-section">
+        <h2>Patterns</h2>
+        <p>Complex components were classified as patterns. These often required specific interaction methods, like how to switch between applications using the App Switcher, which was housed in the Application Bar. Data tables, forms and pagination were all included under Patterns. This gave product teams a repeatable and consistent but versatile manner to organize, display and interact with larger sets of elements and data.</p>
+        <div class="img-grid cols-1">
+          <div>
+            <div class="img-wrap" data-caption="Data table pattern">
+              <img src="../assets/images/cs.ods.datatable1.png" alt="OlySense data table pattern" />
+            </div>
+            <p class="img-caption">Data table pattern</p>
+          </div>
+        </div>
+        <div class="img-grid cols-1">
+          <div>
+            <div class="img-wrap" data-caption="Page header variants — title, side nav, search, breadcrumbs, and focused views">
+              <img src="../assets/images/cs.ods.pageheaders.png" alt="OlySense page header pattern variations, including breadcrumbs and tabs" />
+            </div>
+            <p class="img-caption">Page header variants — title, side nav, search, breadcrumbs, and focused views</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 7 -->
+      <section class="cs-section">
+        <h2>Documentation</h2>
+        <p>Everything was documented in both Figma and our single source of truth documentation website, where designers, developers and the whole organization could learn about our design system and how to implement and use tokens, components, layouts and patterns, as well as how the design system was structured and governed. We held regular office hours, participated in design reviews and handoffs, presented at demos and to leadership, and were always available via dedicated chat rooms on Teams.</p>
+        <div class="img-grid cols-1">
+          <div>
+            <div class="img-wrap" data-caption="Documentation for the ODS Calendar component">
+              <img src="../assets/images/cs.ods.document1.png" alt="ODS documentation page for the Calendar component, showing date states, color modes, and structure specs" />
+            </div>
+            <p class="img-caption">Documentation for the ODS Calendar component</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 8 -->
+      <section class="cs-section">
+        <h2>Agentic Workflows</h2>
+        <p>With AI becoming more and more of a focus across the industry we were quickly turning our focus towards making ODS truly agentic ready. Our designers were using vibe coding tools and features so we built an MCP server to pull directly from ODS when building concept prototypes in Figma Make, with a goal of having developers also leveraging our ODS MCP server in actual development of the OlySense applications. This workstream, and all ODS work, was abruptly cut short by a round of layoffs that heavily impacted the Design and Product teams in early 2026.</p>
+      </section>
+
+    </div>
+    <contact-form></contact-form>
+    <site-footer depth="../"></site-footer>
+
+  </div>
+
+  <script>
+    // Reading progress
+    const bar = document.getElementById('progress-bar');
+    window.addEventListener('scroll', () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      bar.style.width = (docHeight > 0 ? (scrollTop / docHeight) * 100 : 0) + '%';
+    });
+  </script>
+  </div>
+</body>
+</html>
