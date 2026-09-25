@@ -73,7 +73,7 @@ class SiteNav extends HTMLElement {
                   <path d="M3 7l9 6l9 -6" />
                 </svg>
               </dct-button>
-              <dct-button variant="ghost" size="lg" icon-only href="${depth}assets/Daniel_C_Townson_-_Sr_Product_Designer_-_Resume_01Sep26.pdf" target="_blank" rel="noopener" data-tip="Résumé" aria-label="Résumé">
+              <dct-button variant="ghost" size="lg" icon-only href="${depth}assets/resume/Daniel C Townson - Sr Product Designer - Resume 01Sep26.pdf" target="_blank" rel="noopener" data-tip="Résumé" aria-label="Résumé">
                 <svg slot="leading" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M14 3v4a1 1 0 0 0 1 1h4" />
                   <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2" />
@@ -119,7 +119,7 @@ class SiteNav extends HTMLElement {
                   <path d="M3 7l9 6l9 -6" />
                 </svg>
               </dct-button>
-              <dct-button variant="ghost" size="lg" icon-only href="${depth}assets/Daniel_C_Townson_-_Sr_Product_Designer_-_Resume_01Sep26.pdf" target="_blank" rel="noopener" data-tip="Résumé" aria-label="Résumé">
+              <dct-button variant="ghost" size="lg" icon-only href="${depth}assets/resume/Daniel C Townson - Sr Product Designer - Resume 01Sep26.pdf" target="_blank" rel="noopener" data-tip="Résumé" aria-label="Résumé">
                 <svg slot="leading" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M14 3v4a1 1 0 0 0 1 1h4" />
                   <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2" />
