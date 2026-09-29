@@ -513,15 +513,41 @@ html .contact-header h2 {
    ============================================================ */
 
 /* ── Hero ──────────────────────────────────────────────── */
-.hero { margin-bottom: 120px; padding-top: 120px; max-width: 80%;}
+.hero { 
+  margin-bottom: 120px; 
+  margin-top: 120px; 
+  padding-left: 48px;
+  max-width: 90%;}
 
 .hero-eyebrow {
-  font-family: var(--font-family-sans);
-  font-size: var(--font-size-xs);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
-  letter-spacing: var(--font-tracking-wider);
-  text-transform: uppercase;
+  letter-spacing: var(--font-tracking-wide);
   color: var(--color-fg-default);
+}
+
+.hero h3 {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--font-leading-relaxed);
+  color: var(--color-fg-muted);
+}
+/* ── Nav avatar ────────────────────────────────── */
+.nav-greeting {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nav-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+  border: 1px solid var(--color-border-default);
+  flex-shrink: 0;
 }
 
 .hero h1 {
@@ -533,11 +559,11 @@ html .contact-header h2 {
   color: var(--color-fg-default);
   max-width: none;
   margin-bottom: 32px;
-  text-wrap: balance;
+  text-wrap: pretty;
 }
 
 .hero h1 .accent { color: var(--color-accent-default); }
-
+.hero h1 .muted-text { color: var(--color-fg-muted); }
 .hero h2 {
   font-family: var(--font-family-mono);
   font-size: var(--font-size-md);
@@ -949,6 +975,34 @@ html .contact-header h2 {
   padding-left: 2px;
 }
 
+/* ── <theme-swap> ──────────────────────────────── */
+.theme-swap-images .theme-swap-dark { display: none; }
+[data-theme="dark"] .theme-swap-images .theme-swap-light { display: none; }
+[data-theme="dark"] .theme-swap-images .theme-swap-dark  { display: block; }
+
+.theme-swap-live {
+  position: relative;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.theme-swap-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-fg-subtle);
+  background: var(--color-bg-subtle);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-default);
+  padding: 3px 7px;
+}
+
 /* ── <meta-tile> — icon/label/value tile ──────────
    Ported from the Figma redesign (meta-grid/tile component) —
    see components.js for the <meta-tile> element that renders one
@@ -1236,6 +1290,39 @@ contact-form { display: block; }
   transform: translateY(-1px);
 }
 
+/* ============================================================
+   About me
+   ============================================================ */
+.about-me {
+  padding: 48px 0;
+  border-top: 1px solid var(--color-border-default);
+}
+
+.about-me h1 {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--font-tracking-tight);
+  color: var(--color-fg-default);
+  margin-bottom: 24px;
+  margin-top: 16px;
+}
+
+.about-me p {
+  font-size: var(--font-size-base);
+  color: var(--color-fg-muted);
+  line-height: var(--font-leading-relaxed);
+  text-wrap: pretty;
+}
+
+.about-me section-label {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--font-tracking-wider);
+  text-transform: uppercase;
+  color: var(--color-accent-default);
+}
 /* ============================================================
    Footer
    ============================================================ */

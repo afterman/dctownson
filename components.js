@@ -55,7 +55,10 @@ class SiteNav extends HTMLElement {
     return `
       <nav class="home-nav anim anim-1">
         <div class="nav-inner">
-          <p class="hero-eyebrow anim anim-2">Hello, I'm Daniel.</p>
+          <div class="nav-greeting anim anim-2">
+            <img class="nav-avatar" src="${depth}assets/images/DCT-Selfie-BW.png" alt="Daniel Townson" />
+            <p class="hero-eyebrow">Hello, I'm Daniel. I'm here to help.</p>
+          </div>
           <div class="nav-right">
             <div class="nav-links">
               <dct-button variant="ghost" size="lg" icon-only href="https://www.linkedin.com/in/danieltownson/" target="_blank" rel="noopener" data-tip="LinkedIn" aria-label="LinkedIn">
@@ -438,6 +441,66 @@ class DctLightbox extends HTMLElement {
 }
 
 customElements.define('dct-lightbox', DctLightbox);
+
+/* ============================================================
+   <theme-swap> — theme-aware visual for case study sections.
+   Two modes, chosen by what's passed in:
+
+   1. IMAGE PAIR — a static export per theme:
+        <theme-swap
+          light-src="../assets/images/cs.ods.colorswatch.light.png"
+          dark-src="../assets/images/cs.ods.colorswatch.dark.png"
+          alt="OlySense color tokens and palette"
+          caption="OlySense color tokens and palette">
+        </theme-swap>
+      Renders as a normal .img-wrap/.img-caption pair, so
+      <dct-lightbox> and .img-grid keep working untouched — it's a
+      drop-in replacement for <img> inside an .img-wrap. If an
+      asset looks the same in both themes, skip this component and
+      use a plain <img> instead — don't pass the same file as both
+      light-src and dark-src.
+
+   2. LIVE EXAMPLE — pass real markup as children instead of
+      light-src/dark-src, and it's rendered as-is, framed the same
+      way and labeled "Live example". That markup should read its
+      colors from the project's own token scope so it re-themes for
+      free when [data-theme] flips.
+
+   Switching itself needs zero JS in either mode — both variants
+   swap purely through [data-theme="dark"] CSS (see style.css),
+   the same mechanism the rest of the site already uses.
+   ============================================================ */
+
+class ThemeSwap extends HTMLElement {
+  connectedCallback() {
+    const lightSrc = this.getAttribute('light-src');
+    const darkSrc  = this.getAttribute('dark-src');
+    const alt      = this.getAttribute('alt') || '';
+    const caption  = this.getAttribute('caption') || '';
+
+    if (lightSrc && darkSrc) {
+      this.innerHTML = `
+        <div class="img-wrap theme-swap-images" data-caption="${caption}">
+          <img class="theme-swap-light" src="${lightSrc}" alt="${alt}" />
+          <img class="theme-swap-dark"  src="${darkSrc}"  alt="${alt}" />
+        </div>
+        ${caption ? `<p class="img-caption">${caption}</p>` : ''}
+      `;
+      return;
+    }
+
+    const content = this.innerHTML;
+    this.innerHTML = `
+      <div class="img-wrap theme-swap-live">
+        <span class="theme-swap-badge">Live example</span>
+        ${content}
+      </div>
+      ${caption ? `<p class="img-caption">${caption}</p>` : ''}
+    `;
+  }
+}
+
+customElements.define('theme-swap', ThemeSwap);
 
 /* ============================================================
    <dct-button> — button component
