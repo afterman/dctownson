@@ -57,7 +57,7 @@ class SiteNav extends HTMLElement {
         <div class="nav-inner">
           <div class="nav-greeting anim anim-2">
             <img class="nav-avatar" src="${depth}assets/images/DCT-Selfie-BW.png" alt="Daniel Townson" />
-            <p class="hero-eyebrow">Hello, I'm Daniel. I'm here to help.</p>
+            <p class="hero-eyebrow">Hello, I'm Daniel.</p>
           </div>
           <div class="nav-right">
             <div class="nav-links">
