@@ -215,7 +215,7 @@ class SiteFooter extends HTMLElement {
     // it's live by changing this one href.
     this.innerHTML = `
       <p class="footer-built">
-        Built with <a href="https://claude.ai" target="_blank" rel="noopener">Claude</a> and <a href="${depth}tokens/">dct tokens</a>.
+        Designed with Figma and built with <a href="https://claude.ai" target="_blank" rel="noopener">Claude</a> and <a href="${depth}tokens/">--dct-tokens</a>.
       </p>
       <p class="footer-copy">© ${year} Daniel C Townson</p>
     `;
