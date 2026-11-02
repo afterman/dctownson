@@ -4,7 +4,8 @@
 
    Section order: reset/base → layout primitives → motion →
    utilities → components (nav, chip, button) → shared cross-page
-   typography → page-specific (home, case study) → contact → footer.
+   typography → page-specific (home, case study) → contact →
+   about → footer.
    ============================================================ */
 
 /* ── Reset & base ─────────────────────────────────────── */
@@ -32,16 +33,19 @@ body {
 a { color: inherit; text-decoration: none; }
 img { display: block; max-width: 100%; }
 
+/* Global default for every h2–h6 on the site. Headings that need a
+   different color set it on their own class. */
+h2, h3, h4, h5, h6 { color: var(--color-fg-muted); }
+
 /* ── Layout primitives ────────────────────────────────── */
-/* .page and .content are identical wrappers under two names —
-   .page is used on the homepage, .content on case study pages.
-   Worth collapsing to one name later; left separate for now since
-   that touches markup across every page. */
+/* .page is the single source of page width and side margins on
+   every page. .content (case study pages) is a plain grouping
+   wrapper with no styles of its own. */
 .page {
   max-width: 1440px;
   margin: 0 auto;
   padding: 0 56px;
-  --grid-gutter: 12px;
+  --grid-gutter: 56px;
 }
 
 @media (max-width: 1023px) {
@@ -56,13 +60,12 @@ img { display: block; max-width: 100%; }
   }
 }
 
-/* 12-column responsive grid. Desktop (>=1024px): 12 columns,
-   matching the Figma desktop grid (12 col / 12px gutter / 56px
-   margin). Tablet (768-1023px): 8 columns. Mobile (<768px): 4
-   columns. Gutter stays --grid-gutter at every tier; .card-grid
-   and .about-grid override it with their own larger gap below --
-   Figma treats those as component-level gaps independent of the
-   structural grid gutter. */
+/* 12-column responsive grid. Desktop (>=1024px): 12 columns.
+   Tablet (768-1023px): 8 columns. Mobile (<768px): 4 columns.
+   Grids only line up with each other when they share the same
+   column-gap, so every grid takes --grid-gutter for its columns —
+   override row-gap freely, but leave column-gap alone on any grid
+   that needs to align with the others. */
 .hero-masthead,
 .card-grid,
 .about-grid {
@@ -85,17 +88,6 @@ img { display: block; max-width: 100%; }
   .about-grid {
     grid-template-columns: repeat(4, 1fr);
   }
-}
-
-/* .content used to duplicate .page's own max-width/margin/padding.
-   Since .page already applies that box model to the whole page,
-   nesting the same values in .content silently doubled the side
-   gutter (24px + 24px = 48px) for anything inside both — which is
-   exactly why case study pages that kept the header/hero outside
-   .content (24px gutter) visually misaligned against the body
-   content inside it (48px gutter). .content is now just a plain
-   grouping wrapper; .page is the single source of page width. */
-.content {
 }
 
 cs-hero {
@@ -170,18 +162,7 @@ site-nav {
   width: 100%;
 }
 
-nav.home-nav {
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  background: var(--color-bg-default);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  transition: background-color 0.2s ease;
-  padding: 0;
-  margin-bottom: 0;
-}
-
+nav.home-nav,
 nav.cs-nav {
   position: sticky;
   top: 0;
@@ -190,16 +171,13 @@ nav.cs-nav {
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   transition: background-color 0.2s ease;
-  padding: 0;
-  margin-bottom: 0;
 }
 
 .nav-inner {
   /* Nav intentionally ignores .page's max-width. <site-nav> sits
-     outside .page (full-bleed bar), and unlike the page content
-     below it, the left/right actions run all the way to the
-     viewport edges too — inset only by a fixed side padding, not
-     centered into the same 1280px column as the page content. */
+     outside .page (full-bleed bar), so the left/right actions run
+     out toward the viewport edges — inset only by a fixed side
+     padding, not centered into the page content column. */
   padding: 0 24px;
   height: 72px;
   display: flex;
@@ -208,30 +186,27 @@ nav.cs-nav {
   gap: 16px;
 }
 
-.nav-left {
+.nav-greeting {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 12px;
 }
 
-.nav-logo {
-  width: 36px;
-  height: 36px;
+.nav-avatar {
+  width: 32px;
+  height: 32px;
   border-radius: var(--radius-full);
   object-fit: cover;
-  transition: transform 0.25s ease;
-  cursor: pointer;
-}
-
-.nav-logo:hover {
-  transform: scale(1.12);
-}
-
-.nav-divider {
-  width: 1px;
-  height: 20px;
-  background: var(--color-border-default);
+  border: 1px solid var(--color-border-default);
   flex-shrink: 0;
+}
+
+.hero-eyebrow {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--font-tracking-wide);
+  color: var(--color-fg-default);
 }
 
 .nav-links {
@@ -244,30 +219,6 @@ nav.cs-nav {
   display: flex;
   align-items: center;
   flex-shrink: 0;
-}
-
-.nav-back {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-family: var(--font-family-mono);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
-  letter-spacing: var(--font-tracking-wider);
-  text-transform: uppercase;
-  color: var(--color-fg-default);
-}
-
-.nav-back:hover { color: var(--color-fg-default); }
-.nav-back svg { width: 16px; height: 16px; flex-shrink: 0; }
-
-.nav-title {
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-fg-subtle);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 /* ── Navigation — theme toggle ────────────────────────── */
@@ -321,15 +272,15 @@ dct-chip { display: inline-block; }
   transition: background 0.15s ease, color 0.15s ease;
 }
 
+.dct-chip:hover {
+  background: var(--color-bg-muted);
+}
+
 .dct-chip--linked {
   cursor: pointer;
 }
 
-.dct-chip:hover,
-.dct-chip--linked:hover {
-  background: var(--color-bg-muted);
-}
-
+/* Added/removed by the résumé page's chip → project hover script */
 .dct-chip.chip--highlighted {
   background: var(--color-bg-muted);
   color: var(--color-fg-default);
@@ -529,15 +480,11 @@ dct-button { display: inline-flex; }
    Shared cross-page typography
    ============================================================ */
 
-/* "Paper" heading treatment shared by case study & resume subpages.
-   Touches .cs-title / .cs-section h2 (Case study section below) and
-   .contact-header h2 (Contact form section below) — those rules also
-   set their own font-size/color/margin; font-family, font-weight and
-   letter-spacing for those three win here instead, via the higher
-   `html .selector` specificity. .resume-header-left h1's other
-   properties currently live in resume/index.html's own <style> block. */
+/* "Paper" heading treatment shared by .cs-title, .cs-section h2 and
+   .contact-header h2. Font family, weight and tracking live here
+   only; size/color/margin stay on each element's own rule below.
+   The `html` prefix keeps this winning over those rules. */
 html .cs-title,
-html .resume-header-left h1,
 html .cs-section h2,
 html .contact-header h2 {
   font-family: var(--font-heading);
@@ -556,32 +503,12 @@ html .contact-header h2 {
    Page — Home
    ============================================================ */
 
-/* ── Hero ──────────────────────────────────────────────── */
-.hero { 
-
-  max-width: 80%;}
-
-.hero-eyebrow {
-  font-family: var(--font-family-mono);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
-  letter-spacing: var(--font-tracking-wide);
-  color: var(--color-fg-default);
-}
-
-.hero h3 {
-  font-family: var(--font-family-mono);
-  font-size: var(--font-size-md);
-  font-weight: var(--font-weight-normal);
-  line-height: var(--font-leading-relaxed);
-  color: var(--color-fg-muted);
-}
 /* ── Hero masthead ─────────────────────────────── */
 .hero-masthead {
   position: relative;
   overflow: hidden;
   align-items: start;
-  padding: 24px 0 80px;
+  padding: 120px 0 80px;
 }
 
 /* Decorative dot-grid pattern (Figma node 2816:33386), masked so its
@@ -590,8 +517,8 @@ html .contact-header h2 {
   position: absolute;
   top: -180px;
   right: -80px;
-  width: 1400px;
-  height: 1400px;
+  width: 640px;
+  height: 640px;
   background-color: var(--color-fg-default);
   opacity: 0.08;
   -webkit-mask-image: url('assets/images/pattern.hero.png');
@@ -678,60 +605,7 @@ html .contact-header h2 {
   }
 }
 
-/* ── Nav avatar ────────────────────────────────── */
-.nav-greeting {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.nav-avatar {
-  width: 20px;
-  height: 20px;
-  border-radius: var(--radius-full);
-  object-fit: cover;
-  border: 1px solid var(--color-border-default);
-  flex-shrink: 0;
-}
-
-.hero h1 {
-  font-family: var(--font-heading);
-  font-size: clamp(34px, 5.5vw, 60px);
-  font-weight: var(--font-weight-medium);
-  line-height: 1.08;
-  letter-spacing: var(--font-tracking-tight);
-  color: var(--color-fg-default);
-  text-wrap: pretty;
-}
-
-.accent { color: var(--color-accent-default); }
-.muted-text { color: var(--color-fg-muted); }
-.hero h2 {
-  font-family: var(--font-family-mono);
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-normal);
-  line-height: var(--font-leading-relaxed);
-  color: var(--color-fg-muted);
-  text-wrap: pretty;
-}
-
-.hero p {
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-normal);
-  line-height: var(--font-leading-relaxed);
-  color: var(--color-fg-muted);
-  max-width: 480px;
-  margin-bottom: 20px;
-  text-wrap: pretty;
-}
-
-.hero-tags {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-/* ── Pills ─────────────────────────────────────────────── */
+/* ── Pills (tokens page jump links) ────────────────────── */
 .tag {
   font-family: var(--font-family-mono);
   font-size: var(--font-size-xs);
@@ -757,13 +631,24 @@ html .contact-header h2 {
 
 /* ── Card grid ─────────────────────────────────────────── */
 .card-grid {
-  column-gap: 56px;
   row-gap: 64px;
   margin-bottom: 80px;
 }
 
+@media (max-width: 767px) {
+  .card-grid {
+    row-gap: 32px;
+  }
+}
+
+/* ── Case study preview cards (image + info below) ─────── */
 .cs-card {
   grid-column: span 6;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-decoration: none;
+  color: inherit;
 }
 
 @media (max-width: 1023px) {
@@ -772,35 +657,12 @@ html .contact-header h2 {
   }
 }
 
-@media (max-width: 767px) {
-  .card-grid {
-    row-gap: 32px;
-  }
-
-  .cs-card {
-    grid-column: span 4;
-  }
-}
-
-/* ── Case study preview cards (image + info below) ───────
-   Distinct from the old .card/.card-media/.card-overlay-text
-   system (kept below, still used by the locked-card treatment)
-   — these sit beside the image rather than scrimmed over it. */
-.cs-card {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  text-decoration: none;
-  color: inherit;
-}
-
 .cs-card-media {
   border-radius: var(--radius-2xl);
   overflow: hidden;
 }
 
 .cs-card-image {
-  display: block;
   width: 100%;
   aspect-ratio: 3840 / 1664;
   object-fit: cover;
@@ -846,198 +708,11 @@ html .contact-header h2 {
   text-wrap: pretty;
 }
 
-.card {
-  display: block;
-  position: relative;
-  width: 100%;
-  aspect-ratio: 16 / 7;
-  overflow: hidden;
-  text-decoration: none;
-  color: inherit;
-  cursor: pointer;
-  border-radius: var(--radius-2xl);
-  background-color: #000;
-}
-
-.card.disabled {
-  display: none;
-}
-
-/* Card media */
-.card-media {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-
-.card-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  transition: transform 0.6s ease, opacity 0.6s ease;
-}
-
-.card:hover .card-image,
-.card.is-hovered .card-image {
-  transform: scale(1.04);
-  opacity: 0.5;
-}
-
-/* Scrim */
-.card-scrim {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    to top,
-    rgba(0, 0, 0, 0.6) 0%,
-    rgba(0, 0, 0, 0.1) 50%,
-    rgba(0, 0, 0, 0) 100%
-  );
-  transition: opacity 0.4s ease;
-}
-
-.card:hover .card-scrim,
-.card.is-hovered .card-scrim {
-  opacity: 1.3;
-}
-
-/* Logo watermark */
-.card-logo-watermark {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transition: opacity 0.4s ease, transform 0.4s ease;
-  transform: scale(0.92);
-  pointer-events: none;
-}
-
-.card:hover .card-logo-watermark,
-.card.is-hovered .card-logo-watermark {
-  opacity: 1;
-  transform: scale(1);
-}
-
-.card-logo-watermark img {
-  height: auto;
-  width: 320px;
-  filter: brightness(0) invert(1);
-  opacity: 0.9;
-}
-
-/* Overlay text */
-.card-overlay-text {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 24px 28px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.card-type {
-  font-family: var(--font-family-mono);
-  font-size: 11px;
-  font-weight: var(--font-weight-medium);
-  letter-spacing: var(--font-tracking-wider);
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.6);
-}
-
-.card-title {
-  font-family: var(--font-heading);
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-medium);
-  line-height: var(--font-leading-snug);
-  color: #ffffff;
-  text-wrap: balance;
-}
-
-.card-desc {
-  font-size: var(--font-size-sm);
-  color: rgba(255, 255, 255, 0.6);
-}
-
-/* ── Locked case study cards ──────────────────────────────
-   Sits on the same dark photo scrim as .card-title/.card-type, so
-   colors are hardcoded to rgba(255,255,255,…) like the rest of the
-   overlay rather than pulled from theme tokens — the scrim itself
-   doesn't change with light/dark mode, so these shouldn't either. */
-.card-type--locked {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.card-lock-icon {
-  width: 12px;
-  height: 12px;
-  flex-shrink: 0;
-}
-
-.card-lock-form {
-  gap: 12px;
-}
-
-.card-lock-message {
-  font-size: var(--font-size-sm);
-  color: rgba(255, 255, 255, 0.85);
-  max-width: 420px;
-}
-
-.card-lock-fields {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.card-lock-input {
-  font-family: var(--font-family-sans);
-  font-size: var(--font-size-sm);
-  color: #fff;
-  background: rgba(255, 255, 255, 0.12);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: var(--radius-md);
-  padding: 8px 12px;
-  outline: none;
-  min-width: 160px;
-  transition: border-color 0.15s ease, background-color 0.15s ease;
-}
-
-.card-lock-input::placeholder { color: rgba(255, 255, 255, 0.55); }
-
-.card-lock-input:focus {
-  border-color: rgba(255, 255, 255, 0.7);
-  background: rgba(255, 255, 255, 0.18);
-}
-
-/* Reuse dct-button's structure (sizing, focus ring, interaction) but
-   override its token-driven color — a theme-aware color would be
-   wrong here since it sits on a fixed-dark scrim regardless of theme. */
-.card-lock-fields .dct-btn {
-  color: #fff;
-  border-color: rgba(255, 255, 255, 0.4);
-}
-
-.card-lock-fields .dct-btn:hover:not(:disabled):not([aria-disabled="true"]) {
-  background: rgba(255, 255, 255, 0.15);
-  color: #fff;
-}
-
-.card-lock-error {
-  font-size: var(--font-size-xs);
-  color: #ff9d8a;
-  margin: 0;
-}
-
 /* ============================================================
    Page — Case study
+   The header/hero/meta block is rendered by <cs-hero> in
+   components.js; .cs-body content below it is hand-authored
+   per page.
    ============================================================ */
 
 /* ── Reading progress bar ──────────────────────────────── */
@@ -1065,7 +740,6 @@ html .contact-header h2 {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
 }
 
 /* ── Case study header ─────────────────────────────────── */
@@ -1085,15 +759,13 @@ html .contact-header h2 {
 
 .cs-title {
   font-size: var(--font-size-4xl);
-  font-weight: var(--font-weight-bold);
   line-height: var(--font-leading-tight);
-  letter-spacing: var(--font-tracking-tight);
   color: var(--color-fg-default);
   max-width: 86.47%;
 }
 
 .cs-summary {
-  font-size: var(--font-size-md);
+  font-size: var(--font-size-base);
   font-weight: var(--font-weight-normal);
   line-height: var(--font-leading-relaxed);
   color: var(--color-fg-muted);
@@ -1110,25 +782,9 @@ html .contact-header h2 {
   margin-bottom: 80px;
 }
 
-.cs-section-label {
-  font-family: var(--font-family-mono);
-  font-size: var(--font-size-caption);
-  font-weight: var(--font-weight-medium);
-  letter-spacing: var(--font-tracking-widest);
-  text-transform: uppercase;
-  color: var(--color-accent-default);
-  margin-bottom: 12px;
-}
-
-[data-theme="light"] .cs-section-label {
-  color: var(--color-accent-fg);
-}
-
 .cs-section h2 {
   font-size: var(--font-size-3xl);
-  font-weight: var(--font-weight-bold);
   line-height: var(--font-leading-tight);
-  letter-spacing: var(--font-tracking-tight);
   color: var(--color-fg-default);
   margin-bottom: 16px;
 }
@@ -1188,7 +844,6 @@ html .contact-header h2 {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
 }
 
 .img-grid .img-caption {
@@ -1228,14 +883,9 @@ html .contact-header h2 {
 }
 
 /* ── <meta-tile> — icon/label/value tile ──────────
-   Ported from the Figma redesign (meta-grid/tile component) —
-   see components.js for the <meta-tile> element that renders one
-   of these. As of Sep 2026 every case study page renders its four
-   tiles (Role, Timeframe, Responsibilities, Keywords) via <cs-hero>
-   (components.js), which also owns the .meta-grid wrapper below —
-   don't hand-author meta-tile markup or the .meta-grid wrapper in
-   a page's own <style> block anymore; add/change fields on <cs-hero>
-   instead so every page stays in sync. */
+   Rendered four at a time by <cs-hero> (components.js), which also
+   owns the .meta-grid wrapper below. Add/change fields on <cs-hero>
+   rather than hand-authoring meta-tile markup in a page. */
 meta-tile {
   display: flex;
   flex-direction: column;
@@ -1297,6 +947,10 @@ meta-tile {
 }
 
 /* ── Lightbox ──────────────────────────────────── */
+/* DORMANT — styles for <dct-lightbox> (components.js), which no page
+   currently renders: the enlarged image often came out smaller than
+   the inline one. Fix that before re-adding it, or delete these
+   rules together with the DctLightbox class. */
 .lightbox {
   display: none;
   position: fixed;
@@ -1368,26 +1022,6 @@ meta-tile {
   white-space: nowrap;
 }
 
-/* ── Shared case study elements ────────────────────────────
-   .img-grid / .img-wrap / .img-caption are shared here and used
-   directly in each page's .cs-body content — that part stays
-   hand-authored per page, on purpose, since it's the actual case
-   study writeup.
-
-   The header/hero/meta-grid block above .cs-body is NOT hand-
-   authored anymore — every case study page (mfpinsights,
-   ua-baselayer, ua-samsung, ods) now renders that whole block from
-   a single <cs-hero> tag (see components.js). If a page's hero
-   section still has its own .cs-header/.hero-bleed/.meta-grid
-   markup instead of a <cs-hero> tag, it's drifted from the other
-   pages and should be converted.
-
-   .lightbox* below is DORMANT — no page renders a <dct-lightbox>
-   tag as of Sep 2026 (disabled: the enlarged image often came out
-   smaller than the inline one). Left in place in case the sizing
-   gets fixed and it's worth re-enabling; safe to delete along with
-   the DctLightbox class in components.js if not. */
-
 /* ============================================================
    Contact form
    ============================================================ */
@@ -1403,10 +1037,7 @@ contact-form { display: block; }
 }
 
 .contact-header h2 {
-  font-family: var(--font-heading);
   font-size: var(--font-size-2xl);
-  font-weight: var(--font-weight-bold);
-  letter-spacing: var(--font-tracking-tight);
   color: var(--color-fg-default);
   margin-bottom: 8px;
 }
@@ -1515,59 +1146,6 @@ contact-form { display: block; }
 }
 
 /* ============================================================
-   About me
-   ============================================================ */
-.about-me {
-  padding: 48px 0;
-  border-top: 1px solid var(--color-border-default);
-  max-width: 80%;
-}
-
-.about-me h1 {
-  font-family: var(--font-family-mono);
-  font-size: var(--font-size-4xl);
-  font-weight: var(--font-weight-bold);
-  letter-spacing: var(--font-tracking-tight);
-  color: var(--color-fg-default);
-  margin-bottom: 24px;
-  margin-top: 16px;
-}
-
-.about-me p {
-  font-size: var(--font-size-base);
-  color: var(--color-fg-muted);
-  line-height: var(--font-leading-relaxed);
-  text-wrap: pretty;
-}
-
-.about-me section-label {
-  font-family: var(--font-family-mono);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
-  letter-spacing: var(--font-tracking-wider);
-  text-transform: uppercase;
-  color: var(--color-accent-default);
-}
-
-.about-me .section-label {
-  margin-top: 40px;
-}
-
-.about-me .section-label:first-child {
-  margin-top: 0;
-}
-
-.about-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 16px;
-}
-
-.about-me p + p {
-  margin-top: 16px;
-}
-/* ============================================================
    About (photo + label-left content)
    ============================================================ */
 .about-grid {
@@ -1588,7 +1166,6 @@ contact-form { display: block; }
 }
 
 .about-photo img {
-  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -1629,10 +1206,6 @@ contact-form { display: block; }
 }
 
 @media (max-width: 1023px) {
-  .about-photo {
-    grid-column: span 3;
-  }
-
   .about-content {
     grid-column: span 5;
   }
@@ -1658,10 +1231,17 @@ contact-form { display: block; }
 /* ============================================================
    Footer
    ============================================================ */
+/* Bare <footer> is only used by the résumé page */
 footer {
   padding: 32px 0 48px;
   margin-top: 120px;
   border-top: 1px solid var(--color-border-default);
+}
+
+site-footer {
+  display: block;
+  margin-top: 120px;
+  padding-bottom: 120px;
 }
 
 .footer-built {
@@ -1687,10 +1267,4 @@ footer {
   font-family: var(--font-family-mono);
   font-size: var(--font-size-sm);
   color: var(--color-fg-subtle);
-}
-
-site-footer {
-  display: block;
-  margin-top: 120px;
-  padding-bottom: 120px;
 }
