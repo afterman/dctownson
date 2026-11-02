@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="view-transition" content="same-origin" />
+  <!-- Apply saved theme before first paint so dark mode doesn't flash light. -->
+  <script>try { var t = localStorage.getItem('dct-theme'); if (t) document.documentElement.setAttribute('data-theme', t); } catch (e) {}</script>
   <title>OlySense Design System — dctownson.com</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -30,17 +32,18 @@
   <div id="progress-bar"></div>
 
   <cs-hero
-    eyebrow="Design System"
-    title="OlySense Design System - bringing consistency to a suite of endoscopic workflow products."
-    summary="We believe good design will lead to better patient outcomes - by reducing cognitive load and UX disparities."
+    title="OlySense Design System"
+    summary="Bringing consistency to a suite of endoscopic workflow products."
     image="../assets/images/cs.ods.hero.png"
     image-alt="OlySense Design System hero — dashboard cards, calendar, and button/tag variants"
+    chip="Design System"
     transition-name="hero-ods"
     role="Lead Designer"
     timeframe="2024 – 2026"
     responsibilities="Develop a design system for a suite of endoscopic workflow products."
     keywords="Design System, tokens, color palette, components, patterns, guidance, resources">
   </cs-hero>
+ 
 
   <!-- Content -->
   <div class="content anim anim-5">
@@ -208,7 +211,6 @@
       </section>
 
     </div>
-    <contact-form></contact-form>
     <site-footer depth="../"></site-footer>
 
   </div>

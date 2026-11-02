@@ -38,9 +38,53 @@ img { display: block; max-width: 100%; }
    Worth collapsing to one name later; left separate for now since
    that touches markup across every page. */
 .page {
-  max-width: 1280px;
+  max-width: 1440px;
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 0 56px;
+  --grid-gutter: 12px;
+}
+
+@media (max-width: 1023px) {
+  .page {
+    padding: 0 32px;
+  }
+}
+
+@media (max-width: 767px) {
+  .page {
+    padding: 0 24px;
+  }
+}
+
+/* 12-column responsive grid. Desktop (>=1024px): 12 columns,
+   matching the Figma desktop grid (12 col / 12px gutter / 56px
+   margin). Tablet (768-1023px): 8 columns. Mobile (<768px): 4
+   columns. Gutter stays --grid-gutter at every tier; .card-grid
+   and .about-grid override it with their own larger gap below --
+   Figma treats those as component-level gaps independent of the
+   structural grid gutter. */
+.hero-masthead,
+.card-grid,
+.about-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--grid-gutter);
+}
+
+@media (max-width: 1023px) {
+  .hero-masthead,
+  .card-grid,
+  .about-grid {
+    grid-template-columns: repeat(8, 1fr);
+  }
+}
+
+@media (max-width: 767px) {
+  .hero-masthead,
+  .card-grid,
+  .about-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
 }
 
 /* .content used to duplicate .page's own max-width/margin/padding.
@@ -265,15 +309,14 @@ dct-chip { display: inline-block; }
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: 24px;
-  padding: 0 12px;
+  padding: 4px 8px;
   border-radius: 12px;
   background: var(--color-bg-subtle);
-  font-family: var(--font-family-mono);
+  font-family: var(--font-family-sans);
   font-size: var(--font-size-caption);
-  font-weight: var(--font-weight-normal);
-  line-height: 16px;
-  color: var(--color-fg-default);
+  font-weight: var(--font-weight-medium);
+  line-height: normal;
+  color: var(--color-fg-muted);
   white-space: nowrap;
   transition: background 0.15s ease, color 0.15s ease;
 }
@@ -501,6 +544,7 @@ html .contact-header h2 {
   font-weight: var(--font-weight-bold);
   letter-spacing: var(--font-tracking-tight);
   text-wrap: balance;
+  padding-bottom: 20px;
 }
 
 html .cs-section h2,
@@ -514,10 +558,8 @@ html .contact-header h2 {
 
 /* ── Hero ──────────────────────────────────────────────── */
 .hero { 
-  margin-bottom: 120px; 
-  margin-top: 120px; 
-  padding-left: 48px;
-  max-width: 90%;}
+
+  max-width: 80%;}
 
 .hero-eyebrow {
   font-family: var(--font-family-mono);
@@ -534,6 +576,108 @@ html .contact-header h2 {
   line-height: var(--font-leading-relaxed);
   color: var(--color-fg-muted);
 }
+/* ── Hero masthead ─────────────────────────────── */
+.hero-masthead {
+  position: relative;
+  overflow: hidden;
+  align-items: start;
+  padding: 24px 0 80px;
+}
+
+/* Decorative dot-grid pattern (Figma node 2816:33386), masked so its
+   color follows the current theme instead of baking in a fixed color. */
+.hero-pattern {
+  position: absolute;
+  top: -180px;
+  right: -80px;
+  width: 1400px;
+  height: 1400px;
+  background-color: var(--color-fg-default);
+  opacity: 0.08;
+  -webkit-mask-image: url('assets/images/pattern.hero.png');
+  mask-image: url('assets/images/pattern.hero.png');
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.hero-statement {
+  grid-column: span 5;
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-normal);
+  line-height: 1.4;
+  letter-spacing: var(--font-tracking-normal);
+  color: var(--color-fg-muted);
+  max-width: 566px;
+  text-wrap: pretty;
+}
+
+.hero-credentials {
+  grid-column: 7 / span 6;
+  display: flex;
+  gap: 96px;
+  flex-wrap: wrap;
+}
+
+.credential-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.credential-label,
+.credential-value {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--font-tracking-normal);
+  line-height: normal;
+  white-space: nowrap;
+}
+
+.credential-label {
+  color: var(--color-fg-subtle);
+}
+
+.credential-value {
+  color: var(--color-fg-default);
+}
+
+@media (max-width: 1023px) {
+  .hero-pattern {
+    width: 420px;
+    height: 420px;
+    top: -120px;
+    right: -60px;
+  }
+
+  .hero-statement,
+  .hero-credentials {
+    grid-column: span 4;
+  }
+}
+
+@media (max-width: 767px) {
+  .hero-masthead {
+    padding: 16px 0 56px;
+    row-gap: 32px;
+  }
+
+  .hero-pattern {
+    display: none;
+  }
+
+  .hero-credentials {
+    gap: 40px;
+  }
+}
+
 /* ── Nav avatar ────────────────────────────────── */
 .nav-greeting {
   display: flex;
@@ -542,8 +686,8 @@ html .contact-header h2 {
 }
 
 .nav-avatar {
-  width: 32px;
-  height: 32px;
+  width: 20px;
+  height: 20px;
   border-radius: var(--radius-full);
   object-fit: cover;
   border: 1px solid var(--color-border-default);
@@ -557,21 +701,17 @@ html .contact-header h2 {
   line-height: 1.08;
   letter-spacing: var(--font-tracking-tight);
   color: var(--color-fg-default);
-  max-width: none;
-  margin-bottom: 32px;
   text-wrap: pretty;
 }
 
-.hero h1 .accent { color: var(--color-accent-default); }
-.hero h1 .muted-text { color: var(--color-fg-muted); }
+.accent { color: var(--color-accent-default); }
+.muted-text { color: var(--color-fg-muted); }
 .hero h2 {
   font-family: var(--font-family-mono);
-  font-size: var(--font-size-md);
+  font-size: var(--font-size-xl);
   font-weight: var(--font-weight-normal);
   line-height: var(--font-leading-relaxed);
   color: var(--color-fg-muted);
-  max-width: 480px;
-  margin-bottom: 20px;
   text-wrap: pretty;
 }
 
@@ -617,10 +757,93 @@ html .contact-header h2 {
 
 /* ── Card grid ─────────────────────────────────────────── */
 .card-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 24px;
+  column-gap: 56px;
+  row-gap: 64px;
   margin-bottom: 80px;
+}
+
+.cs-card {
+  grid-column: span 6;
+}
+
+@media (max-width: 1023px) {
+  .cs-card {
+    grid-column: span 4;
+  }
+}
+
+@media (max-width: 767px) {
+  .card-grid {
+    row-gap: 32px;
+  }
+
+  .cs-card {
+    grid-column: span 4;
+  }
+}
+
+/* ── Case study preview cards (image + info below) ───────
+   Distinct from the old .card/.card-media/.card-overlay-text
+   system (kept below, still used by the locked-card treatment)
+   — these sit beside the image rather than scrimmed over it. */
+.cs-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.cs-card-media {
+  border-radius: var(--radius-2xl);
+  overflow: hidden;
+}
+
+.cs-card-image {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3840 / 1664;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.cs-card:hover .cs-card-image {
+  transform: scale(1.03);
+}
+
+.cs-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cs-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.cs-card-title {
+  font-family: var(--font-heading);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-display);
+  letter-spacing: var(--font-tracking-tight);
+  color: var(--color-fg-default);
+}
+
+.cs-card-chips {
+  display: flex;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.cs-card-summary {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-normal);
+  color: var(--color-fg-default);
+  text-wrap: pretty;
 }
 
 .card {
@@ -866,7 +1089,7 @@ html .contact-header h2 {
   line-height: var(--font-leading-tight);
   letter-spacing: var(--font-tracking-tight);
   color: var(--color-fg-default);
-  max-width: 72%;
+  max-width: 86.47%;
 }
 
 .cs-summary {
@@ -875,6 +1098,7 @@ html .contact-header h2 {
   line-height: var(--font-leading-relaxed);
   color: var(--color-fg-muted);
   max-width: 80%;
+  padding-bottom: 20px;
   text-wrap: pretty;
 }
 
@@ -1296,6 +1520,7 @@ contact-form { display: block; }
 .about-me {
   padding: 48px 0;
   border-top: 1px solid var(--color-border-default);
+  max-width: 80%;
 }
 
 .about-me h1 {
@@ -1323,6 +1548,113 @@ contact-form { display: block; }
   text-transform: uppercase;
   color: var(--color-accent-default);
 }
+
+.about-me .section-label {
+  margin-top: 40px;
+}
+
+.about-me .section-label:first-child {
+  margin-top: 0;
+}
+
+.about-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.about-me p + p {
+  margin-top: 16px;
+}
+/* ============================================================
+   About (photo + label-left content)
+   ============================================================ */
+.about-grid {
+  align-items: start;
+  column-gap: 64px;
+  row-gap: 32px;
+  padding: 48px 0;
+  border-top: 1px solid var(--color-border-default);
+}
+
+.about-photo {
+  grid-column: span 3;
+  aspect-ratio: 333 / 445;
+  border-radius: var(--radius-2xl);
+  overflow: hidden;
+  background: var(--color-bg-subtle);
+  box-shadow: 0px 4px 6px 0px rgba(0, 0, 0, 0.04), 0px 8px 12px 0px rgba(0, 0, 0, 0.08);
+}
+
+.about-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.about-content {
+  grid-column: span 9;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  min-width: 0;
+}
+
+.about-block {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 0 32px;
+}
+
+.about-heading {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-normal);
+  color: var(--color-fg-default);
+}
+
+.about-body p {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--font-leading-normal);
+  color: var(--color-fg-default);
+  text-wrap: pretty;
+}
+
+.about-body p + p {
+  margin-top: 16px;
+}
+
+@media (max-width: 1023px) {
+  .about-photo {
+    grid-column: span 3;
+  }
+
+  .about-content {
+    grid-column: span 5;
+  }
+}
+
+@media (max-width: 767px) {
+  .about-photo {
+    grid-column: span 4;
+    max-width: 240px;
+    justify-self: start;
+  }
+
+  .about-content {
+    grid-column: span 4;
+  }
+
+  .about-block {
+    grid-template-columns: 1fr;
+    gap: 8px 0;
+  }
+}
+
 /* ============================================================
    Footer
    ============================================================ */

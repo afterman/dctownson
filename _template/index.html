@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="view-transition" content="same-origin" />
+  <!-- Apply saved theme before first paint so dark mode doesn't flash light. -->
+  <script>try { var t = localStorage.getItem('dct-theme'); if (t) document.documentElement.setAttribute('data-theme', t); } catch (e) {}</script>
+  <title>[Case Study Title] — dctownson.com</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Inconsolata:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../tokens.css" />
+  <link rel="stylesheet" href="../style.css" />
+  <script src="../components.js" defer></script>
+  <style>
+
+    /* ── Divider ───────────────────────────────────── */
+    .cs-divider {
+      border: none;
+      border-top: 1px solid var(--color-border-default);
+    }
+
+  </style>
+</head>
+<body>
+  <!--
+    CASE STUDY TEMPLATE
+    Copy this folder's index.html into a new /case-study-slug/ directory,
+    then replace every [bracketed] placeholder. This file is a starting
+    point only — editing it later will NOT update any existing case
+    study page (ods, ua-samsung, ua-baselayer, mfpinsights). Each page
+    is its own standalone file.
+
+    Shared behavior (nav, hero layout, chips, image switching, footer)
+    comes from ../components.js and ../style.css — fix those once and
+    every page that uses the matching element picks it up automatically.
+  -->
+
+  <!-- Nav -->
+  <site-nav type="casestudy" title="[Case Study Title]" depth="../"></site-nav>
+
+  <div class="page">
+
+  <div id="progress-bar"></div>
+
+  <cs-hero
+    eyebrow="[Category, e.g. Design System]"
+    title="[Full case study title]"
+    summary="[One or two sentences — the core problem or goal, shown in the hero]"
+    image="../assets/images/[hero-image].png"
+    image-alt="[Hero image alt text]"
+    transition-name="hero-[case-study-slug]"
+    role="[Your role, e.g. Lead Designer]"
+    timeframe="[e.g. 2021 – 2023]"
+    responsibilities="[Short responsibilities summary]"
+    keywords="[Comma, separated, keywords]"></cs-hero>
+
+  <!-- Content -->
+  <div class="content anim anim-5">
+
+    <div class="cs-body">
+
+      <!-- Section 1 -->
+      <section class="cs-section">
+        <h2>[Section heading — the opening context or problem]</h2>
+        <p>[Body copy. Each section is a plain <h2> + one or more <p> tags. Keep paragraphs focused — one idea per paragraph reads better than long blocks.]</p>
+        <div class="img-grid cols-1">
+          <div>
+            <div class="img-wrap" data-caption="[Caption shown in the lightbox]">
+              <img src="../assets/images/cs.[slug].[name].png" alt="[Descriptive alt text]" />
+            </div>
+            <p class="img-caption">[Caption shown under the image]</p>
+          </div>
+        </div>
+      </section>
+
+      <hr class="cs-divider" />
+
+      <!-- Section 2 -->
+      <section class="cs-section">
+        <h2>[Next section heading]</h2>
+        <p>[Body copy. A section can be text-only — images aren't required on every section.]</p>
+      </section>
+
+      <hr class="cs-divider" />
+
+      <!-- Section 3 — example of a two-image grid, and an image that
+           switches with light/dark mode via <theme-swap>. Delete the
+           light-src/dark-src example if this section's images don't
+           have dark-mode variants; use plain <img> tags instead. -->
+      <section class="cs-section">
+        <h2>[Section heading]</h2>
+        <p>[Body copy.]</p>
+        <div class="img-grid cols-2">
+          <div>
+            <div class="img-wrap" data-caption="[Caption]">
+              <img src="../assets/images/cs.[slug].[name].png" alt="[Alt text]" />
+            </div>
+            <p class="img-caption">[Caption]</p>
+          </div>
+          <div>
+            <theme-swap
+              light-src="../assets/images/cs.[slug].[name].light.png"
+              dark-src="../assets/images/cs.[slug].[name].dark.png"
+              alt="[Alt text]"
+              caption="[Caption]">
+            </theme-swap>
+          </div>
+        </div>
+      </section>
+
+      <!-- Repeat <hr class="cs-divider" /> + <section class="cs-section"> for each additional section. -->
+
+    </div>
+    <site-footer depth="../"></site-footer>
+
+  </div>
+
+  <script>
+    // Reading progress
+    const bar = document.getElementById('progress-bar');
+    window.addEventListener('scroll', () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      bar.style.width = (docHeight > 0 ? (scrollTop / docHeight) * 100 : 0) + '%';
+    });
+  </script>
+  </div>
+</body>
+</html>

@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="view-transition" content="same-origin" />
+  <!-- Apply saved theme before first paint so dark mode doesn't flash light. -->
+  <script>try { var t = localStorage.getItem('dct-theme'); if (t) document.documentElement.setAttribute('data-theme', t); } catch (e) {}</script>
   <title>dctownson.com</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -19,73 +21,121 @@
   <div class="page">
 
     <!-- Hero -->
-    <section class="hero">
-      
-      <h1 class="anim anim-3">I design digital experiences that help everyday people live <span class="accent">happier, healthier</span> lives.</h1>
+    <section class="hero-masthead">
+      <div class="hero-pattern" aria-hidden="true"></div>
+      <p class="hero-statement anim anim-3">Daniel Townson is a systems-driven designer building experiences at the intersection of hardware and software.</p>
+      <div class="hero-credentials anim anim-4">
+        <div class="credential-group">
+          <p class="credential-label">EXPERIENCE</p>
+          <p class="credential-value">Olympus</p>
+          <p class="credential-value">Under Armour</p>
+          <p class="credential-value">MapMyFitness</p>
+          <p class="credential-value">MyFitnessPal</p>
+          <p class="credential-value">St Jude Medical</p>
+          <p class="credential-value">Asuragen</p>
+        </div>
+        <div class="credential-group">
+          <p class="credential-label">FOCUS</p>
+          <p class="credential-value">Design Systems</p>
+          <p class="credential-value">Medical Software</p>
+          <p class="credential-value">Health Tracking</p>
+          <p class="credential-value">Wearables</p>
+          <p class="credential-value">Consumer Apps</p>
+        </div>
+      </div>
     </section>
-
+  
     <!-- Case Studies -->
-    <p class="section-label anim anim-4">Selected work</p>
+    <p class="section-label anim anim-4">Selected works</p>
     <div class="card-grid anim anim-5">
     <!-- OlySense Design System — not password-gated; the case study page
          itself is noindex,nofollow so it stays out of search results -->
-    <a class="card" href="/ods" style="view-transition-name: hero-ods;">
-      <div class="card-media">
-        <img class="card-image" src="assets/images/card.hero.ods2.png" alt="OlySense Design System" />
-        <div class="card-scrim"></div>
-        <div class="card-logo-watermark">
-          <img src="assets/images/Olysense Design System.svg" alt="OlySense" />
+    <a class="cs-card" href="/ods" style="view-transition-name: hero-ods;">
+      <div class="cs-card-media">
+        <img class="cs-card-image" src="assets/images/card.hero.ods2.png" alt="OlySense Design System" />
+      </div>
+      <div class="cs-card-info">
+        <div class="cs-card-header">
+          <h3 class="cs-card-title">OlySense</h3>
+          <div class="cs-card-chips">
+            <dct-chip>Design System</dct-chip>
+            <dct-chip>2026</dct-chip>
+          </div>
         </div>
-        <div class="card-overlay-text">
-          <span class="card-type">Design System</span>
-          <span class="card-title">Unifying the Endoscopic Workflow for industry leader Olympus</span>
-        </div>
+        <p class="cs-card-summary">Unifying the endoscopic workflow for industry leader Olympus</p>
       </div>
     </a>
-      <!-- UA Samsung -->
-      <a class="card" href="/ua-samsung" style="view-transition-name: hero-ua-samsung;">
-        <div class="card-media">
-          <img class="card-image" src="assets/images/cs.uasamsung.mmr.heroimage.png" alt="UA Samsung" />
-          <div class="card-scrim"></div>
-          <div class="card-logo-watermark">
-            <img src="assets/images/UA Samsung Lockup.svg" alt="Under Armour × Samsung" />
+      <!-- UA Baselayer -->
+      <a class="cs-card" href="/ua-baselayer" style="view-transition-name: hero-ua-baselayer;">
+        <div class="cs-card-media">
+          <img class="cs-card-image" src="assets/images/card.hero.uabaselayer.png" alt="UA Baselayer Design System" />
+        </div>
+        <div class="cs-card-info">
+          <div class="cs-card-header">
+            <h3 class="cs-card-title">UA Baselayer</h3>
+            <div class="cs-card-chips">
+              <dct-chip>Design System</dct-chip>
+              <dct-chip>2024</dct-chip>
+            </div>
           </div>
-          <div class="card-overlay-text">
-            <span class="card-type">Wearable</span>
-            <span class="card-title">Find Your Form with a co-branded smartwatch by Under Armour and Samsung</span>
-          </div>
+          <p class="cs-card-summary">A brand-right system-driven redesign of Under Armour's fitness apps</p>
         </div>
       </a>
-      <!-- UA Baselayer -->
-      <a class="card" href="/ua-baselayer" style="view-transition-name: hero-ua-baselayer;">
-        <div class="card-media">
-          <img class="card-image" src="assets/images/card.hero.uabaselayer.png" alt="UA Baselayer Design System" />
-          <div class="card-scrim"></div>
-          <div class="card-logo-watermark"> 
-            <img src="assets/images/UA Baselayer.svg" alt="UA Baselayer" />
-          </div>
-          <div class="card-overlay-text">
-            <span class="card-type">Design System</span>
-            <span class="card-title">A brand-right design system for Under Armours fitness apps</span>
-          </div>
+      <!-- UA Samsung -->
+      <a class="cs-card" href="/ua-samsung" style="view-transition-name: hero-ua-samsung;">
+        <div class="cs-card-media">
+          <img class="cs-card-image" src="assets/images/cs.uasamsung.mmr.heroimage.png" alt="UA Samsung" />
         </div>
-        </a>
-
+        <div class="cs-card-info">
+          <div class="cs-card-header">
+            <h3 class="cs-card-title">UA x Samsung</h3>
+            <div class="cs-card-chips">
+              <dct-chip>Wearable</dct-chip>
+              <dct-chip>2019</dct-chip>
+            </div>
+          </div>
+          <p class="cs-card-summary">Find Your Form with a co-branded smartwatch by Under Armour and Samsung</p>
+        </div>
+      </a>
       <!-- MFP Insights -->
-      <a class="card" href="/mfpinsights" style="view-transition-name: hero-mfp-nutrition-insights;">
-        <div class="card-media">
-          <img class="card-image" src="assets/images/card.hero.mfpnutritioninsights.png" alt="MyFitnessPal Nutrition Insights"/>
-          <div class="card-scrim"></div>
-          <div class="card-logo-watermark">
-            <img src="assets/images/myfitnesspal.svg" alt="MyFitnessPal" />
+      <a class="cs-card" href="/mfpinsights" style="view-transition-name: hero-mfp-nutrition-insights;">
+        <div class="cs-card-media">
+          <img class="cs-card-image" src="assets/images/card.hero.mfpnutritioninsights.png" alt="MyFitnessPal Nutrition Insights"/>
+        </div>
+        <div class="cs-card-info">
+          <div class="cs-card-header">
+            <h3 class="cs-card-title">MyFitnessPal Insights</h3>
+            <div class="cs-card-chips">
+              <dct-chip>Premium Feature</dct-chip>
+              <dct-chip>2020</dct-chip>
+            </div>
           </div>
-          <div class="card-overlay-text">
-            <span class="card-type">Premium Feature</span>
-            <span class="card-title">Premium insights to help you hit your goals using MyFitnessPal</span>
-          </div>
+          <p class="cs-card-summary">Premium insights to help you hit your nutrition goals</p>
         </div>
       </a>
     </div>
+
+    <!-- About -->
+    <section class="about-grid anim anim-6">
+      <div class="about-photo">
+        <img src="assets/images/photo.about.png" alt="Daniel Townson" />
+      </div>
+      <div class="about-content">
+        <div class="about-block">
+          <p class="about-heading">About Me</p>
+          <div class="about-body">
+            <p>I'm a product designer with close to a decade of experience building and scaling design systems for complex software. Most of that time was spent at Under Armour, working across MapMyRun, MapMyFitness, and MyFitnessPal, including a co-branded fitness experience for the Samsung Galaxy Watch. More recently, I was the sole designer on Olympus's design systems team, partnering with an embedded engineer to bring consistency to a suite of endoscopic workflow software used by clinicians every day.</p>
+            <p>I care about the gap between a well-designed component and a well-designed system — the tokens, documentation, and governance that make a product actually hold together as it grows.</p>
+          </div>
+        </div>
+        <div class="about-block">
+          <p class="about-heading">How I work with AI</p>
+          <div class="about-body">
+            <p>I treat AI as a working partner, not an autopilot — it moves fastest when I stay the one making the calls on content, hierarchy, and correctness, and when it checks its own work instead of asking me to take it on faith. This site is a live example: its case studies are synced from Figma by matching real layer names instead of guessing, every image gets checked against actual pixels before a caption gets written, and every change gets a structural and visual pass before it ships.</p>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <!-- Footer -->
     <site-footer class="anim anim-6"></site-footer>

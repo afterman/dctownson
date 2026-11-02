@@ -24,6 +24,10 @@
  * Theme preference is persisted in localStorage under 'dct-theme'.
  */
 
+// Current résumé PDF, relative to the site root. Both nav variants
+// link here — swap the filename once when a new résumé ships.
+const RESUME_PATH = 'assets/resume/Daniel_Townson_Resume_DesignSystems_2026.pdf';
+
 class SiteNav extends HTMLElement {
   connectedCallback() {
     const type  = this.getAttribute('type') || 'home';
@@ -76,7 +80,7 @@ class SiteNav extends HTMLElement {
                   <path d="M3 7l9 6l9 -6" />
                 </svg>
               </dct-button>
-              <dct-button variant="ghost" size="lg" icon-only href="${depth}assets/resume/Daniel C Townson - Sr Product Designer - Resume 01Sep26.pdf" target="_blank" rel="noopener" data-tip="Résumé" aria-label="Résumé">
+              <dct-button variant="ghost" size="lg" icon-only href="${depth}${RESUME_PATH}" target="_blank" rel="noopener" data-tip="Résumé" aria-label="Résumé">
                 <svg slot="leading" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M14 3v4a1 1 0 0 0 1 1h4" />
                   <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2" />
@@ -122,7 +126,7 @@ class SiteNav extends HTMLElement {
                   <path d="M3 7l9 6l9 -6" />
                 </svg>
               </dct-button>
-              <dct-button variant="ghost" size="lg" icon-only href="${depth}assets/resume/Daniel C Townson - Sr Product Designer - Resume 01Sep26.pdf" target="_blank" rel="noopener" data-tip="Résumé" aria-label="Résumé">
+              <dct-button variant="ghost" size="lg" icon-only href="${depth}${RESUME_PATH}" target="_blank" rel="noopener" data-tip="Résumé" aria-label="Résumé">
                 <svg slot="leading" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M14 3v4a1 1 0 0 0 1 1h4" />
                   <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2" />
@@ -215,7 +219,7 @@ class SiteFooter extends HTMLElement {
     // it's live by changing this one href.
     this.innerHTML = `
       <p class="footer-built">
-        Designed with Figma and built with <a href="https://claude.ai" target="_blank" rel="noopener">Claude</a> and <a href="${depth}tokens/">--dct-tokens</a>.
+        Built with <a href="https://claude.ai" target="_blank" rel="noopener">Claude Code</a> using <a href="${depth}tokens/">dct tokens</a> and Tabler icons.
       </p>
       <p class="footer-copy">© ${year} Daniel C Townson</p>
     `;
@@ -345,6 +349,7 @@ class CsHero extends HTMLElement {
     const eyebrow = this.getAttribute('eyebrow') || '';
     const title = this.getAttribute('title') || '';
     const summary = this.getAttribute('summary') || '';
+    const chip = this.getAttribute('chip') || '';
     const image = this.getAttribute('image') || '';
     const imageAlt = this.getAttribute('image-alt') || '';
     const transitionName = this.getAttribute('transition-name') || '';
@@ -359,6 +364,7 @@ class CsHero extends HTMLElement {
         <p class="cs-type">${eyebrow}</p>
         <h1 class="cs-title">${title}</h1>
         <p class="cs-summary">${summary}</p>
+        ${chip ? `<dct-chip>${chip}</dct-chip>` : ''}
       </header>
       <div class="hero-bleed anim anim-3">
         <img src="${image}" style="view-transition-name: ${transitionName};" alt="${imageAlt}" />
