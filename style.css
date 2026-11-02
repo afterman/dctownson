@@ -30,6 +30,30 @@ body {
   transition: background-color 0.2s ease, color 0.2s ease;
 }
 
+/* Fixed background pattern (Figma node 2836:38409). Opt in per page
+   with <body class="has-bg-pattern">. It sits on a fixed layer
+   rather than background-attachment: fixed, which iOS Safari
+   ignores. The SVG is used as a mask so its color comes from a
+   token and follows the theme. --pattern-size keeps the 1440px
+   design scale on desktop and grows with viewport height on tall,
+   narrow screens; the -0.432 offset matches the Figma placement. */
+body.has-bg-pattern::before {
+  --pattern-size: max(161.6vw, 120vh);
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-color: var(--color-bg-subtle);
+  transition: background-color 0.2s ease;
+  -webkit-mask: url('assets/images/bg-pattern.svg') no-repeat;
+  mask: url('assets/images/bg-pattern.svg') no-repeat;
+  -webkit-mask-size: var(--pattern-size) auto;
+  mask-size: var(--pattern-size) auto;
+  -webkit-mask-position: calc(var(--pattern-size) * -0.432) center;
+  mask-position: calc(var(--pattern-size) * -0.432) center;
+}
+
 a { color: inherit; text-decoration: none; }
 img { display: block; max-width: 100%; }
 
@@ -153,44 +177,62 @@ cs-hero {
    Components
    ============================================================ */
 
-/* ── Navigation — <site-nav> host + shared inner layout ── */
+/* ── Navigation — <site-nav> floating pills ────────────────
+   No bar behind the nav: each group sits in its own pill and the
+   page (and the fixed bg pattern) shows between them. The host is
+   sticky with a negative top equal to the inset it gives up on
+   scroll, so the pills start --nav-inset from the top and settle
+   at --nav-inset-stuck once the page scrolls — no scroll listener
+   needed. The pills align with .page's content column and side
+   padding at every breakpoint. */
 site-nav {
+  --nav-inset: 56px;
+  --nav-inset-stuck: 16px;
   display: block;
   position: sticky;
-  top: 0;
+  top: calc(var(--nav-inset-stuck) - var(--nav-inset));
   z-index: 50;
   width: 100%;
-}
-
-nav.home-nav,
-nav.cs-nav {
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  background: var(--color-bg-default);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  transition: background-color 0.2s ease;
+  padding-top: var(--nav-inset);
+  pointer-events: none;
 }
 
 .nav-inner {
-  /* Nav intentionally ignores .page's max-width. <site-nav> sits
-     outside .page (full-bleed bar), so the left/right actions run
-     out toward the viewport edges — inset only by a fixed side
-     padding, not centered into the page content column. */
-  padding: 0 24px;
-  height: 72px;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 56px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
-}
-
-.nav-greeting {
-  display: flex;
-  align-items: center;
   gap: 12px;
 }
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: 12px;
+}
+
+.nav-pill {
+  display: flex;
+  align-items: center;
+  height: 56px;
+  padding: 0 16px;
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-full);
+  background: color-mix(in srgb, var(--color-bg-default) 80%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
+  pointer-events: auto;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.nav-pill--icon,
+.nav-pill--back { padding: 0 11px; }
+
+.nav-greeting { gap: 12px; }
 
 .nav-avatar {
   width: 32px;
@@ -202,11 +244,11 @@ nav.cs-nav {
 }
 
 .hero-eyebrow {
-  font-family: var(--font-family-mono);
+  font-family: var(--font-family-display);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
-  letter-spacing: var(--font-tracking-wide);
-  color: var(--color-fg-default);
+  line-height: 20px;
+  color: var(--color-fg-muted);
 }
 
 .nav-links {
@@ -215,10 +257,26 @@ nav.cs-nav {
   gap: 8px;
 }
 
-.nav-right {
-  display: flex;
-  align-items: center;
-  flex-shrink: 0;
+site-nav .dct-btn--sm svg { width: var(--icon-md); height: var(--icon-md); }
+
+@media (max-width: 1023px) {
+  site-nav { --nav-inset: 32px; }
+  .nav-inner { padding: 0 32px; }
+}
+
+@media (max-width: 767px) {
+  site-nav { --nav-inset: 24px; --nav-inset-stuck: 12px; }
+  .nav-inner { padding: 0 24px; }
+}
+
+/* Three pills don't fit across a phone with text showing, so the
+   first pill drops to its icon: the avatar on home, the back
+   arrow on case studies (its aria-label still names it). */
+@media (max-width: 479px) {
+  .nav-greeting { padding: 0 11px; }
+  .hero-eyebrow { display: none; }
+  .nav-pill--back .dct-btn { width: 32px; padding: 0; }
+  .nav-pill--back .dct-btn-label { display: none; }
 }
 
 /* ── Navigation — theme toggle ────────────────────────── */
@@ -226,9 +284,9 @@ nav.cs-nav {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: var(--radius-md);
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-lg);
   border: none;
   outline: none;
   background: transparent;
@@ -511,28 +569,6 @@ html .contact-header h2 {
   padding: 120px 0 80px;
 }
 
-/* Decorative dot-grid pattern (Figma node 2816:33386), masked so its
-   color follows the current theme instead of baking in a fixed color. */
-.hero-pattern {
-  position: absolute;
-  top: -180px;
-  right: -80px;
-  width: 640px;
-  height: 640px;
-  background-color: var(--color-fg-default);
-  opacity: 0.08;
-  -webkit-mask-image: url('assets/images/pattern.hero.png');
-  mask-image: url('assets/images/pattern.hero.png');
-  -webkit-mask-size: contain;
-  mask-size: contain;
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-  -webkit-mask-position: center;
-  mask-position: center;
-  pointer-events: none;
-  z-index: -1;
-}
-
 .hero-statement {
   grid-column: span 5;
   font-family: var(--font-family-sans);
@@ -577,13 +613,6 @@ html .contact-header h2 {
 }
 
 @media (max-width: 1023px) {
-  .hero-pattern {
-    width: 420px;
-    height: 420px;
-    top: -120px;
-    right: -60px;
-  }
-
   .hero-statement,
   .hero-credentials {
     grid-column: span 4;
@@ -592,12 +621,8 @@ html .contact-header h2 {
 
 @media (max-width: 767px) {
   .hero-masthead {
-    padding: 16px 0 56px;
+    padding: 40px 0 56px;
     row-gap: 32px;
-  }
-
-  .hero-pattern {
-    display: none;
   }
 
   .hero-credentials {
@@ -630,7 +655,11 @@ html .contact-header h2 {
 }
 
 /* ── Card grid ─────────────────────────────────────────── */
+/* container-type lets .cs-card-media size its height off the grid's
+   width (cqi units), so every image in a row is the same height no
+   matter how many columns its card spans. */
 .card-grid {
+  container-type: inline-size;
   row-gap: 64px;
   margin-bottom: 80px;
 }
@@ -642,8 +671,11 @@ html .contact-header h2 {
 }
 
 /* ── Case study preview cards (image + info below) ─────── */
+/* Desktop column span is set per card in the markup via --span
+   (e.g. style="--span: 4"); each row's spans should add up to 12.
+   Tablet and mobile ignore it and use the fixed spans below. */
 .cs-card {
-  grid-column: span 6;
+  grid-column: span var(--span, 6);
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -658,15 +690,25 @@ html .contact-header h2 {
 }
 
 .cs-card-media {
+  height: 22cqi;
   border-radius: var(--radius-2xl);
   overflow: hidden;
 }
 
 .cs-card-image {
   width: 100%;
-  aspect-ratio: 3840 / 1664;
+  height: 100%;
   object-fit: cover;
   transition: transform 0.5s ease;
+}
+
+/* One card per row on mobile — 22cqi would be too short, so go back
+   to a fixed shape. */
+@media (max-width: 767px) {
+  .cs-card-media {
+    height: auto;
+    aspect-ratio: 16 / 9;
+  }
 }
 
 .cs-card:hover .cs-card-image {
@@ -1186,9 +1228,11 @@ contact-form { display: block; }
 }
 
 .about-heading {
-  font-family: var(--font-family-sans);
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-normal);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--font-tracking-wide);
+  text-transform: uppercase;
   color: var(--color-fg-default);
 }
 

@@ -59,13 +59,13 @@ class SiteNav extends HTMLElement {
     return `
       <nav class="home-nav anim anim-1">
         <div class="nav-inner">
-          <div class="nav-greeting anim anim-2">
+          <div class="nav-pill nav-greeting anim anim-2">
             <img class="nav-avatar" src="${depth}assets/images/DCT-Selfie-BW.png" alt="Daniel Townson" />
             <p class="hero-eyebrow">dctownson</p>
           </div>
           <div class="nav-right">
-            <div class="nav-links">
-              <dct-button variant="ghost" size="lg" icon-only href="https://www.linkedin.com/in/danieltownson/" target="_blank" rel="noopener" data-tip="LinkedIn" aria-label="LinkedIn">
+            <div class="nav-pill nav-links">
+              <dct-button variant="ghost" size="sm" icon-only href="https://www.linkedin.com/in/danieltownson/" target="_blank" rel="noopener" data-tip="LinkedIn" aria-label="LinkedIn">
                 <svg slot="leading" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M8 11v5" />
                   <path d="M8 8v.01" />
@@ -74,13 +74,13 @@ class SiteNav extends HTMLElement {
                   <path d="M3 7a4 4 0 0 1 4 -4h10a4 4 0 0 1 4 4v10a4 4 0 0 1 -4 4h-10a4 4 0 0 1 -4 -4l0 -10" />
                 </svg>
               </dct-button>
-              <dct-button variant="ghost" size="lg" icon-only href="mailto:dctownson@gmail.com?subject=Hi%20Daniel!" data-tip="Email Me" aria-label="Email Me">
+              <dct-button variant="ghost" size="sm" icon-only href="mailto:dctownson@gmail.com?subject=Hi%20Daniel!" data-tip="Email Me" aria-label="Email Me">
                 <svg slot="leading" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10" />
                   <path d="M3 7l9 6l9 -6" />
                 </svg>
               </dct-button>
-              <dct-button variant="ghost" size="lg" icon-only href="${depth}${RESUME_PATH}" target="_blank" rel="noopener" data-tip="Résumé" aria-label="Résumé">
+              <dct-button variant="ghost" size="sm" icon-only href="${depth}${RESUME_PATH}" target="_blank" rel="noopener" data-tip="Résumé" aria-label="Résumé">
                 <svg slot="leading" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M14 3v4a1 1 0 0 0 1 1h4" />
                   <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2" />
@@ -89,6 +89,8 @@ class SiteNav extends HTMLElement {
                   <path d="M9 17l6 0" />
                 </svg>
               </dct-button>
+            </div>
+            <div class="nav-pill nav-pill--icon">
               ${this._themeToggleHTML()}
             </div>
           </div>
@@ -101,7 +103,8 @@ class SiteNav extends HTMLElement {
     return `
       <nav class="cs-nav">
         <div class="nav-inner anim anim-1">
-        <dct-button variant="ghost" size="md" href="/">
+          <div class="nav-pill nav-pill--back">
+          <dct-button variant="ghost" size="sm" href="/" aria-label="Back to Work">
             <svg slot="leading" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
               <path d="M5 12l14 0" />
               <path d="M5 12l6 6" />
@@ -109,9 +112,10 @@ class SiteNav extends HTMLElement {
             </svg>
             <span slot="leading">Back to Work</span>
           </dct-button>
+          </div>
           <div class="nav-right">
-            <div class="nav-links">
-              <dct-button variant="ghost" size="lg" icon-only href="https://www.linkedin.com/in/danieltownson/" target="_blank" rel="noopener" data-tip="LinkedIn" aria-label="LinkedIn">
+            <div class="nav-pill nav-links">
+              <dct-button variant="ghost" size="sm" icon-only href="https://www.linkedin.com/in/danieltownson/" target="_blank" rel="noopener" data-tip="LinkedIn" aria-label="LinkedIn">
                 <svg slot="leading" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M8 11v5" />
                   <path d="M8 8v.01" />
@@ -120,13 +124,13 @@ class SiteNav extends HTMLElement {
                   <path d="M3 7a4 4 0 0 1 4 -4h10a4 4 0 0 1 4 4v10a4 4 0 0 1 -4 4h-10a4 4 0 0 1 -4 -4l0 -10" />
                 </svg>
               </dct-button>
-              <dct-button variant="ghost" size="lg" icon-only href="mailto:dctownson@gmail.com?subject=Hi%20Daniel!" data-tip="Email Me" aria-label="Email Me">
+              <dct-button variant="ghost" size="sm" icon-only href="mailto:dctownson@gmail.com?subject=Hi%20Daniel!" data-tip="Email Me" aria-label="Email Me">
                 <svg slot="leading" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10" />
                   <path d="M3 7l9 6l9 -6" />
                 </svg>
               </dct-button>
-              <dct-button variant="ghost" size="lg" icon-only href="${depth}${RESUME_PATH}" target="_blank" rel="noopener" data-tip="Résumé" aria-label="Résumé">
+              <dct-button variant="ghost" size="sm" icon-only href="${depth}${RESUME_PATH}" target="_blank" rel="noopener" data-tip="Résumé" aria-label="Résumé">
                 <svg slot="leading" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M14 3v4a1 1 0 0 0 1 1h4" />
                   <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2" />
@@ -135,7 +139,10 @@ class SiteNav extends HTMLElement {
                   <path d="M9 17l6 0" />
                 </svg>
               </dct-button>
-            ${this._themeToggleHTML()}
+            </div>
+            <div class="nav-pill nav-pill--icon">
+              ${this._themeToggleHTML()}
+            </div>
           </div>
         </div>
       </nav>

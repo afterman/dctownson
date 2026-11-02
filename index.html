@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="style.css" />
   <script src="components.js" defer></script>
 </head>
-<body>
+<body class="has-bg-pattern">
   <!-- Nav -->
   <site-nav type="home"></site-nav>
 
@@ -22,7 +22,6 @@
 
     <!-- Hero -->
     <section class="hero-masthead">
-      <div class="hero-pattern" aria-hidden="true"></div>
       <p class="hero-statement anim anim-3">Daniel Townson is a systems-driven designer building experiences at the intersection of hardware and software.</p>
       <div class="hero-credentials anim anim-4">
         <div class="credential-group">
@@ -50,7 +49,7 @@
     <div class="card-grid anim anim-5">
     <!-- OlySense Design System — not password-gated; the case study page
          itself is noindex,nofollow so it stays out of search results -->
-    <a class="cs-card" href="/ods" style="view-transition-name: hero-ods;">
+    <a class="cs-card" href="/ods" style="--span: 5; view-transition-name: hero-ods;">
       <div class="cs-card-media">
         <img class="cs-card-image" src="assets/images/card.hero.ods2.png" alt="OlySense Design System" />
       </div>
@@ -66,7 +65,7 @@
       </div>
     </a>
       <!-- UA Baselayer -->
-      <a class="cs-card" href="/ua-baselayer" style="view-transition-name: hero-ua-baselayer;">
+      <a class="cs-card" href="/ua-baselayer" style="--span: 7; view-transition-name: hero-ua-baselayer;">
         <div class="cs-card-media">
           <img class="cs-card-image" src="assets/images/card.hero.uabaselayer.png" alt="UA Baselayer Design System" />
         </div>
@@ -82,7 +81,7 @@
         </div>
       </a>
       <!-- UA Samsung -->
-      <a class="cs-card" href="/ua-samsung" style="view-transition-name: hero-ua-samsung;">
+      <a class="cs-card" href="/ua-samsung" style="--span: 7; view-transition-name: hero-ua-samsung;">
         <div class="cs-card-media">
           <img class="cs-card-image" src="assets/images/cs.uasamsung.mmr.heroimage.png" alt="UA Samsung" />
         </div>
@@ -98,7 +97,7 @@
         </div>
       </a>
       <!-- MFP Insights -->
-      <a class="cs-card" href="/mfpinsights" style="view-transition-name: hero-mfp-nutrition-insights;">
+      <a class="cs-card" href="/mfpinsights" style="--span: 5; view-transition-name: hero-mfp-nutrition-insights;">
         <div class="cs-card-media">
           <img class="cs-card-image" src="assets/images/card.hero.mfpnutritioninsights.png" alt="MyFitnessPal Nutrition Insights"/>
         </div>
@@ -122,8 +121,9 @@
       </div>
       <div class="about-content">
         <div class="about-block">
-          <p class="about-heading">About Me</p>
+         
           <div class="about-body">
+            <p class="about-heading">About Me</p>
             <p>I'm a product designer with close to a decade of experience building and scaling design systems for complex software. Most of that time was spent at Under Armour, working across MapMyRun, MapMyFitness, and MyFitnessPal, including a co-branded fitness experience for the Samsung Galaxy Watch. More recently, I was the sole designer on Olympus's design systems team, partnering with an embedded engineer to bring consistency to a suite of endoscopic workflow software used by clinicians every day.</p>
             <p>I care about the gap between a well-designed component and a well-designed system — the tokens, documentation, and governance that make a product actually hold together as it grows.</p>
           </div>
