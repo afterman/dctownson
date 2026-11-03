@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="view-transition" content="same-origin" />
   <!-- Apply saved theme before first paint so dark mode doesn't flash light. -->
   <script>try { var t = localStorage.getItem('dct-theme'); if (t) document.documentElement.setAttribute('data-theme', t); } catch (e) {}</script>
   <title>dctownson.com</title>
@@ -12,9 +11,16 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Inconsolata:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="tokens.css" />
   <link rel="stylesheet" href="style.css" />
-  <script src="components.js" defer></script>
+  <script src="components.js" defer blocking="render"></script>
+  <!-- Load a case study in the background as soon as its card is hovered
+       (or pressed, on touch), so it's ready — images included — by the
+       time the exit animation ends. Chrome/Edge only; others ignore it. -->
+  <script type="speculationrules">
+  { "prerender": [{ "where": { "selector_matches": "a.cs-card" }, "eagerness": "moderate" }] }
+  </script>
 </head>
-<body class="has-bg-pattern">
+<body>
+  <bg-pattern aria-hidden="true"></bg-pattern>
   <!-- Nav -->
   <site-nav type="home"></site-nav>
 
@@ -22,7 +28,7 @@
 
     <!-- Hero -->
     <section class="hero-masthead">
-      <p class="hero-statement anim anim-3">Daniel Townson is a systems-driven designer building experiences at the intersection of hardware and software.</p>
+      <p class="hero-statement anim anim-3">I design systems, interfaces, and experiences for health tech products that help everyday people live happier, healthier lives.</p>
       <div class="hero-credentials anim anim-4">
         <div class="credential-group">
           <p class="credential-label">EXPERIENCE</p>
@@ -36,10 +42,11 @@
         <div class="credential-group">
           <p class="credential-label">FOCUS</p>
           <p class="credential-value">Design Systems</p>
-          <p class="credential-value">Medical Software</p>
-          <p class="credential-value">Health Tracking</p>
-          <p class="credential-value">Wearables</p>
-          <p class="credential-value">Consumer Apps</p>
+          <p class="credential-value">Fitness Tracking</p>
+          <p class="credential-value">Wearable UX</p>
+          <p class="credential-value">Premium Upsells</p>
+          <p class="credential-value">Marketing Design</p>
+          <p class="credential-value">Branding</p>
         </div>
       </div>
     </section>
@@ -49,9 +56,9 @@
     <div class="card-grid anim anim-5">
     <!-- OlySense Design System — not password-gated; the case study page
          itself is noindex,nofollow so it stays out of search results -->
-    <a class="cs-card" href="/ods" style="--span: 5; view-transition-name: hero-ods;">
+    <a class="cs-card" href="/ods" style="--span: 5;">
       <div class="cs-card-media">
-        <img class="cs-card-image" src="assets/images/card.hero.ods2.png" alt="OlySense Design System" />
+        <img class="cs-card-image" src="assets/images/card.hero.ods2.jpg" alt="OlySense Design System" />
       </div>
       <div class="cs-card-info">
         <div class="cs-card-header">
@@ -65,9 +72,9 @@
       </div>
     </a>
       <!-- UA Baselayer -->
-      <a class="cs-card" href="/ua-baselayer" style="--span: 7; view-transition-name: hero-ua-baselayer;">
+      <a class="cs-card" href="/ua-baselayer" style="--span: 7;">
         <div class="cs-card-media">
-          <img class="cs-card-image" src="assets/images/card.hero.uabaselayer.png" alt="UA Baselayer Design System" />
+          <img class="cs-card-image" src="assets/images/card.hero.uabaselayer.jpg" alt="UA Baselayer Design System" />
         </div>
         <div class="cs-card-info">
           <div class="cs-card-header">
@@ -81,7 +88,7 @@
         </div>
       </a>
       <!-- UA Samsung -->
-      <a class="cs-card" href="/ua-samsung" style="--span: 7; view-transition-name: hero-ua-samsung;">
+      <a class="cs-card" href="/ua-samsung" style="--span: 7;">
         <div class="cs-card-media">
           <img class="cs-card-image" src="assets/images/cs.uasamsung.mmr.heroimage.png" alt="UA Samsung" />
         </div>
@@ -97,9 +104,9 @@
         </div>
       </a>
       <!-- MFP Insights -->
-      <a class="cs-card" href="/mfpinsights" style="--span: 5; view-transition-name: hero-mfp-nutrition-insights;">
+      <a class="cs-card" href="/mfpinsights" style="--span: 5;">
         <div class="cs-card-media">
-          <img class="cs-card-image" src="assets/images/card.hero.mfpnutritioninsights.png" alt="MyFitnessPal Nutrition Insights"/>
+          <img class="cs-card-image" src="assets/images/card.hero.mfpnutritioninsights.jpg" alt="MyFitnessPal Nutrition Insights"/>
         </div>
         <div class="cs-card-info">
           <div class="cs-card-header">
@@ -121,17 +128,16 @@
       </div>
       <div class="about-content">
         <div class="about-block">
-         
+          <p class="about-heading">I'm here to help</p>
           <div class="about-body">
-            <p class="about-heading">About Me</p>
-            <p>I'm a product designer with close to a decade of experience building and scaling design systems for complex software. Most of that time was spent at Under Armour, working across MapMyRun, MapMyFitness, and MyFitnessPal, including a co-branded fitness experience for the Samsung Galaxy Watch. More recently, I was the sole designer on Olympus's design systems team, partnering with an embedded engineer to bring consistency to a suite of endoscopic workflow software used by clinicians every day.</p>
-            <p>I care about the gap between a well-designed component and a well-designed system — the tokens, documentation, and governance that make a product actually hold together as it grows.</p>
-          </div>
-        </div>
-        <div class="about-block">
-          <p class="about-heading">How I work with AI</p>
-          <div class="about-body">
-            <p>I treat AI as a working partner, not an autopilot — it moves fastest when I stay the one making the calls on content, hierarchy, and correctness, and when it checks its own work instead of asking me to take it on faith. This site is a live example: its case studies are synced from Figma by matching real layer names instead of guessing, every image gets checked against actual pixels before a caption gets written, and every change gets a structural and visual pass before it ships.</p>
+           
+            <p>In 2012 I was working as a contract designer for a medical tech company that made pacemakers and pain-management devices when I realized that I’d found my calling with my career - using my skills to help everyday people live happier, healthier lives. Since then I’ve pursued roles that live up to this guiding principle - from consumer fitness tracking apps, nutrition management features, and goal setting flows to cancer screening and treatment software, my work has helped millions improve their daily habits and conditions, while staying true to brand vision and mission. </p>
+
+              <p>I’ve worked with global brands Under Armour, Samsung, Garmin and Olympus, on cross-functional international teams building products that intersect hardware and software. From connected footwear to wearables to clinical software, I thrive at converging complex data into user friendly experiences. </p>
+              
+              <p>Inherently a systems-thinker, I care about the space between a well-designed component and a well-designed system - the tokens, documentation and governance that help a product actually hold shape and stay true to it’s principles as it scales. </p>
+              
+              <p>As a designer always on the forefront of what’s next, AI has become an indispensable partner in my work. I retain complete control over what it executes, using my systems-thinking approach to define guardrails and goals prior to hitting the prompt. This portfolio site is a clean example - I make all the design decisions and lean on Claude to set up the scaffolding and help with implementing wide-impact structural changes. The tokens are custom, the components all mine, and the UX defined in Figma first before wasting compute iterating on concepts until something sticks. I also take full responsibility for the flaws - typos, glitches, something off-kilter or long-winded. I am only human - but, so are you. And that’s who I build for - everyday people, just trying to live happier, healthier lives. </p>
           </div>
         </div>
       </div>

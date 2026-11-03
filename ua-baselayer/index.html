@@ -3,16 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="view-transition" content="same-origin" />
   <!-- Apply saved theme before first paint so dark mode doesn't flash light. -->
   <script>try { var t = localStorage.getItem('dct-theme'); if (t) document.documentElement.setAttribute('data-theme', t); } catch (e) {}</script>
+  <!-- Flag arrivals via the home card morph before first paint, so the hero skips its own fade (style.css "Page transition"). -->
+  <script>addEventListener('pagereveal', function (e) { if (e.viewTransition) document.documentElement.classList.add('is-arriving'); });</script>
   <title>UA Baselayer — dctownson.com</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Inconsolata:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../tokens.css" />
   <link rel="stylesheet" href="../style.css" />
-  <script src="../components.js" defer></script>
+  <script src="../components.js" defer blocking="render"></script>
   <style>
 
    
@@ -37,9 +38,8 @@
     eyebrow="Design System"
     title="UA Baselayer — Unifying the product with a brand-right design system"
     summary="Establish a scalable design system that brings multiple Under Armour digital products under one brand — giving the Focused Performer a true performance experience."
-    image="../assets/images/card.hero.uabaselayer.png"
+    image="../assets/images/card.hero.uabaselayer.jpg"
     image-alt="UA Baselayer Design System hero"
-    transition-name="hero-ua-baselayer"
     role="Lead Designer"
     timeframe="2021 – 2023"
     responsibilities="Co-lead design system across web, mobile, and wearables"

@@ -30,29 +30,78 @@ body {
   transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-/* Fixed background pattern (Figma node 2836:38409). Opt in per page
-   with <body class="has-bg-pattern">. It sits on a fixed layer
-   rather than background-attachment: fixed, which iOS Safari
-   ignores. The SVG is used as a mask so its color comes from a
-   token and follows the theme. --pattern-size keeps the 1440px
-   design scale on desktop and grows with viewport height on tall,
-   narrow screens; the -0.432 offset matches the Figma placement. */
-body.has-bg-pattern::before {
-  --pattern-size: max(161.6vw, 120vh);
-  content: '';
+/* ── Background pattern — <bg-pattern> ─────────────────────
+   Fixed layer behind the page (position: fixed rather than
+   background-attachment: fixed, which iOS Safari ignores). The
+   SVG sits on the left, sized off the viewport height and pushed
+   past the left and top edges so it bleeds off them. --pattern-apex-x
+   / --pattern-apex-y place the fan's apex (the point on the right
+   where the lines meet) in the viewport; --pattern-height sets the
+   size; --pattern-rotate turns it around the apex (clockwise). Line color comes from a token via currentColor. */
+bg-pattern {
+  --pattern-height: 130vh;
+  --pattern-apex-x: 40vw;
+  --pattern-apex-y: 30vh;
+  --pattern-rotate: -60deg;
   position: fixed;
   inset: 0;
   z-index: -1;
+  overflow: hidden;
   pointer-events: none;
-  background-color: var(--color-bg-subtle);
-  transition: background-color 0.2s ease;
-  -webkit-mask: url('assets/images/bg-pattern.svg') no-repeat;
-  mask: url('assets/images/bg-pattern.svg') no-repeat;
-  -webkit-mask-size: var(--pattern-size) auto;
-  mask-size: var(--pattern-size) auto;
-  -webkit-mask-position: calc(var(--pattern-size) * -0.432) center;
-  mask-position: calc(var(--pattern-size) * -0.432) center;
+  color: var(--color-border-muted);
+  transition: color 0.2s ease;
 }
+
+/* The apex is at (1520, 906) in the 1562 × 1812 viewBox, i.e.
+   97.3% across and 50% down — the offsets below put that point at
+   --pattern-apex-x / -y. */
+bg-pattern svg {
+  position: absolute;
+  height: var(--pattern-height);
+  width: auto;
+  aspect-ratio: 1562 / 1812;
+  left: calc(var(--pattern-apex-x) - var(--pattern-height) * 1520 / 1812);
+  top: calc(var(--pattern-apex-y) - var(--pattern-height) * 0.5);
+  transform: rotate(var(--pattern-rotate));
+  transform-origin: 97.31% 50%;   /* turn around the apex so it stays put */
+}
+
+/* Fan-in on load. Every line rotates into place around one shared
+   pivot near the apex on the right (in the SVG's 1562 × 1812 units),
+   starting from --fan-shift to the left. Each line starts turned
+   back by its own tilt (1.5° per line, matching the Figma build) plus
+   --fan-base, so they open out like a fan. line-01 leads; the rest
+   follow --fan-stagger apart. 19 × 30ms + 900ms ≈ 1.5s total, so the
+   pattern settles just after the page content (~1.05s). */
+bg-pattern g {
+  --fan-pivot: 1520px 906px;
+  --fan-shift: -110px;        /* user units: ≈120 screen px at 1440 × 900 */
+  --fan-base: 4deg;
+  --fan-step: 1.5deg;
+  --fan-stagger: 30ms;
+  --fan-angle: calc(var(--fan-base) + var(--i) * var(--fan-step));
+  transform-box: view-box;
+  transform-origin: var(--fan-pivot);
+  animation: fan-in 900ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(var(--i) * var(--fan-stagger));
+}
+
+@keyframes fan-in {
+  from {
+    opacity: 0;
+    transform: translateX(var(--fan-shift)) rotate(var(--fan-angle));
+  }
+  40% { opacity: 1; }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  bg-pattern g { animation: none; }
+}
+
 
 a { color: inherit; text-decoration: none; }
 img { display: block; max-width: 100%; }
@@ -123,8 +172,6 @@ cs-hero {
   opacity: 0;
   transform: translateY(16px);
   animation: fade-up 0.5s ease forwards;
-  will-change: transform, opacity;
-  backface-visibility: hidden;
 }
 
 @keyframes fade-up {
@@ -140,6 +187,103 @@ cs-hero {
 .anim-4 { animation-delay: 0.35s; }
 .anim-5 { animation-delay: 0.45s; }
 .anim-6 { animation-delay: 0.55s; }
+
+/* ── Motion — page exit (home → case study) ──────────────
+   components.js adds .is-leaving to <html> when a case study card
+   is clicked and navigates after PAGE_EXIT_MS (600ms). The nav stays
+   put since the next page has the same one. Content lifts and fades;
+   the clicked card (.is-active) lingers a beat longer; the pattern
+   fades out. */
+@keyframes page-out {
+  from { opacity: 1; transform: none; }
+  to   { opacity: 0; transform: translateY(-12px); }
+}
+
+.is-leaving .page .anim {
+  animation: page-out 0.35s ease forwards;
+}
+
+.is-leaving .page .card-grid.anim {
+  animation: none;
+  opacity: 1;
+  transform: none;
+}
+
+.is-leaving .cs-card {
+  animation: page-out 0.35s ease forwards;
+}
+
+.is-leaving .cs-card.is-active {
+  animation: page-out 0.3s ease 0.25s forwards;
+}
+
+/* The pattern fades out as one layer rather than folding line by
+   line: per-line SVG transforms repaint the whole pattern on the main
+   thread every frame, which made the exit stutter. Opacity on the
+   layer runs on the GPU. */
+.is-leaving bg-pattern {
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+/* With a morph coming (.can-morph), the clicked card's image stays
+   fully visible — it becomes the case study hero — and only its
+   title and summary fade with the rest. */
+.is-leaving.can-morph .cs-card.is-active {
+  animation: none;
+}
+
+.is-leaving.can-morph .cs-card.is-active .cs-card-info {
+  animation: page-out 0.35s ease forwards;
+}
+
+/* ── Motion — page transition (home → case study) ─────────
+   Cross-page view transitions: the clicked card's image and the
+   case study hero share the name "cs-hero" (components.js), so the
+   browser morphs one into the other while the rest of the page
+   cross-fades. Browsers without support just load the next page.
+   The case study's own entrance is the staggered .anim fade-up in
+   <cs-hero>; the hero skips its fade when it arrives by morph
+   (.is-arriving, set by a pagereveal listener in each case study's
+   <head>). */
+@view-transition {
+  navigation: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @view-transition {
+    navigation: none;
+  }
+}
+
+::view-transition-group(root) {
+  animation-duration: 0.3s;
+}
+
+::view-transition-group(cs-hero) {
+  animation-duration: 0.6s;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* The card and the hero crop the image differently — cover keeps
+   it from stretching while the box changes shape. */
+::view-transition-old(cs-hero),
+::view-transition-new(cs-hero) {
+  height: 100%;
+  object-fit: cover;
+}
+
+.is-arriving .hero-bleed.anim {
+  animation: none;
+  opacity: 1;
+  transform: none;
+}
+
+/* Meta tiles follow the hero in, 60ms apart. */
+cs-hero meta-tile:nth-child(1) { animation-delay: 0.35s; }
+cs-hero meta-tile:nth-child(2) { animation-delay: 0.41s; }
+cs-hero meta-tile:nth-child(3) { animation-delay: 0.47s; }
+cs-hero meta-tile:nth-child(4) { animation-delay: 0.53s; }
 
 /* ── Utilities — ghost tooltip ─────────────────────────── */
 [data-tip] { position: relative; }
@@ -286,7 +430,7 @@ site-nav .dct-btn--sm svg { width: var(--icon-md); height: var(--icon-md); }
   justify-content: center;
   width: 32px;
   height: 32px;
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-full);
   border: none;
   outline: none;
   background: transparent;
@@ -357,7 +501,7 @@ dct-button { display: inline-flex; }
   justify-content: center;
   gap: var(--spacing-2);
   border: 1px solid transparent;
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-full);
   font-family: var(--font-family-sans);
   font-weight: var(--font-weight-medium);
   line-height: 1;
@@ -579,12 +723,13 @@ html .contact-header h2 {
   color: var(--color-fg-muted);
   max-width: 566px;
   text-wrap: pretty;
+  padding-left:56px
 }
 
 .hero-credentials {
-  grid-column: 7 / span 6;
+  grid-column: 6 / span 6;
   display: flex;
-  gap: 96px;
+  gap: 56px;
   flex-wrap: wrap;
 }
 
@@ -693,6 +838,8 @@ html .contact-header h2 {
   height: 22cqi;
   border-radius: var(--radius-2xl);
   overflow: hidden;
+  border: 1px solid var(--color-border-default);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
 }
 
 .cs-card-image {
@@ -1223,17 +1370,18 @@ contact-form { display: block; }
 
 .about-block {
   display: grid;
-  grid-template-columns: 180px 1fr;
   gap: 0 32px;
 }
 
 .about-heading {
-  font-family: var(--font-family-mono);
-  font-size: var(--font-size-xs);
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-2xl);
   font-weight: var(--font-weight-medium);
   letter-spacing: var(--font-tracking-wide);
-  text-transform: uppercase;
+  text-transform: none;
   color: var(--color-fg-default);
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--color-border-default);
 }
 
 .about-body p {
@@ -1243,6 +1391,7 @@ contact-form { display: block; }
   line-height: var(--font-leading-normal);
   color: var(--color-fg-default);
   text-wrap: pretty;
+  padding-top: 16px;
 }
 
 .about-body p + p {

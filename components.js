@@ -61,7 +61,7 @@ class SiteNav extends HTMLElement {
         <div class="nav-inner">
           <div class="nav-pill nav-greeting anim anim-2">
             <img class="nav-avatar" src="${depth}assets/images/DCT-Selfie-BW.png" alt="Daniel Townson" />
-            <p class="hero-eyebrow">dctownson</p>
+            <p class="hero-eyebrow">Daniel C Townson</p>
           </div>
           <div class="nav-right">
             <div class="nav-pill nav-links">
@@ -236,6 +236,147 @@ class SiteFooter extends HTMLElement {
 customElements.define('site-footer', SiteFooter);
 
 /* ============================================================
+   <bg-pattern> — fixed background line pattern
+   Figma: "custom pattern" frame (node 2849:1736), lines line-01
+   (innermost) to line-20. Each line is a rounded square rotated
+   about its top-left corner; the rows below are [x, y, size,
+   tilt°] in the frame's 1562 × 1812 coordinate space, read from
+   the Figma layer positions. Rendered as inline SVG (not a CSS
+   mask) so each line can animate on its own — see style.css
+   "Background pattern" for the fan-in / fan-out motion.
+
+   Usage: <bg-pattern aria-hidden="true"></bg-pattern> as the first
+   child of <body>.
+   ============================================================ */
+const BG_PATTERN_LINES = [
+  [876.62, 0.0, 601, 0],
+  [835.83, 43.45, 630, 1.5],
+  [793.88, 92.03, 659, 3],
+  [750.96, 142.61, 688, 4.5],
+  [706.74, 197.45, 717, 6],
+  [661.7, 254.37, 746, 7.5],
+  [617.43, 315.06, 775, 9],
+  [570.58, 378.47, 804, 10.5],
+  [524.66, 445.71, 833, 12],
+  [478.24, 515.18, 862, 13.5],
+  [430.42, 587.17, 891, 15],
+  [383.51, 662.12, 920, 16.5],
+  [335.38, 739.64, 949, 18],
+  [287.37, 820.43, 978, 19.5],
+  [238.97, 902.59, 1007, 21],
+  [190.87, 988.05, 1036, 22.5],
+  [143.52, 1074.61, 1065, 24],
+  [95.67, 1164.78, 1094, 25.5],
+  [47.8, 1256.34, 1123, 27],
+  [0.0, 1349.3, 1152, 28.5]
+];
+
+class BgPattern extends HTMLElement {
+  connectedCallback() {
+    const rects = BG_PATTERN_LINES.map(([x, y, size, tilt], i) =>
+      // The <g> carries the animation: a CSS transform on the <rect>
+      // itself would replace its tilt (the transform attribute).
+      `<g style="--i: ${i}"><rect x="${x}" y="${y}" width="${size}" height="${size}" rx="22" transform="rotate(${-tilt} ${x} ${y})" /></g>`
+    ).join('');
+    this.innerHTML = `
+      <svg viewBox="0 0 1562 1812" preserveAspectRatio="xMaxYMid meet" fill="none" stroke="currentColor" stroke-width="2" focusable="false">
+        ${rects}
+      </svg>
+    `;
+  }
+}
+
+customElements.define('bg-pattern', BgPattern);
+
+/* ============================================================
+   Page exit — plays the home page's out animation when a case
+   study card is clicked, then navigates. Adds .is-leaving to <html>
+   (style.css "Page exit" does the motion) and .is-active to the
+   clicked card so it can linger a beat after the rest has gone.
+
+   Where the browser supports cross-page view transitions, the
+   clicked card's image is named "cs-hero" — the same name as the
+   case study's hero image — so it stays put during the exit and
+   then morphs into the hero (style.css "Page transition"). The
+   html also gets .can-morph so the CSS keeps that image visible.
+   Skipped for new-tab clicks and when reduced motion is on.
+   ============================================================ */
+const PAGE_EXIT_MS = 600;
+const CAN_MORPH = 'onpagereveal' in window;
+
+// Warm the case study's hero image on hover / touch / click, so the
+// morph lands on a loaded image instead of an empty box that pops in
+// later. Reads the image path from the page's <cs-hero image="…">.
+// Chrome also prerenders the whole page (speculationrules in
+// index.html); this covers browsers that don't.
+const warmedHeroes = new Set();
+
+function warmCaseStudyHero(href) {
+  if (warmedHeroes.has(href)) return;
+  warmedHeroes.add(href);
+  fetch(href)
+    .then(res => res.text().then(page => ({ page, url: res.url })))
+    .then(({ page, url }) => {
+      const m = page.match(/<cs-hero[^>]*\simage="([^"]+)"/);
+      if (!m) return;
+      const img = new Image();
+      img.src = new URL(m[1], url).href;
+      img.decode().catch(() => {});
+    })
+    .catch(() => warmedHeroes.delete(href));
+}
+
+function initPageExit() {
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const html = document.documentElement;
+
+  document.querySelectorAll('a.cs-card').forEach(card => {
+    const warm = () => warmCaseStudyHero(card.href);
+    card.addEventListener('pointerenter', warm);
+    card.addEventListener('pointerdown', warm);
+    card.addEventListener('focus', warm);
+
+    card.addEventListener('click', e => {
+      warm();
+      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      if (reduceMotion.matches || html.classList.contains('is-leaving')) return;
+
+      e.preventDefault();
+      card.classList.add('is-active');
+      if (CAN_MORPH) {
+        card.querySelector('.cs-card-media').style.viewTransitionName = 'cs-hero';
+        html.classList.add('can-morph');
+      }
+      html.classList.add('is-leaving');
+      setTimeout(() => { location.href = card.href; }, PAGE_EXIT_MS);
+    });
+  });
+
+  // Coming back with the browser's Back button can restore this page
+  // from cache mid-exit — reset it so the content is visible again.
+  window.addEventListener('pageshow', e => {
+    if (!e.persisted) return;
+    html.classList.remove('is-leaving', 'can-morph');
+    document.querySelectorAll('a.cs-card.is-active').forEach(c => {
+      c.classList.remove('is-active');
+      c.querySelector('.cs-card-media').style.viewTransitionName = '';
+    });
+  });
+}
+
+initPageExit();
+
+// The home page prerenders a case study on hover (speculationrules in
+// index.html). Its entrance animations would play out unseen in the
+// background, so rewind them when the page is actually shown —
+// prerenderingchange fires before the first visible frame.
+if (document.prerendering) {
+  document.addEventListener('prerenderingchange', () => {
+    document.getAnimations().forEach(a => { a.currentTime = 0; });
+  }, { once: true });
+}
+
+/* ============================================================
    <dct-chip> — skill/tag chip component
    Attributes:
      data-projects  — comma-separated project IDs this chip
@@ -328,12 +469,14 @@ customElements.define('meta-tile', MetaTile);
                 real-time data."
        image="../assets/images/cs.uasamsung.mmr.heroimage.png"
        image-alt="Samsung Galaxy Watch Active2 hero shot"
-       transition-name="hero-ua-samsung"
        role="Lead UX/UI Designer"
        timeframe="2018 – 2020"
        responsibilities="On-watch UX/UI, device sync, real-time coaching"
        keywords="Wearable, Coaching, Integrations, Design System">
      </cs-hero>
+
+   The hero image is always named view-transition "cs-hero", so the
+   home card that was clicked morphs into it (see Page exit below).
 
    To change the icon used for one of the four meta fields site-
    wide, edit CS_HERO_ICONS below — every case study page picks
@@ -359,7 +502,6 @@ class CsHero extends HTMLElement {
     const chip = this.getAttribute('chip') || '';
     const image = this.getAttribute('image') || '';
     const imageAlt = this.getAttribute('image-alt') || '';
-    const transitionName = this.getAttribute('transition-name') || '';
     const role = this.getAttribute('role') || '';
     const timeframe = this.getAttribute('timeframe') || '';
     const responsibilities = this.getAttribute('responsibilities') || '';
@@ -367,20 +509,20 @@ class CsHero extends HTMLElement {
 
     this.innerHTML = `
    
-      <header class="cs-header anim anim-3">
-        <p class="cs-type">${eyebrow}</p>
-        <h1 class="cs-title">${title}</h1>
-        <p class="cs-summary">${summary}</p>
-        ${chip ? `<dct-chip>${chip}</dct-chip>` : ''}
+      <header class="cs-header">
+        <p class="cs-type anim anim-1">${eyebrow}</p>
+        <h1 class="cs-title anim anim-2">${title}</h1>
+        <p class="cs-summary anim anim-3">${summary}</p>
+        ${chip ? `<dct-chip class="anim anim-4">${chip}</dct-chip>` : ''}
       </header>
-      <div class="hero-bleed anim anim-3">
-        <img src="${image}" style="view-transition-name: ${transitionName};" alt="${imageAlt}" />
+      <div class="hero-bleed anim anim-3" style="view-transition-name: cs-hero;">
+        <img src="${image}" alt="${imageAlt}" />
       </div>
-      <div class="meta-grid anim anim-4">
-        <meta-tile label="Role" value="${role}">${csHeroIcon('user')}</meta-tile>
-        <meta-tile label="Timeframe" value="${timeframe}">${csHeroIcon('calendar')}</meta-tile>
-        <meta-tile label="Responsibilities" value="${responsibilities}">${csHeroIcon('tasks')}</meta-tile>
-        <meta-tile label="Keywords" value="${keywords}">${csHeroIcon('tags')}</meta-tile>
+      <div class="meta-grid">
+        <meta-tile class="anim" label="Role" value="${role}">${csHeroIcon('user')}</meta-tile>
+        <meta-tile class="anim" label="Timeframe" value="${timeframe}">${csHeroIcon('calendar')}</meta-tile>
+        <meta-tile class="anim" label="Responsibilities" value="${responsibilities}">${csHeroIcon('tasks')}</meta-tile>
+        <meta-tile class="anim" label="Keywords" value="${keywords}">${csHeroIcon('tags')}</meta-tile>
       </div>
     `;
   }
