@@ -141,7 +141,11 @@ h2, h3, h4, h5, h6 { color: var(--color-fg-muted); }
    that needs to align with the others. */
 .hero-masthead,
 .card-grid,
-.about-grid {
+.grid,
+.cs-header,
+.cs-section,
+.img-grid,
+.meta-grid {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   gap: var(--grid-gutter);
@@ -150,7 +154,11 @@ h2, h3, h4, h5, h6 { color: var(--color-fg-muted); }
 @media (max-width: 1023px) {
   .hero-masthead,
   .card-grid,
-  .about-grid {
+  .grid,
+  .cs-header,
+  .cs-section,
+  .img-grid,
+  .meta-grid {
     grid-template-columns: repeat(8, 1fr);
   }
 }
@@ -158,8 +166,52 @@ h2, h3, h4, h5, h6 { color: var(--color-fg-muted); }
 @media (max-width: 767px) {
   .hero-masthead,
   .card-grid,
-  .about-grid {
+  .grid,
+  .cs-header,
+  .cs-section,
+  .img-grid,
+  .meta-grid {
     grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* ── Grid placement ─────────────────────────────────────
+   Children of .grid and of the case study containers (.cs-header,
+   .cs-section, .img-grid, .meta-grid) sit on the columns above. Each
+   element type has a default span (see "Page — Case study"); to place
+   one yourself, set these on the element:
+     --span / --start        desktop, out of 12   style="--span: 6"
+     --span-md / --start-md  tablet, out of 8     style="--span-md: 4"
+     --span-sm               phone, out of 4
+   e.g. style="--span: 6; --start: 4" spans columns 4–9 on desktop.
+   Anything unset falls back to the element's default (full width
+   unless noted). The --_span* properties hold those defaults and are
+   internal — set --span* in markup, not them.
+   None of these inherit, so a span set on one element never leaks
+   into a nested grid. */
+@property --span     { syntax: '*'; inherits: false; }
+@property --start    { syntax: '*'; inherits: false; }
+@property --span-md  { syntax: '*'; inherits: false; }
+@property --start-md { syntax: '*'; inherits: false; }
+@property --span-sm  { syntax: '*'; inherits: false; }
+@property --_span    { syntax: '*'; inherits: false; }
+@property --_span-md { syntax: '*'; inherits: false; }
+@property --_span-sm { syntax: '*'; inherits: false; }
+
+:is(.grid, .cs-header, .cs-section, .img-grid, .meta-grid) > * {
+  grid-column: var(--start, auto) / span var(--span, var(--_span, 12));
+  min-width: 0;
+}
+
+@media (max-width: 1023px) {
+  :is(.grid, .cs-header, .cs-section, .img-grid, .meta-grid) > * {
+    grid-column: var(--start-md, auto) / span var(--span-md, var(--_span-md, 8));
+  }
+}
+
+@media (max-width: 767px) {
+  :is(.grid, .cs-header, .cs-section, .img-grid, .meta-grid) > * {
+    grid-column: auto / span var(--span-sm, var(--_span-sm, 4));
   }
 }
 
@@ -363,8 +415,8 @@ site-nav {
   align-items: center;
   height: 56px;
   padding: 0 16px;
-  border: 1px solid var(--color-border-default);
-  border-radius: var(--radius-full);
+  border: 1px solid var(--color-border-muted);
+  border-radius: var(--radius-3xl);
   background: color-mix(in srgb, var(--color-bg-default) 80%, transparent);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -376,7 +428,159 @@ site-nav {
 .nav-pill--icon,
 .nav-pill--back { padding: 0 11px; }
 
-.nav-greeting { gap: 12px; }
+/* ── About card — the name pill grows into it ──────────────
+   .nav-about holds the pill's place in the nav; the card is absolute
+   on top of it, so growing it never moves anything else. Its copy is a
+   fixed width and doesn't reflow, so animating width and height only
+   repaints the card itself. The heavy effects stay out of the way:
+   the blur drops as soon as it opens and returns once it has closed,
+   and the large shadow fades in after it has finished growing.
+   components.js measures --about-closed-w and --about-open-h and
+   toggles .is-open. */
+.home-nav .nav-inner { container-type: inline-size; }
+
+/* Dims the page behind the open card. It sits in the nav's stacking
+   context, so the card and the other pills stay above it. It catches
+   taps while open, so closing the card on touch can't also follow a
+   link underneath. */
+.nav-scrim {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+/* Eases in slower than it leaves, so the dim settles behind the card
+   rather than snapping on. */
+site-nav.is-about-open .nav-scrim {
+  opacity: 1;
+  pointer-events: auto;
+  transition: opacity 0.6s ease-in-out;
+}
+
+.nav-about {
+  --about-open-w: min(735px, 100cqw);
+  --about-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --about-time: 0.5s;
+  --about-pad: 16px;   /* the avatar's inset — the copy's edges match it */
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+  width: var(--about-closed-w, 180px);
+  height: 56px;
+}
+
+.nav-about-card {
+  position: absolute;
+  top: 0;
+  left: 0;
+  flex-direction: column;
+  align-items: flex-start;
+  width: var(--about-closed-w, 180px);
+  height: 56px;
+  padding: 0;
+  overflow: hidden;
+  transition:
+    width var(--about-time) var(--about-ease),
+    height var(--about-time) var(--about-ease),
+    background-color 0.15s ease,
+    border-color 0.2s ease,
+    box-shadow 0.15s ease,
+    backdrop-filter 0s linear var(--about-time),
+    -webkit-backdrop-filter 0s linear var(--about-time);
+}
+
+.nav-about.is-open .nav-about-card {
+  width: var(--about-open-w);
+  height: min(var(--about-open-h, 600px), 100dvh - 72px);
+  background: var(--color-bg-default);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.25), 0 24px 64px rgba(0, 0, 0, 0.16);
+  transition:
+    width var(--about-time) var(--about-ease),
+    height var(--about-time) var(--about-ease),
+    background-color 0.15s ease,
+    border-color 0.2s ease,
+    box-shadow 0.3s ease 0.3s;
+}
+
+.nav-greeting {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 12px;
+  width: max-content;
+  height: 54px;
+  padding: 0 var(--about-pad);
+  border: 0;
+  border-radius: var(--radius-3xl);
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: default;
+}
+
+.nav-greeting:focus-visible {
+  outline: 2px solid var(--color-accent-default);
+  outline-offset: -4px;
+}
+
+.nav-about-body {
+  flex: 1 1 auto;
+  width: calc(var(--about-open-w) - 2px);
+  min-height: 0;
+  overflow: hidden;
+}
+
+.nav-about.is-settled .nav-about-body {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.nav-about-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 4px var(--about-pad) var(--about-pad);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px);
+  transition:
+    opacity 0.12s ease,
+    transform 0.12s ease,
+    visibility 0s linear 0.12s;
+}
+
+/* Drops in slightly from above, following the card as it grows down. */
+.nav-about.is-open .nav-about-copy {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition:
+    opacity 0.35s ease 0.12s,
+    transform 0.5s var(--about-ease) 0.12s,
+    visibility 0s;
+}
+
+.nav-about-copy p {
+  font-size: var(--font-size-sm);
+  line-height: var(--font-leading-normal);
+  color: var(--color-fg-default);
+  text-wrap: pretty;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-scrim,
+  .nav-about-card,
+  site-nav.is-about-open .nav-scrim,
+  .nav-about.is-open .nav-about-card,
+  .nav-about-copy,
+  .nav-about.is-open .nav-about-copy { transition: none; }
+}
 
 .nav-avatar {
   width: 32px;
@@ -417,8 +621,8 @@ site-nav .dct-btn--sm svg { width: var(--icon-md); height: var(--icon-md); }
    first pill drops to its icon: the avatar on home, the back
    arrow on case studies (its aria-label still names it). */
 @media (max-width: 479px) {
-  .nav-greeting { padding: 0 11px; }
-  .hero-eyebrow { display: none; }
+  .nav-about { --about-pad: 11px; }
+  .nav-about:not(.is-open) .hero-eyebrow { display: none; }
   .nav-pill--back .dct-btn { width: 32px; padding: 0; }
   .nav-pill--back .dct-btn-label { display: none; }
 }
@@ -727,7 +931,7 @@ html .contact-header h2 {
 }
 
 .hero-credentials {
-  grid-column: 6 / span 6;
+  grid-column: 8 / span 6;
   display: flex;
   gap: 56px;
   flex-wrap: wrap;
@@ -932,9 +1136,16 @@ html .contact-header h2 {
 }
 
 /* ── Case study header ─────────────────────────────────── */
+/* On the grid: eyebrow and chip full row, title 10 columns, summary
+   8 (the same measure as body copy). */
 .cs-header {
   padding: 120px 0 24px;
+  row-gap: 0;
 }
+
+.cs-header > .cs-title { --_span: 10; }
+.cs-header > .cs-summary { --_span: 8; }
+.cs-header > dct-chip { justify-self: start; }
 
 .cs-type {
   font-family: var(--font-family-mono);
@@ -950,7 +1161,6 @@ html .contact-header h2 {
   font-size: var(--font-size-4xl);
   line-height: var(--font-leading-tight);
   color: var(--color-fg-default);
-  max-width: 86.47%;
 }
 
 .cs-summary {
@@ -958,7 +1168,6 @@ html .contact-header h2 {
   font-weight: var(--font-weight-normal);
   line-height: var(--font-leading-relaxed);
   color: var(--color-fg-muted);
-  max-width: 80%;
   padding-bottom: 20px;
   text-wrap: pretty;
 }
@@ -970,6 +1179,15 @@ html .contact-header h2 {
   gap: 64px;
   margin-bottom: 80px;
 }
+
+/* Each section is a grid row by row: headings, paragraphs and lists
+   take 8 columns (the reading measure), image grids the full 12.
+   Spacing between rows comes from the margins below, not row-gap. */
+.cs-section {
+  row-gap: 0;
+}
+
+.cs-section > :is(h2, h3, p, ul, ol) { --_span: 8; }
 
 .cs-section h2 {
   font-size: var(--font-size-3xl);
@@ -983,7 +1201,6 @@ html .contact-header h2 {
   font-weight: var(--font-weight-normal);
   line-height: var(--font-leading-relaxed);
   color: var(--color-fg-muted);
-  max-width: 80%;
   margin-bottom: 16px;
   text-wrap: pretty;
 }
@@ -1002,24 +1219,28 @@ html .contact-header h2 {
   font-weight: var(--font-weight-normal);
   line-height: var(--font-leading-relaxed);
   color: var(--color-fg-muted);
-  max-width: 80%;
 }
 
 /* ── Image grid ────────────────────────────────── */
+/* Same 12/8/4 columns and gutter as the text, so image edges line up
+   with the copy above. cols-N sets each image's default span; override
+   one with --span (e.g. a 4 + 8 pair: style="--span: 4" and "--span: 8").
+     cols-2  6 + 6  ·  tablet 4 + 4  ·  phone stacked
+     cols-3  4 each ·  tablet 3 equal (8 columns don't split in 3)
+                    ·  phone stacked
+     cols-4  3 each ·  tablet 4 + 4  ·  phone 2 + 2 */
 .img-grid {
-  display: grid;
-  gap: 12px;
+  row-gap: 32px;
   margin-top: 32px;
 }
 
-.img-grid.cols-1 { grid-template-columns: 1fr; }
-.img-grid.cols-2 { grid-template-columns: 1fr 1fr; }
-.img-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
-.img-grid.cols-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+.img-grid.cols-2 > * { --_span: 6; --_span-md: 4; }
+.img-grid.cols-3 > * { --_span: 4; }
+.img-grid.cols-4 > * { --_span: 3; --_span-md: 4; --_span-sm: 2; }
 
-@media (max-width: 600px) {
-  .img-grid.cols-2,
-  .img-grid.cols-3 { grid-template-columns: 1fr; }
+@media (min-width: 768px) and (max-width: 1023px) {
+  .img-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+  .img-grid.cols-3 > * { grid-column: auto; }
 }
 
 .img-wrap {
@@ -1080,9 +1301,7 @@ meta-tile {
   flex-direction: column;
   align-items: flex-start;
   gap: 8px;
-  padding: 24px 16px;
-  min-width: 180px;
-  max-width: 320px;
+  padding: 24px 0;
 }
 
 .meta-tile-icon {
@@ -1115,25 +1334,15 @@ meta-tile {
 }
 
 /* ── Meta grid ─────────────────────────────────── */
-/* Hug layout, not equal-width columns: each tile sizes to its own
-   content (Role is narrow, Keywords is wide) and they sit evenly
-   spaced next to each other, wrapping to a new row when they run
-   out of horizontal room. Below 600px (matching .img-grid's own
-   breakpoint) each tile drops to full width, one per row. */
+/* On the grid: four tiles across on desktop (3 columns each), two
+   on tablet, one per row on phones. */
 .meta-grid {
-  display: flex;
-  flex-wrap: wrap;
-  column-gap: 48px;
+  row-gap: 0;
   margin-bottom: 64px;
-  max-width: 100%;
   margin-top: 120px;
 }
 
-@media (max-width: 600px) {
-  .meta-grid meta-tile {
-    flex: 1 1 100%;
-  }
-}
+.meta-grid > meta-tile { --_span: 3; --_span-md: 4; }
 
 /* ── Lightbox ──────────────────────────────────── */
 /* DORMANT — styles for <dct-lightbox> (components.js), which no page
@@ -1332,93 +1541,6 @@ contact-form { display: block; }
 .form-submit:hover {
   opacity: 0.85;
   transform: translateY(-1px);
-}
-
-/* ============================================================
-   About (photo + label-left content)
-   ============================================================ */
-.about-grid {
-  align-items: start;
-  column-gap: 64px;
-  row-gap: 32px;
-  padding: 48px 0;
-  border-top: 1px solid var(--color-border-default);
-}
-
-.about-photo {
-  grid-column: span 3;
-  aspect-ratio: 333 / 445;
-  border-radius: var(--radius-2xl);
-  overflow: hidden;
-  background: var(--color-bg-subtle);
-  box-shadow: 0px 4px 6px 0px rgba(0, 0, 0, 0.04), 0px 8px 12px 0px rgba(0, 0, 0, 0.08);
-}
-
-.about-photo img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.about-content {
-  grid-column: span 9;
-  display: flex;
-  flex-direction: column;
-  gap: 40px;
-  min-width: 0;
-}
-
-.about-block {
-  display: grid;
-  gap: 0 32px;
-}
-
-.about-heading {
-  font-family: var(--font-family-sans);
-  font-size: var(--font-size-2xl);
-  font-weight: var(--font-weight-medium);
-  letter-spacing: var(--font-tracking-wide);
-  text-transform: none;
-  color: var(--color-fg-default);
-  padding-bottom: 16px;
-  border-bottom: 1px solid var(--color-border-default);
-}
-
-.about-body p {
-  font-family: var(--font-family-sans);
-  font-size: var(--font-size-base);
-  font-weight: var(--font-weight-normal);
-  line-height: var(--font-leading-normal);
-  color: var(--color-fg-default);
-  text-wrap: pretty;
-  padding-top: 16px;
-}
-
-.about-body p + p {
-  margin-top: 16px;
-}
-
-@media (max-width: 1023px) {
-  .about-content {
-    grid-column: span 5;
-  }
-}
-
-@media (max-width: 767px) {
-  .about-photo {
-    grid-column: span 4;
-    max-width: 240px;
-    justify-self: start;
-  }
-
-  .about-content {
-    grid-column: span 4;
-  }
-
-  .about-block {
-    grid-template-columns: 1fr;
-    gap: 8px 0;
-  }
 }
 
 /* ============================================================

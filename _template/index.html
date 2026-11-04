@@ -36,6 +36,24 @@
     Shared behavior (nav, hero layout, chips, image switching, footer)
     comes from ../components.js and ../style.css — fix those once and
     every page that uses the matching element picks it up automatically.
+
+    LAYOUT GRID
+    The hero header, meta tiles, every .cs-section and every .img-grid sit
+    on the same 12-column grid as the home page (8 on tablet, 4 on phones),
+    so text and image edges line up across all pages. Defaults:
+      h2 / p / ul ......... 8 columns (reading width)
+      .img-grid ........... full 12
+      cols-2 / -3 / -4 .... 6+6 / 4+4+4 / 3+3+3+3
+    To place something yourself, set its span on the element:
+      style="--span: 4"            desktop, out of 12
+      style="--span: 6; --start: 4" columns 4–9
+      style="--span-md: 3"         tablet, out of 8
+      style="--span-sm: 2"         phone, out of 4
+    e.g. a 4 + 8 image pair: give the two children of a cols-2 grid
+    style="--span: 4" and style="--span: 8". An item narrower than the
+    row's remaining columns sits beside the one before it — an
+    .img-grid with --span: 4 right after an 8-column paragraph lands
+    next to it. Full notes in style.css, "Grid placement".
   -->
 
   <!-- Nav -->

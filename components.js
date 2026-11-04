@@ -28,6 +28,14 @@
 // link here — swap the filename once when a new résumé ships.
 const RESUME_PATH = 'assets/resume/Daniel_Townson_Resume_DesignSystems_2026.pdf';
 
+// The About card that opens from the name pill in the home nav.
+const ABOUT_COPY = [
+  'In 2012 I was working as a contract designer for a med tech company that made pacemakers and pain-management devices when I realized that I’d found my calling with my career - using my skills to help everyday people live happier, healthier lives. Since then I’ve pursued roles that live up to this guiding principle - from consumer fitness tracking apps, nutrition management features, and goal setting flows to cancer screening and treatment software, my work has helped millions improve their daily habits and conditions, while staying true to brand vision and mission.',
+  'I’ve worked with global brands Under Armour, Samsung, Garmin and Olympus, on cross-functional international teams building products that intersect hardware and software. From connected footwear to wearables to clinical software, I thrive at converging complex data into user friendly experiences.',
+  'Inherently a systems-thinker, I care about the space between a well-designed component and a well-designed system - the tokens, documentation and governance that help a product actually hold shape and stay true to it’s principles as it scales.',
+  'As a designer always on the forefront of what’s next, AI has become an indispensable partner in my work. I retain complete control over what it executes, using my systems-thinking approach to define guardrails and goals prior to hitting the prompt. This portfolio site is a clean example - I make all the design decisions and lean on Claude to set up the scaffolding and help with implementing wide-impact structural changes. The tokens are custom, the components all mine, and the UX defined in Figma first before wasting compute iterating on concepts until something sticks. I also take full responsibility for the flaws - typos, glitches, something off-kilter or long-winded. I am only human - but, so are you. And that’s who I build for - everyday people, just trying to live happier, healthier lives.',
+];
+
 class SiteNav extends HTMLElement {
   connectedCallback() {
     const type  = this.getAttribute('type') || 'home';
@@ -39,6 +47,7 @@ class SiteNav extends HTMLElement {
       : this._caseStudyNav(title, depth);
 
     this._initTheme();
+    this._initAbout();
   }
 
   _themeToggleHTML() {
@@ -57,11 +66,21 @@ class SiteNav extends HTMLElement {
 
   _homeNav(depth) {
     return `
+      <div class="nav-scrim"></div>
       <nav class="home-nav anim anim-1">
         <div class="nav-inner">
-          <div class="nav-pill nav-greeting anim anim-2">
-            <img class="nav-avatar" src="${depth}assets/images/DCT-Selfie-BW.png" alt="Daniel Townson" />
-            <p class="hero-eyebrow">Daniel C Townson</p>
+          <div class="nav-about anim anim-2">
+            <div class="nav-pill nav-about-card">
+              <button class="nav-greeting" type="button" aria-expanded="false" aria-controls="navAboutBody" aria-label="About Daniel C Townson">
+                <img class="nav-avatar" src="${depth}assets/images/DCT-Selfie-BW.png" alt="" />
+                <span class="hero-eyebrow">Daniel C Townson</span>
+              </button>
+              <div class="nav-about-body" id="navAboutBody">
+                <div class="nav-about-copy">
+                  ${ABOUT_COPY.map(text => `<p>${text}</p>`).join('')}
+                </div>
+              </div>
+            </div>
           </div>
           <div class="nav-right">
             <div class="nav-pill nav-links">
@@ -147,6 +166,80 @@ class SiteNav extends HTMLElement {
         </div>
       </nav>
     `;
+  }
+
+  // Opens on hover with a mouse; tap or Enter/Space toggles it on touch
+  // and keyboard. Esc, tapping outside or tabbing away closes it. The
+  // card's closed width and open height depend on fonts and breakpoint,
+  // so they're measured into --about-closed-w / --about-open-h and CSS
+  // does the animating (style.css "About card").
+  _initAbout() {
+    const about = this.querySelector('.nav-about');
+    if (!about) return;
+
+    const card    = about.querySelector('.nav-about-card');
+    const trigger = about.querySelector('.nav-greeting');
+    const copy    = about.querySelector('.nav-about-copy');
+    let timer;
+
+    const setOpen = open => {
+      clearTimeout(timer);
+      if (open === about.classList.contains('is-open')) return;
+      about.classList.toggle('is-open', open);
+      about.classList.remove('is-settled');
+      this.classList.toggle('is-about-open', open);
+      trigger.setAttribute('aria-expanded', open);
+    };
+
+    const measure = () => {
+      if (!about.classList.contains('is-open')) {
+        about.style.setProperty('--about-closed-w', `${trigger.offsetWidth + 2}px`);
+      }
+      about.style.setProperty('--about-open-h', `${trigger.offsetHeight + copy.offsetHeight + 2}px`);
+    };
+    const observer = new ResizeObserver(measure);
+    observer.observe(trigger);
+    observer.observe(copy);
+    measure();
+
+    about.addEventListener('pointerenter', e => {
+      if (e.pointerType !== 'mouse') return;
+      clearTimeout(timer);
+      timer = setTimeout(() => setOpen(true), 60);
+    });
+    about.addEventListener('pointerleave', e => {
+      if (e.pointerType !== 'mouse') return;
+      clearTimeout(timer);
+      timer = setTimeout(() => setOpen(false), 200);
+    });
+
+    // A mouse has already opened it by hovering, so its click does nothing.
+    let lastPointer = '';
+    trigger.addEventListener('pointerdown', e => { lastPointer = e.pointerType; });
+    trigger.addEventListener('click', e => {
+      if (e.detail > 0 && lastPointer === 'mouse') return;
+      setOpen(!about.classList.contains('is-open'));
+    });
+
+    about.addEventListener('keydown', e => {
+      if (e.key !== 'Escape' || !about.classList.contains('is-open')) return;
+      setOpen(false);
+      trigger.focus();
+    });
+    about.addEventListener('focusout', e => {
+      if (e.relatedTarget && !about.contains(e.relatedTarget)) setOpen(false);
+    });
+    document.addEventListener('pointerdown', e => {
+      if (!about.contains(e.target)) setOpen(false);
+    });
+
+    // Only let long copy scroll once the card has finished growing, or a
+    // scrollbar would flash and reflow the text mid-animation.
+    card.addEventListener('transitionend', e => {
+      if (e.target === card && e.propertyName === 'height' && about.classList.contains('is-open')) {
+        about.classList.add('is-settled');
+      }
+    });
   }
 
   _initTheme() {
