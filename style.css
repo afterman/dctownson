@@ -639,13 +639,72 @@ site-nav.is-about-open .nav-scrim {
   .nav-about-section { transform: none; }
 }
 
+/* A 2px ring: the gradient behind the photo shows through the padding.
+   Gradients can't transition, but a registered colour can, so the ring
+   blends to solid accent by animating the gradient's end colour as the
+   About card opens. */
+@property --avatar-ring-end {
+  syntax: '<color>';
+  inherits: false;
+  initial-value: transparent;
+}
+
 .nav-avatar {
+  --avatar-ring-end: var(--color-fg-muted);
+  position: relative;
   width: 32px;
   height: 32px;
+  padding: 2px;
   border-radius: var(--radius-full);
   object-fit: cover;
-  border: 1px solid var(--color-border-default);
+  background: linear-gradient(135deg, var(--color-accent-default), var(--avatar-ring-end));
   flex-shrink: 0;
+  transition: --avatar-ring-end var(--about-time, 0.5s) ease;
+}
+
+.nav-about.is-open .nav-avatar { --avatar-ring-end: var(--color-accent-default); }
+
+/* The shimmer: a soft glow behind the avatar with two brighter arcs that
+   travel around the ring while the whole glow gently pulses. It only
+   animates rotation and opacity, so it stays cheap to run. */
+.nav-greeting { position: relative; isolation: isolate; }
+
+.nav-greeting::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: var(--about-pad);
+  z-index: -1;
+  width: 38px;
+  height: 38px;
+  margin: -19px 0 0 -3px;
+  border-radius: var(--radius-full);
+  background: conic-gradient(
+    var(--color-accent-default),
+    transparent 30%,
+    var(--color-accent-default) 50%,
+    transparent 80%,
+    var(--color-accent-default)
+  );
+  filter: blur(3px);
+  pointer-events: none;
+  animation:
+    avatar-shimmer-spin 5s linear infinite,
+    avatar-shimmer-pulse 2.5s ease-in-out infinite;
+}
+
+@keyframes avatar-shimmer-spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes avatar-shimmer-pulse {
+  0%, 100% { opacity: 0.35; }
+  50%      { opacity: 0.7; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-avatar { transition: none; }
+  .nav-greeting::before { animation: none; opacity: 0.5; }
 }
 
 .hero-eyebrow {
