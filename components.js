@@ -29,11 +29,28 @@
 const RESUME_PATH = 'assets/resume/Daniel_Townson_Resume_DesignSystems_2026.pdf';
 
 // The About card that opens from the name pill in the home nav.
-const ABOUT_COPY = [
-  'In 2012 I was working as a contract designer for a med tech company that made pacemakers and pain-management devices when I realized that I’d found my calling with my career - using my skills to help everyday people live happier, healthier lives. Since then I’ve pursued roles that live up to this guiding principle - from consumer fitness tracking apps, nutrition management features, and goal setting flows to cancer screening and treatment software, my work has helped millions improve their daily habits and conditions, while staying true to brand vision and mission.',
-  'I’ve worked with global brands Under Armour, Samsung, Garmin and Olympus, on cross-functional international teams building products that intersect hardware and software. From connected footwear to wearables to clinical software, I thrive at converging complex data into user friendly experiences.',
-  'Inherently a systems-thinker, I care about the space between a well-designed component and a well-designed system - the tokens, documentation and governance that help a product actually hold shape and stay true to it’s principles as it scales.',
-  'As a designer always on the forefront of what’s next, AI has become an indispensable partner in my work. I retain complete control over what it executes, using my systems-thinking approach to define guardrails and goals prior to hitting the prompt. This portfolio site is a clean example - I make all the design decisions and lean on Claude to set up the scaffolding and help with implementing wide-impact structural changes. The tokens are custom, the components all mine, and the UX defined in Figma first before wasting compute iterating on concepts until something sticks. I also take full responsibility for the flaws - typos, glitches, something off-kilter or long-winded. I am only human - but, so are you. And that’s who I build for - everyday people, just trying to live happier, healthier lives.',
+const ABOUT_SECTIONS = [
+  {
+    label: 'What I do',
+    icon: 'icon.about.flatstack.svg',
+    copy: [
+      'I build systems, interfaces and experiences for med tech products that merge hardware and software to help everyday people live happier, healthier lives.<br></br> Inherently a systems-thinker, I care about the space between a well-designed component and a well-designed system - the tokens, documentation and governance that help a product actually hold shape and stay true to it’s principles as it scales.',
+    ],
+  },
+  {
+    label: 'Who I do it for',
+    icon: 'icon.about.stack.svg',
+    copy: [
+      'I’ve worked with global brands Under Armour, Samsung, Garmin and Olympus, on cross-functional international teams building products that combine hardware and software. From connected footwear to wearables to clinical software, I excel at converging complex device-derived data into user friendly experiences.',
+    ],
+  },
+  {
+    label: 'How I work with AI',
+    icon: 'icon.about.layers.svg',
+    copy: [
+      'AI has become an indispensable partner in my work, helping me build products and execute ideas. I retain complete creative control over what it does though, using my systems-thinking approach to define guardrails and goals prior to hitting the prompt. This portfolio site is a good example - The tokens are custom, the components all mine, and the UX defined in Figma first before wasting compute iterating on concepts until something sticks. <br></br>I also take full responsibility for the flaws - typos, glitches, something off-kilter or long-winded. I am only human - but, so are you. And that’s who I build for - everyday people, just like you, trying to live happier, healthier lives. ',
+    ],
+  },
 ];
 
 class SiteNav extends HTMLElement {
@@ -77,7 +94,15 @@ class SiteNav extends HTMLElement {
               </button>
               <div class="nav-about-body" id="navAboutBody">
                 <div class="nav-about-copy">
-                  ${ABOUT_COPY.map(text => `<p>${text}</p>`).join('')}
+                  ${ABOUT_SECTIONS.map(({ label, icon, copy }, i) => `
+                    <section class="nav-about-section" style="--i: ${i}">
+                      <h3 class="nav-about-label">
+                        <img src="${depth}assets/images/${icon}" width="15" height="15" alt="" />
+                        ${label}
+                      </h3>
+                      ${copy.map(text => `<p>${text}</p>`).join('')}
+                    </section>
+                  `).join('')}
                 </div>
               </div>
             </div>
@@ -170,9 +195,10 @@ class SiteNav extends HTMLElement {
 
   // Opens on hover with a mouse; tap or Enter/Space toggles it on touch
   // and keyboard. Esc, tapping outside or tabbing away closes it. The
-  // card's closed width and open height depend on fonts and breakpoint,
-  // so they're measured into --about-closed-w / --about-open-h and CSS
-  // does the animating (style.css "About card").
+  // card's closed width and open height, and the width of the pills it
+  // stops short of, depend on fonts and breakpoint, so they're measured
+  // into --about-closed-w / --about-open-h / --about-right-w and CSS does
+  // the animating (style.css "About card").
   _initAbout() {
     const about = this.querySelector('.nav-about');
     if (!about) return;
@@ -180,6 +206,7 @@ class SiteNav extends HTMLElement {
     const card    = about.querySelector('.nav-about-card');
     const trigger = about.querySelector('.nav-greeting');
     const copy    = about.querySelector('.nav-about-copy');
+    const right   = this.querySelector('.nav-right');
     let timer;
 
     const setOpen = open => {
@@ -196,10 +223,12 @@ class SiteNav extends HTMLElement {
         about.style.setProperty('--about-closed-w', `${trigger.offsetWidth + 2}px`);
       }
       about.style.setProperty('--about-open-h', `${trigger.offsetHeight + copy.offsetHeight + 2}px`);
+      about.style.setProperty('--about-right-w', `${right.offsetWidth}px`);
     };
     const observer = new ResizeObserver(measure);
     observer.observe(trigger);
     observer.observe(copy);
+    observer.observe(right);
     measure();
 
     about.addEventListener('pointerenter', e => {

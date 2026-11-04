@@ -529,6 +529,10 @@ site-nav.is-about-open .nav-scrim {
   outline-offset: -4px;
 }
 
+.nav-greeting .accent {
+  color: var(--color-accent-default);
+}
+
 .nav-about-body {
   flex: 1 1 auto;
   width: calc(var(--about-open-w) - 2px);
@@ -541,36 +545,85 @@ site-nav.is-about-open .nav-scrim {
   overscroll-behavior: contain;
 }
 
+/* One column until the row can hold three; see the container queries
+   below. */
 .nav-about-copy {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+  column-gap: 32px;
+  row-gap: 24px;
+  padding: 4px var(--about-pad) var(--about-pad);
+  visibility: hidden;
+  transition: visibility 0s linear 0.12s;
+}
+
+.nav-about.is-open .nav-about-copy {
+  visibility: visible;
+  transition: visibility 0s;
+}
+
+/* Each section slides in from the left, the way the card grows, one
+   after another. They all leave together, quickly. */
+.nav-about-section {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  padding: 4px var(--about-pad) var(--about-pad);
+  gap: 8px;
   opacity: 0;
-  visibility: hidden;
-  transform: translateY(-8px);
-  transition:
-    opacity 0.12s ease,
-    transform 0.12s ease,
-    visibility 0s linear 0.12s;
+  transform: translateX(-16px);
+  transition: opacity 0.12s ease, transform 0.12s ease;
 }
 
-/* Drops in slightly from above, following the card as it grows down. */
-.nav-about.is-open .nav-about-copy {
+.nav-about.is-open .nav-about-section {
+  --about-delay: calc(0.12s + var(--i) * 0.08s);
   opacity: 1;
-  visibility: visible;
   transform: none;
   transition:
-    opacity 0.35s ease 0.12s,
-    transform 0.5s var(--about-ease) 0.12s,
-    visibility 0s;
+    opacity 0.35s ease var(--about-delay),
+    transform 0.5s var(--about-ease) var(--about-delay);
 }
 
-.nav-about-copy p {
+.nav-about-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-medium);
+  line-height: 1;
+  color: var(--color-fg-default);
+  text-transform: uppercase;
+}
+
+.nav-about-label img { flex-shrink: 0; }
+
+.nav-about-section p {
   font-size: var(--font-size-sm);
   line-height: var(--font-leading-normal);
   color: var(--color-fg-default);
   text-wrap: pretty;
+  padding-left:24px;
+}
+
+/* The space of one blank line between paragraphs in a section. */
+.nav-about-section p + p { margin-top: calc(var(--font-leading-normal) * 1em - 8px); }
+
+/* Three columns: the card stops 24px short of the pills on the right and
+   the columns line up under the name. */
+@container (min-width: 1000px) {
+  .nav-about { --about-open-w: calc(100cqw - var(--about-right-w, 190px) - 24px); }
+
+  .nav-about-copy {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    padding: 24px 24px 32px calc(var(--about-pad) + 44px);
+  }
+}
+
+@container (min-width: 1120px) {
+  .nav-about-copy {
+    column-gap: 64px;
+    padding: 24px calc(var(--about-pad) + 44px) 48px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -579,7 +632,11 @@ site-nav.is-about-open .nav-scrim {
   site-nav.is-about-open .nav-scrim,
   .nav-about.is-open .nav-about-card,
   .nav-about-copy,
-  .nav-about.is-open .nav-about-copy { transition: none; }
+  .nav-about.is-open .nav-about-copy,
+  .nav-about-section,
+  .nav-about.is-open .nav-about-section { transition: none; }
+
+  .nav-about-section { transform: none; }
 }
 
 .nav-avatar {
@@ -606,6 +663,16 @@ site-nav.is-about-open .nav-scrim {
 }
 
 site-nav .dct-btn--sm svg { width: var(--icon-md); height: var(--icon-md); }
+
+/* Pill icons pick up the accent on hover; a button's text label doesn't.
+   Mouse only, so the colour doesn't stick after a tap on touch screens. */
+.nav-pill .dct-btn svg,
+.nav-pill .theme-toggle svg { transition: color 0.15s ease; }
+
+@media (hover: hover) {
+  .nav-pill .dct-btn:hover svg,
+  .nav-pill .theme-toggle:hover svg { color: var(--color-accent-default); }
+}
 
 @media (max-width: 1023px) {
   site-nav { --nav-inset: 32px; }
@@ -918,7 +985,7 @@ html .contact-header h2 {
 }
 
 .hero-statement {
-  grid-column: span 5;
+  grid-column: span 6;
   font-family: var(--font-family-sans);
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-normal);
@@ -930,10 +997,22 @@ html .contact-header h2 {
   padding-left:56px
 }
 
+.hero-statement .accent-1 {
+  color: var(--color-accent-default);
+  font-weight: var(--font-weight-semibold);
+}
+.hero-statement .accent-2 {
+  color: var(--color-info-text-muted);
+  font-weight: var(--font-weight-semibold);
+}
+.hero-statement .accent-3 {
+  color: var(--color-green-500);
+  font-weight: var(--font-weight-semibold);
+}
 .hero-credentials {
   grid-column: 8 / span 6;
   display: flex;
-  gap: 56px;
+  gap: 88px;
   flex-wrap: wrap;
 }
 
@@ -954,10 +1033,18 @@ html .contact-header h2 {
 }
 
 .credential-label {
-  color: var(--color-fg-subtle);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-fg-default);
 }
 
+.credential-label img { flex-shrink: 0; }
+
+/* Lines the values up under the label text: the 15px icon + 8px gap,
+   rounded up to 24px as in Figma. */
 .credential-value {
+  padding-left: 24px;
   color: var(--color-fg-default);
 }
 
