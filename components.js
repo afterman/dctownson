@@ -31,22 +31,22 @@ const RESUME_PATH = 'assets/resume/Daniel_Townson_Resume_DesignSystems_2026.pdf'
 // The About card that opens from the name pill in the home nav.
 const ABOUT_SECTIONS = [
   {
-    label: 'Purpose',
+    label: 'About me',
     icon: 'icon.about.flatstack.svg',
     copy: [
       'I build systems, interfaces and experiences for med tech products that merge hardware and software to help everyday people live happier, healthier lives.',
-      ' Inherently a systems-thinker, I care about the space between a well-designed component and a well-designed system - the tokens, documentation and governance that help a product actually hold shape and stay true to its principles as it scales.',
+      'Inherently a systems-thinker, I care about the space between a well-designed component and a well-designed system - the tokens, documentation and governance that help a product actually hold shape and stay true to its principles as it scales.',
     ],
   },
   {
-    label: 'Partners',
+    label: 'My experience',
     icon: 'icon.about.stack.svg',
     copy: [
       'I’ve worked with global brands Under Armour, Samsung, Garmin and Olympus, on cross-functional international teams building products that combine hardware and software. From connected footwear to wearables to clinical software, I excel at converging complex device-derived data into user friendly experiences.',
     ],
   },
   {
-    label: 'Process',
+    label: 'Working with AI',
     icon: 'icon.about.layers.svg',
     copy: [
       'AI has become an indispensable partner in my work, helping me build products and execute ideas. I retain complete creative control over what it does though, using my systems-thinking approach to define guardrails and goals prior to hitting the prompt.',
