@@ -49,7 +49,7 @@ const ABOUT_SECTIONS = [
     label: 'Working with AI',
     icon: 'icon.about.layers.svg',
     copy: [
-      'AI has become an indispensable partner in my work, helping me build products and execute ideas. I retain complete creative control over what it does though, using my systems-thinking approach to define guardrails and goals prior to hitting the prompt.',
+      'AI has become an indispensable partner in my work, helping me execute ideas to build products while retaining complete creative control over what it does. My systems-thinking approach defines guardrails and goals prior to hitting the prompt.',
       'This portfolio site is a good example - the tokens are custom, the components all mine, and the UX defined in Figma first before wasting compute iterating on concepts until something sticks. I also take full responsibility for the flaws - typos, glitches, something off-kilter or long-winded. I am only human - but, so are you. And that’s who I build for - everyday people, just like you, trying to live happier, healthier lives.',
     ],
   },
