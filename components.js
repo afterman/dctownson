@@ -31,26 +31,26 @@ const RESUME_PATH = 'assets/resume/Daniel_Townson_Resume_DesignSystems_2026.pdf'
 // The About card that opens from the name pill in the home nav.
 const ABOUT_SECTIONS = [
   {
-    label: 'About me',
+    label: 'What I do',
     icon: 'icon.about.flatstack.svg',
     copy: [
       'I build systems, interfaces and experiences for med tech products that merge hardware and software to help everyday people live happier, healthier lives.',
-      'Inherently a systems-thinker, I care about the space between a well-designed component and a well-designed system - the tokens, documentation and governance that help a product actually hold shape and stay true to its principles as it scales.',
+      'Inherently a systems-thinker, I understand the space between a well-designed component and a well-designed system, as well as the tokens, documentation and governance that help a product actually hold shape and stay true to its principles as it scales.',
     ],
   },
   {
-    label: 'My experience',
+    label: 'Who I work with',
     icon: 'icon.about.stack.svg',
     copy: [
-      'I’ve worked with global brands Under Armour, Samsung, Garmin and Olympus, on cross-functional international teams building products that intersect hardware and software. From connected footwear to wearables to clinical software, I excel at converging complex device-derived data into user friendly experiences.',
+      'I’ve worked with global brands Under Armour, Samsung, Garmin and Olympus, on cross-functional international teams building experiences for products that sync hardware to software.',
+      'From connected footwear to wearables to clinical software, I excel at converging complex device-derived data into user friendly experiences.',
     ],
   },
   {
-    label: 'Working with AI',
+    label: 'How i work with AI',
     icon: 'icon.about.layers.svg',
     copy: [
-      'AI has become an indispensable partner in my work, helping me execute ideas to build products while retaining complete creative control over what it does. My systems-thinking approach defines guardrails and goals prior to hitting the prompt.',
-      'This portfolio site is a good example - the tokens are custom, the components all mine, and the UX defined in Figma first before wasting compute iterating on concepts until something sticks. I also take full responsibility for the flaws - typos, glitches, something off-kilter or long-winded. I am only human - but, so are you. And that’s who I build for - everyday people, just like you, trying to live happier, healthier lives.',
+      'AI has become an indispensable partner in my work, helping me build products and execute ideas. I retain complete creative control over what it does though, using my systems-thinking approach to define guardrails and goals prior to hitting the prompt. I also take full responsibility for the flaws - typos, glitches, something off-kilter or long-winded. I am only human - but, so are you. And that’s who I build for - everyday people, just like you, trying to live happier, healthier lives.',
     ],
   },
 ];
