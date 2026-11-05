@@ -42,7 +42,7 @@ const ABOUT_SECTIONS = [
     label: 'My experience',
     icon: 'icon.about.stack.svg',
     copy: [
-      'I’ve worked with global brands Under Armour, Samsung, Garmin and Olympus, on cross-functional international teams building products that combine hardware and software. From connected footwear to wearables to clinical software, I excel at converging complex device-derived data into user friendly experiences.',
+      'I’ve worked with global brands Under Armour, Samsung, Garmin and Olympus, on cross-functional international teams building products that intersect hardware and software. From connected footwear to wearables to clinical software, I excel at converging complex device-derived data into user friendly experiences.',
     ],
   },
   {
