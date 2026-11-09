@@ -32,17 +32,18 @@ body {
 
 /* ── Background pattern — <bg-pattern> ─────────────────────
    Fixed layer behind the page (position: fixed rather than
-   background-attachment: fixed, which iOS Safari ignores). The
-   SVG sits on the left, sized off the viewport height and pushed
-   past the left and top edges so it bleeds off them. --pattern-apex-x
-   / --pattern-apex-y place the fan's apex (the point on the right
-   where the lines meet) in the viewport; --pattern-height sets the
-   size; --pattern-rotate turns it around the apex (clockwise). Line color comes from a token via currentColor. */
+   background-attachment: fixed, which iOS Safari ignores). The lines
+   spread out from past the top-left corner. --pattern-width sizes it
+   off the page width, with a floor so phones keep open spacing;
+   --pattern-x / -y move it; --pattern-rotate turns it around the
+   top-left corner (clockwise). The lines themselves are set in
+   components.js (BG_PATTERN). Line color comes from a token via
+   currentColor. */
 bg-pattern {
-  --pattern-height: 130vh;
-  --pattern-apex-x: 40vw;
-  --pattern-apex-y: 30vh;
-  --pattern-rotate: -60deg;
+  --pattern-width: max(80vw, 720px);
+  --pattern-x: 0px;
+  --pattern-y: 0px;
+  --pattern-rotate: 0deg;
   position: fixed;
   inset: 0;
   z-index: -1;
@@ -52,32 +53,32 @@ bg-pattern {
   transition: color 0.2s ease;
 }
 
-/* The apex is at (1520, 906) in the 1562 × 1812 viewBox, i.e.
-   97.3% across and 50% down — the offsets below put that point at
-   --pattern-apex-x / -y. */
+/* The lines run well past the viewBox, so overflow stays visible or
+   they'd be cut off in a straight line. */
 bg-pattern svg {
+  overflow: visible;
   position: absolute;
-  height: var(--pattern-height);
-  width: auto;
-  aspect-ratio: 1562 / 1812;
-  left: calc(var(--pattern-apex-x) - var(--pattern-height) * 1520 / 1812);
-  top: calc(var(--pattern-apex-y) - var(--pattern-height) * 0.5);
+  left: var(--pattern-x);
+  top: var(--pattern-y);
+  width: var(--pattern-width);
+  height: auto;
+  aspect-ratio: 1440 / 1622;
   transform: rotate(var(--pattern-rotate));
-  transform-origin: 97.31% 50%;   /* turn around the apex so it stays put */
+  transform-origin: 0 0;
 }
 
-/* Fan-in on load. Every line rotates into place around one shared
-   pivot near the apex on the right (in the SVG's 1562 × 1812 units),
-   starting from --fan-shift to the left. Each line starts turned
-   back by its own tilt (1.5° per line, matching the Figma build) plus
-   --fan-base, so they open out like a fan. line-01 leads; the rest
+/* Fan-in on load. The lines start bunched together and open out like a
+   fan around one shared pivot past the top-left corner (in the SVG's
+   1440-wide units), starting from --fan-shift to the left. Each line
+   starts turned back by its own spread (--fan-step matches the angle
+   between lines in BG_PATTERN) plus --fan-base. line-01 leads; the rest
    follow --fan-stagger apart. 19 × 30ms + 900ms ≈ 1.5s total, so the
    pattern settles just after the page content (~1.05s). */
 bg-pattern g {
-  --fan-pivot: 1520px 906px;
-  --fan-shift: -110px;        /* user units: ≈120 screen px at 1440 × 900 */
+  --fan-pivot: -150px -200px;
+  --fan-shift: -110px;
   --fan-base: 4deg;
-  --fan-step: 1.5deg;
+  --fan-step: 1.58deg;
   --fan-stagger: 30ms;
   --fan-angle: calc(var(--fan-base) + var(--i) * var(--fan-step));
   transform-box: view-box;
@@ -117,19 +118,19 @@ h2, h3, h4, h5, h6 { color: var(--color-fg-muted); }
 .page {
   max-width: 1440px;
   margin: 0 auto;
-  padding: 0 56px;
-  --grid-gutter: 56px;
+  padding: 0 12px;
+  --grid-gutter: 8px;
 }
 
 @media (max-width: 1023px) {
   .page {
-    padding: 0 32px;
+    padding: 0 12px;
   }
 }
 
 @media (max-width: 767px) {
   .page {
-    padding: 0 24px;
+    padding: 0 12px;
   }
 }
 
@@ -396,7 +397,7 @@ site-nav {
 .nav-inner {
   max-width: 1440px;
   margin: 0 auto;
-  padding: 0 56px;
+  padding: 0 12px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -428,288 +429,18 @@ site-nav {
 .nav-pill--icon,
 .nav-pill--back { padding: 0 11px; }
 
-/* ── About card — the name pill grows into it ──────────────
-   .nav-about holds the pill's place in the nav; the card is absolute
-   on top of it, so growing it never moves anything else. Its copy is a
-   fixed width and doesn't reflow, so animating width and height only
-   repaints the card itself. The heavy effects stay out of the way:
-   the blur drops as soon as it opens and returns once it has closed,
-   and the large shadow fades in after it has finished growing.
-   components.js measures --about-closed-w and --about-open-h and
-   toggles .is-open. */
-.home-nav .nav-inner { container-type: inline-size; }
+/* The name pill: avatar and name. */
+.nav-name { gap: 12px; }
 
-/* Dims the page behind the open card. It sits in the nav's stacking
-   context, so the card and the other pills stay above it. It catches
-   taps while open, so closing the card on touch can't also follow a
-   link underneath. */
-.nav-scrim {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.4);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
-}
-
-/* Eases in slower than it leaves, so the dim settles behind the card
-   rather than snapping on. */
-site-nav.is-about-open .nav-scrim {
-  opacity: 1;
-  pointer-events: auto;
-  transition: opacity 0.6s ease-in-out;
-}
-
-.nav-about {
-  --about-open-w: min(735px, 100cqw);
-  --about-ease: cubic-bezier(0.22, 1, 0.36, 1);
-  --about-time: 0.5s;
-  --about-pad: 16px;   /* the avatar's inset — the copy's edges match it */
-  position: relative;
-  z-index: 1;
-  flex-shrink: 0;
-  width: var(--about-closed-w, 180px);
-  height: 56px;
-}
-
-.nav-about-card {
-  position: absolute;
-  top: 0;
-  left: 0;
-  flex-direction: column;
-  align-items: flex-start;
-  width: var(--about-closed-w, 180px);
-  height: 56px;
-  padding: 0;
-  overflow: hidden;
-  transition:
-    width var(--about-time) var(--about-ease),
-    height var(--about-time) var(--about-ease),
-    background-color 0.15s ease,
-    border-color 0.2s ease,
-    box-shadow 0.15s ease,
-    backdrop-filter 0s linear var(--about-time),
-    -webkit-backdrop-filter 0s linear var(--about-time);
-}
-
-.nav-about.is-open .nav-about-card {
-  width: var(--about-open-w);
-  height: min(var(--about-open-h, 600px), 100dvh - 72px);
-  background: var(--color-bg-default);
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
-  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.25), 0 24px 64px rgba(0, 0, 0, 0.16);
-  transition:
-    width var(--about-time) var(--about-ease),
-    height var(--about-time) var(--about-ease),
-    background-color 0.15s ease,
-    border-color 0.2s ease,
-    box-shadow 0.3s ease 0.3s;
-}
-
-.nav-greeting {
-  display: flex;
-  flex-shrink: 0;
-  align-items: center;
-  gap: 12px;
-  width: max-content;
-  height: 54px;
-  padding: 0 var(--about-pad);
-  border: 0;
-  border-radius: var(--radius-3xl);
-  background: none;
-  color: inherit;
-  font: inherit;
-  text-align: left;
-  cursor: default;
-}
-
-.nav-greeting:focus-visible {
-  outline: 2px solid var(--color-accent-default);
-  outline-offset: -4px;
-}
-
-.nav-greeting .accent {
-  color: var(--color-accent-default);
-}
-
-.nav-about-body {
-  flex: 1 1 auto;
-  width: calc(var(--about-open-w) - 2px);
-  min-height: 0;
-  overflow: hidden;
-}
-
-.nav-about.is-settled .nav-about-body {
-  overflow-y: auto;
-  overscroll-behavior: contain;
-}
-
-/* One column until the row can hold two; see the container queries
-   below. */
-.nav-about-copy {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  align-items: start;
-  column-gap: 32px;
-  row-gap: 24px;
-  padding: 4px var(--about-pad) var(--about-pad);
-  visibility: hidden;
-  transition: visibility 0s linear 0.12s;
-}
-
-.nav-about.is-open .nav-about-copy {
-  visibility: visible;
-  transition: visibility 0s;
-}
-
-/* Each section slides in from the left, the way the card grows, one
-   after another. They all leave together, quickly. */
-.nav-about-section {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  opacity: 0;
-  transform: translateX(-16px);
-  transition: opacity 0.12s ease, transform 0.12s ease;
-}
-
-.nav-about.is-open .nav-about-section {
-  --about-delay: calc(0.12s + var(--i) * 0.08s);
-  opacity: 1;
-  transform: none;
-  transition:
-    opacity 0.35s ease var(--about-delay),
-    transform 0.5s var(--about-ease) var(--about-delay);
-}
-
-.nav-about-label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-family: var(--font-family-sans);
-  font-size: var(--font-size-caption);
-  font-weight: var(--font-weight-medium);
-  line-height: 1;
-  color: var(--color-fg-default);
-  text-transform: uppercase;
-}
-
-.nav-about-label img { flex-shrink: 0; }
-
-.nav-about-section p {
-  font-size: var(--font-size-sm);
-  line-height: var(--font-leading-normal);
-  color: var(--color-fg-default);
-  text-wrap: pretty;
-  padding-left:24px;
-}
-
-/* The space of one blank line between paragraphs in a section. */
-.nav-about-section p + p { margin-top: calc(var(--font-leading-normal) * 1em - 8px); }
-
-/* Two columns with the last section running full width below them: the
-   card stops 24px short of the pills on the right and the columns line
-   up under the name. */
-@container (min-width: 1000px) {
-  .nav-about { --about-open-w: calc(100cqw - var(--about-right-w, 190px) - 24px); }
-
-  .nav-about-copy {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    row-gap: 32px;
-    padding: 24px 24px 32px calc(var(--about-pad) + 44px);
-  }
-
-  .nav-about-section:last-child { grid-column: 1 / -1; }
-}
-
-@container (min-width: 1120px) {
-  .nav-about-copy {
-    column-gap: 64px;
-    row-gap: 48px;
-    padding: 24px calc(var(--about-pad) + 44px) 48px;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .nav-scrim,
-  .nav-about-card,
-  site-nav.is-about-open .nav-scrim,
-  .nav-about.is-open .nav-about-card,
-  .nav-about-copy,
-  .nav-about.is-open .nav-about-copy,
-  .nav-about-section,
-  .nav-about.is-open .nav-about-section { transition: none; }
-
-  .nav-about-section { transform: none; }
-}
-
-/* A 2px ring: the gradient behind the photo shows through the padding.
-   Gradients can't transition, but a registered colour can, so the ring
-   blends to solid accent by animating the gradient's end colour as the
-   About card opens. */
-@property --avatar-ring-end {
-  syntax: '<color>';
-  inherits: false;
-  initial-value: transparent;
-}
-
+/* A 2px ring: the gradient behind the photo shows through the padding. */
 .nav-avatar {
-  --avatar-ring-end: var(--color-fg-muted);
-  position: relative;
   width: 32px;
   height: 32px;
   padding: 2px;
   border-radius: var(--radius-full);
   object-fit: cover;
-  background: linear-gradient(135deg, var(--color-accent-default), var(--avatar-ring-end));
+  background: linear-gradient(135deg, var(--color-accent-default), var(--color-fg-muted));
   flex-shrink: 0;
-  transition: --avatar-ring-end var(--about-time, 0.5s) ease;
-}
-
-.nav-about.is-open .nav-avatar { --avatar-ring-end: var(--color-accent-default); }
-
-/* The shimmer: a soft glow behind the avatar with two brighter arcs that
-   travel around the ring while the whole glow gently pulses. It only
-   animates rotation and opacity, so it stays cheap to run. */
-.nav-greeting { position: relative; isolation: isolate; }
-
-.nav-greeting::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: var(--about-pad);
-  z-index: -1;
-  width: 38px;
-  height: 38px;
-  margin: -19px 0 0 -3px;
-  border-radius: var(--radius-full);
-  background: conic-gradient(
-    var(--color-accent-default),
-    transparent 30%,
-    var(--color-accent-default) 50%,
-    transparent 80%,
-    var(--color-accent-default)
-  );
-  filter: blur(3px);
-  pointer-events: none;
-  animation:
-    avatar-shimmer-spin 5s linear infinite,
-    avatar-shimmer-pulse 2.5s ease-in-out infinite;
-}
-
-@keyframes avatar-shimmer-spin {
-  to { transform: rotate(360deg); }
-}
-
-@keyframes avatar-shimmer-pulse {
-  0%, 100% { opacity: 0.35; }
-  50%      { opacity: 0.7; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .nav-avatar { transition: none; }
-  .nav-greeting::before { animation: none; opacity: 0.5; }
 }
 
 .hero-eyebrow {
@@ -728,19 +459,28 @@ site-nav.is-about-open .nav-scrim {
 
 site-nav .dct-btn--sm svg { width: var(--icon-md); height: var(--icon-md); }
 
-/* Pill icons pick up the accent on hover; a button's text label doesn't.
+/* On home the icons sit straight on the page, without a pill. The nav
+   ignores clicks so the page under its gaps stays usable; the row takes
+   them back. */
+.home-nav .nav-links {
+  height: 56px;
+  padding: 0 12px;
+  pointer-events: auto;
+}
+
+/* Nav icons pick up the accent on hover; a button's text label doesn't.
    Mouse only, so the colour doesn't stick after a tap on touch screens. */
-.nav-pill .dct-btn svg,
-.nav-pill .theme-toggle svg { transition: color 0.15s ease; }
+site-nav .dct-btn svg,
+site-nav .theme-toggle svg { transition: color 0.15s ease; }
 
 @media (hover: hover) {
-  .nav-pill .dct-btn:hover svg,
-  .nav-pill .theme-toggle:hover svg { color: var(--color-accent-default); }
+  site-nav .dct-btn:hover svg,
+  site-nav .theme-toggle:hover svg { color: var(--color-accent-default); }
 }
 
 @media (max-width: 1023px) {
-  site-nav { --nav-inset: 32px; }
-  .nav-inner { padding: 0 32px; }
+  site-nav { --nav-inset: 24px; }
+  .nav-inner { padding: 0 24px; }
 }
 
 @media (max-width: 767px) {
@@ -752,8 +492,8 @@ site-nav .dct-btn--sm svg { width: var(--icon-md); height: var(--icon-md); }
    first pill drops to its icon: the avatar on home, the back
    arrow on case studies (its aria-label still names it). */
 @media (max-width: 479px) {
-  .nav-about { --about-pad: 11px; }
-  .nav-about:not(.is-open) .hero-eyebrow { display: none; }
+  .nav-name { padding: 0 11px; }
+  .nav-name .hero-eyebrow { display: none; }
   .nav-pill--back .dct-btn { width: 32px; padding: 0; }
   .nav-pill--back .dct-btn-label { display: none; }
 }
@@ -1045,20 +785,32 @@ html .contact-header h2 {
   position: relative;
   overflow: hidden;
   align-items: start;
-  padding: 120px 0 80px;
+  padding: 120px 0 120px;
 }
 
 .hero-statement {
-  grid-column: span 7;
+  grid-column: 2 / span 6;
   font-family: var(--font-family-sans);
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-normal);
   line-height: 1.4;
   letter-spacing: var(--font-tracking-normal);
   color: var(--color-fg-muted);
-  max-width: 566px;
   text-wrap: pretty;
-  padding-left:56px
+  max-width:640px;
+  padding-bottom:24px;
+}
+
+.hero-subline {
+  grid-column: 2 / span 6;
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-normal);
+  line-height: 1.4;
+  letter-spacing: var(--font-tracking-normal);
+  color: var(--color-fg-subtle);
+  text-wrap: pretty;
+  max-width:640px;
 }
 
 .hero-statement .accent-1 {
@@ -1073,29 +825,6 @@ html .contact-header h2 {
   color: var(--color-green-500);
   font-weight: var(--font-weight-semibold);
 }
-.hero-credentials {
-  grid-column: 8 / span 6;
-  display: flex;
-  gap: 88px;
-  flex-wrap: wrap;
-}
-
-.credential-group {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.credential-label,
-.credential-value {
-  font-family: var(--font-family-sans);
-  font-size: var(--font-size-caption);
-  font-weight: var(--font-weight-medium);
-  letter-spacing: var(--font-tracking-normal);
-  line-height: normal;
-  white-space: nowrap;
-}
-
 .section-label {
   display: flex;
   align-items: center;
@@ -1105,28 +834,18 @@ html .contact-header h2 {
 
 .section-label img { flex-shrink: 0; }
 
-/* Lines the values up under the label text: the 15px icon + 8px gap,
-   rounded up to 24px as in Figma. */
-.credential-value {
-  padding-left: 24px;
-  color: var(--color-fg-default);
-}
-
 @media (max-width: 1023px) {
   .hero-statement,
-  .hero-credentials {
-    grid-column: span 4;
+  .hero-subline {
+    grid-column: 1 / span 6;
+    padding-left:32px;
   }
 }
 
 @media (max-width: 767px) {
   .hero-masthead {
     padding: 40px 0 56px;
-    row-gap: 32px;
-  }
-
-  .hero-credentials {
-    gap: 40px;
+    row-gap: 12px;
   }
 }
 
@@ -1158,14 +877,14 @@ html .contact-header h2 {
    matter how many columns its card spans. */
 .card-grid {
   container-type: inline-size;
-  row-gap: 64px;
+  row-gap: 8px;
   margin-bottom: 80px;
   margin-top: 32px;
 }
 
 @media (max-width: 767px) {
   .card-grid {
-    row-gap: 32px;
+    row-gap: 12px;
   }
 }
 
@@ -1192,8 +911,6 @@ html .contact-header h2 {
   height: 22cqi;
   border-radius: var(--radius-2xl);
   overflow: hidden;
-  border: 1px solid var(--color-border-default);
-  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
 }
 
 .cs-card-image {

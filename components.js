@@ -28,33 +28,6 @@
 // link here — swap the filename once when a new résumé ships.
 const RESUME_PATH = 'assets/resume/Daniel_Townson_Resume_DesignSystems_2026.pdf';
 
-// The About card that opens from the name pill in the home nav.
-const ABOUT_SECTIONS = [
-  {
-    label: 'What I do',
-    icon: 'icon.about.flatstack.svg',
-    copy: [
-      'I build systems, interfaces and experiences for med tech products that merge hardware and software to help everyday people live happier, healthier lives.',
-      'Inherently a systems-thinker, I understand the space between a well-designed component and a well-designed system, as well as the tokens, documentation and governance that help a product actually hold shape and stay true to its principles as it scales.',
-    ],
-  },
-  {
-    label: 'Who I work with',
-    icon: 'icon.about.stack.svg',
-    copy: [
-      'I’ve worked with global brands Under Armour, Samsung, Garmin and Olympus, on cross-functional international teams building experiences for products that sync hardware to software.',
-      'From connected footwear to wearables to clinical software, I excel at converging complex device-derived data into user friendly experiences.',
-    ],
-  },
-  {
-    label: 'How i work with AI',
-    icon: 'icon.about.layers.svg',
-    copy: [
-      'AI has become an indispensable partner in my work, helping me build products and execute ideas. I retain complete creative control over what it does though, using my systems-thinking approach to define guardrails and goals prior to hitting the prompt. I also take full responsibility for the flaws - typos, glitches, something off-kilter or long-winded. I am only human - but, so are you. And that’s who I build for - everyday people, just like you, trying to live happier, healthier lives.',
-    ],
-  },
-];
-
 class SiteNav extends HTMLElement {
   connectedCallback() {
     const type  = this.getAttribute('type') || 'home';
@@ -66,7 +39,6 @@ class SiteNav extends HTMLElement {
       : this._caseStudyNav(title, depth);
 
     this._initTheme();
-    this._initAbout();
   }
 
   _themeToggleHTML() {
@@ -85,32 +57,14 @@ class SiteNav extends HTMLElement {
 
   _homeNav(depth) {
     return `
-      <div class="nav-scrim"></div>
       <nav class="home-nav anim anim-1">
         <div class="nav-inner">
-          <div class="nav-about anim anim-2">
-            <div class="nav-pill nav-about-card">
-              <button class="nav-greeting" type="button" aria-expanded="false" aria-controls="navAboutBody" aria-label="About Daniel C Townson">
-                <img class="nav-avatar" src="${depth}assets/images/DCT-Selfie-BW.png" alt="" />
-                <span class="hero-eyebrow">Daniel C Townson</span>
-              </button>
-              <div class="nav-about-body" id="navAboutBody">
-                <div class="nav-about-copy">
-                  ${ABOUT_SECTIONS.map(({ label, icon, copy }, i) => `
-                    <section class="nav-about-section" style="--i: ${i}">
-                      <h3 class="nav-about-label">
-                        <img src="${depth}assets/images/${icon}" width="15" height="15" alt="" />
-                        ${label}
-                      </h3>
-                      ${copy.map(text => `<p>${text}</p>`).join('')}
-                    </section>
-                  `).join('')}
-                </div>
-              </div>
-            </div>
+          <div class="nav-pill nav-name anim anim-2">
+            <img class="nav-avatar" src="${depth}assets/images/DCT-Selfie-BW.png" alt="" />
+            <span class="hero-eyebrow">Daniel C Townson</span>
           </div>
           <div class="nav-right">
-            <div class="nav-pill nav-links">
+            <div class="nav-links">
               <dct-button variant="ghost" size="sm" icon-only href="https://www.linkedin.com/in/danieltownson/" target="_blank" rel="noopener" data-tip="LinkedIn" aria-label="LinkedIn">
                 <svg slot="leading" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M8 11v5" />
@@ -135,8 +89,6 @@ class SiteNav extends HTMLElement {
                   <path d="M9 17l6 0" />
                 </svg>
               </dct-button>
-            </div>
-            <div class="nav-pill nav-pill--icon">
               ${this._themeToggleHTML()}
             </div>
           </div>
@@ -193,84 +145,6 @@ class SiteNav extends HTMLElement {
         </div>
       </nav>
     `;
-  }
-
-  // Opens on hover with a mouse; tap or Enter/Space toggles it on touch
-  // and keyboard. Esc, tapping outside or tabbing away closes it. The
-  // card's closed width and open height, and the width of the pills it
-  // stops short of, depend on fonts and breakpoint, so they're measured
-  // into --about-closed-w / --about-open-h / --about-right-w and CSS does
-  // the animating (style.css "About card").
-  _initAbout() {
-    const about = this.querySelector('.nav-about');
-    if (!about) return;
-
-    const card    = about.querySelector('.nav-about-card');
-    const trigger = about.querySelector('.nav-greeting');
-    const copy    = about.querySelector('.nav-about-copy');
-    const right   = this.querySelector('.nav-right');
-    let timer;
-
-    const setOpen = open => {
-      clearTimeout(timer);
-      if (open === about.classList.contains('is-open')) return;
-      about.classList.toggle('is-open', open);
-      about.classList.remove('is-settled');
-      this.classList.toggle('is-about-open', open);
-      trigger.setAttribute('aria-expanded', open);
-    };
-
-    const measure = () => {
-      if (!about.classList.contains('is-open')) {
-        about.style.setProperty('--about-closed-w', `${trigger.offsetWidth + 2}px`);
-      }
-      about.style.setProperty('--about-open-h', `${trigger.offsetHeight + copy.offsetHeight + 2}px`);
-      about.style.setProperty('--about-right-w', `${right.offsetWidth}px`);
-    };
-    const observer = new ResizeObserver(measure);
-    observer.observe(trigger);
-    observer.observe(copy);
-    observer.observe(right);
-    measure();
-
-    about.addEventListener('pointerenter', e => {
-      if (e.pointerType !== 'mouse') return;
-      clearTimeout(timer);
-      timer = setTimeout(() => setOpen(true), 60);
-    });
-    about.addEventListener('pointerleave', e => {
-      if (e.pointerType !== 'mouse') return;
-      clearTimeout(timer);
-      timer = setTimeout(() => setOpen(false), 200);
-    });
-
-    // A mouse has already opened it by hovering, so its click does nothing.
-    let lastPointer = '';
-    trigger.addEventListener('pointerdown', e => { lastPointer = e.pointerType; });
-    trigger.addEventListener('click', e => {
-      if (e.detail > 0 && lastPointer === 'mouse') return;
-      setOpen(!about.classList.contains('is-open'));
-    });
-
-    about.addEventListener('keydown', e => {
-      if (e.key !== 'Escape' || !about.classList.contains('is-open')) return;
-      setOpen(false);
-      trigger.focus();
-    });
-    about.addEventListener('focusout', e => {
-      if (e.relatedTarget && !about.contains(e.relatedTarget)) setOpen(false);
-    });
-    document.addEventListener('pointerdown', e => {
-      if (!about.contains(e.target)) setOpen(false);
-    });
-
-    // Only let long copy scroll once the card has finished growing, or a
-    // scrollbar would flash and reflow the text mid-animation.
-    card.addEventListener('transitionend', e => {
-      if (e.target === card && e.propertyName === 'height' && about.classList.contains('is-open')) {
-        about.classList.add('is-settled');
-      }
-    });
   }
 
   _initTheme() {
@@ -361,49 +235,47 @@ customElements.define('site-footer', SiteFooter);
 
 /* ============================================================
    <bg-pattern> — fixed background line pattern
-   Figma: "custom pattern" frame (node 2849:1736), lines line-01
-   (innermost) to line-20. Each line is a rounded square rotated
-   about its top-left corner; the rows below are [x, y, size,
-   tilt°] in the frame's 1562 × 1812 coordinate space, read from
-   the Figma layer positions. Rendered as inline SVG (not a CSS
-   mask) so each line can animate on its own — see style.css
-   "Background pattern" for the fan-in / fan-out motion.
+   20 nested rounded squares whose lines spread out like rays from the
+   top-left corner. Units are CSS px on a 1440-wide page; style.css
+   "Background pattern" scales and places the whole thing. Each value
+   below is the first line's, plus a step per line, so the spacing and
+   spread can be tuned from one number:
+
+     corner   the right-hand corner of the line, where the ray ends
+     heading  the ray's angle in degrees, clockwise from horizontal
+     size     the length of the square's sides
+
+   Rendered as inline SVG (not a CSS mask) so each line can animate on
+   its own — see style.css for the fan-in motion.
 
    Usage: <bg-pattern aria-hidden="true"></bg-pattern> as the first
    child of <body>.
    ============================================================ */
-const BG_PATTERN_LINES = [
-  [876.62, 0.0, 601, 0],
-  [835.83, 43.45, 630, 1.5],
-  [793.88, 92.03, 659, 3],
-  [750.96, 142.61, 688, 4.5],
-  [706.74, 197.45, 717, 6],
-  [661.7, 254.37, 746, 7.5],
-  [617.43, 315.06, 775, 9],
-  [570.58, 378.47, 804, 10.5],
-  [524.66, 445.71, 833, 12],
-  [478.24, 515.18, 862, 13.5],
-  [430.42, 587.17, 891, 15],
-  [383.51, 662.12, 920, 16.5],
-  [335.38, 739.64, 949, 18],
-  [287.37, 820.43, 978, 19.5],
-  [238.97, 902.59, 1007, 21],
-  [190.87, 988.05, 1036, 22.5],
-  [143.52, 1074.61, 1065, 24],
-  [95.67, 1164.78, 1094, 25.5],
-  [47.8, 1256.34, 1123, 27],
-  [0.0, 1349.3, 1152, 28.5]
-];
+const BG_PATTERN = {
+  lines: 20,
+  corner: [91, 447],
+  cornerStep: [56.8, 2.9],
+  heading: 56,
+  headingStep: -1.58,
+  size: 761,
+  sizeStep: 35,
+  radius: 30,
+};
 
 class BgPattern extends HTMLElement {
   connectedCallback() {
-    const rects = BG_PATTERN_LINES.map(([x, y, size, tilt], i) =>
+    const p = BG_PATTERN;
+    const rects = Array.from({ length: p.lines }, (_, i) => {
+      const x = p.corner[0] + i * p.cornerStep[0];
+      const y = p.corner[1] + i * p.cornerStep[1];
+      const size = p.size + i * p.sizeStep;
+      const heading = p.heading + i * p.headingStep;
       // The <g> carries the animation: a CSS transform on the <rect>
-      // itself would replace its tilt (the transform attribute).
-      `<g style="--i: ${i}"><rect x="${x}" y="${y}" width="${size}" height="${size}" rx="22" transform="rotate(${-tilt} ${x} ${y})" /></g>`
-    ).join('');
+      // itself would replace its rotation (the transform attribute).
+      return `<g style="--i: ${i}"><rect x="${x - size}" y="${y}" width="${size}" height="${size}" rx="${p.radius}" transform="rotate(${heading} ${x} ${y})" /></g>`;
+    }).join('');
     this.innerHTML = `
-      <svg viewBox="0 0 1562 1812" preserveAspectRatio="xMaxYMid meet" fill="none" stroke="currentColor" stroke-width="2" focusable="false">
+      <svg viewBox="0 0 1440 1622" preserveAspectRatio="xMinYMin meet" fill="none" stroke="currentColor" stroke-width="1.5" focusable="false">
         ${rects}
       </svg>
     `;
