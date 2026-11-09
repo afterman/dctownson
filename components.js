@@ -55,14 +55,10 @@ class SiteNav extends HTMLElement {
     `;
   }
 
-  _homeNav(depth) {
+  // LinkedIn, email, résumé and the theme toggle: one row of bare icons
+  // on the right of both navs.
+  _navRightHTML(depth) {
     return `
-      <nav class="home-nav anim anim-1">
-        <div class="nav-inner">
-          <div class="nav-pill nav-name anim anim-2">
-            <img class="nav-avatar" src="${depth}assets/images/DCT-Selfie-BW.png" alt="" />
-            <span class="hero-eyebrow">Daniel C Townson</span>
-          </div>
           <div class="nav-right">
             <div class="nav-links">
               <dct-button variant="ghost" size="sm" icon-only href="https://www.linkedin.com/in/danieltownson/" target="_blank" rel="noopener" data-tip="LinkedIn" aria-label="LinkedIn">
@@ -92,6 +88,18 @@ class SiteNav extends HTMLElement {
               ${this._themeToggleHTML()}
             </div>
           </div>
+    `;
+  }
+
+  _homeNav(depth) {
+    return `
+      <nav class="home-nav anim anim-1">
+        <div class="nav-inner">
+          <div class="nav-pill nav-name anim anim-2">
+            <img class="nav-avatar" src="${depth}assets/images/DCT-Selfie-BW.png" alt="" />
+            <span class="hero-eyebrow">Daniel C Townson</span>
+          </div>
+          ${this._navRightHTML(depth)}
         </div>
       </nav>
     `;
@@ -111,37 +119,7 @@ class SiteNav extends HTMLElement {
             <span slot="leading">Back to Work</span>
           </dct-button>
           </div>
-          <div class="nav-right">
-            <div class="nav-pill nav-links">
-              <dct-button variant="ghost" size="sm" icon-only href="https://www.linkedin.com/in/danieltownson/" target="_blank" rel="noopener" data-tip="LinkedIn" aria-label="LinkedIn">
-                <svg slot="leading" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M8 11v5" />
-                  <path d="M8 8v.01" />
-                  <path d="M12 16v-5" />
-                  <path d="M16 16v-3a2 2 0 1 0 -4 0" />
-                  <path d="M3 7a4 4 0 0 1 4 -4h10a4 4 0 0 1 4 4v10a4 4 0 0 1 -4 4h-10a4 4 0 0 1 -4 -4l0 -10" />
-                </svg>
-              </dct-button>
-              <dct-button variant="ghost" size="sm" icon-only href="mailto:dctownson@gmail.com?subject=Hi%20Daniel!" data-tip="Email Me" aria-label="Email Me">
-                <svg slot="leading" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10" />
-                  <path d="M3 7l9 6l9 -6" />
-                </svg>
-              </dct-button>
-              <dct-button variant="ghost" size="sm" icon-only href="${depth}${RESUME_PATH}" target="_blank" rel="noopener" data-tip="Résumé" aria-label="Résumé">
-                <svg slot="leading" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M14 3v4a1 1 0 0 0 1 1h4" />
-                  <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2" />
-                  <path d="M9 9l1 0" />
-                  <path d="M9 13l6 0" />
-                  <path d="M9 17l6 0" />
-                </svg>
-              </dct-button>
-            </div>
-            <div class="nav-pill nav-pill--icon">
-              ${this._themeToggleHTML()}
-            </div>
-          </div>
+          ${this._navRightHTML(depth)}
         </div>
       </nav>
     `;
@@ -154,10 +132,40 @@ class SiteNav extends HTMLElement {
 
     const btn = this.querySelector('#themeToggle');
     if (!btn) return;
+    // The new theme spreads out from the toggle in a growing circle.
+    // Underneath, the page swaps in one go with its colour transitions
+    // switched off (.theme-switching), and the browser reveals a snapshot
+    // of it, so nothing repaints while the circle grows. Without view
+    // transitions, or with reduced motion, it just swaps.
     btn.addEventListener('click', () => {
       const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-      html.setAttribute('data-theme', next);
-      localStorage.setItem('dct-theme', next);
+      const apply = () => {
+        html.setAttribute('data-theme', next);
+        localStorage.setItem('dct-theme', next);
+      };
+
+      html.classList.add('theme-switching');
+      const done = () => html.classList.remove('theme-switching');
+
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (!document.startViewTransition || reduce) {
+        apply();
+        requestAnimationFrame(() => requestAnimationFrame(done));
+        return;
+      }
+
+      // Centre on the toggle and size the circle to reach the farthest
+      // corner. The mask's solid part is the inner 70% of the circle
+      // (style.css "theme switch"), hence the / 0.7.
+      const r = btn.getBoundingClientRect();
+      const x = r.left + r.width / 2;
+      const y = r.top + r.height / 2;
+      const reach = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+      html.style.setProperty('--reveal-x', `${x}px`);
+      html.style.setProperty('--reveal-y', `${y}px`);
+      html.style.setProperty('--reveal-d', `${Math.ceil((reach / 0.7) * 2)}px`);
+
+      document.startViewTransition(apply).finished.finally(done);
     });
   }
 }

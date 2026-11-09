@@ -326,6 +326,53 @@ cs-hero {
   object-fit: cover;
 }
 
+/* ── Motion — theme switch ────────────────────────────────
+   The new theme grows out from the toggle as a circle with a soft
+   edge: a radial-gradient mask on ::view-transition-new(root), solid
+   for its inner 70% and fading out to the rim, so the edge widens as
+   it spreads. components.js sets the centre (--reveal-x / -y) and the
+   final size (--reveal-d) from the toggle's position. Animating
+   mask-size and mask-position together keeps the centre fixed.
+   While .theme-switching is on, colour transitions are off so the page
+   swaps in one go, the old view stays put beneath the circle instead
+   of cross-fading, and the case study hero gives up its name so it's
+   revealed with the rest. */
+.theme-switching *,
+.theme-switching *::before,
+.theme-switching *::after { transition: none !important; }
+
+.theme-switching::view-transition-old(root) { animation: none; }
+
+.theme-switching::view-transition-new(root) {
+  mix-blend-mode: normal;
+  -webkit-mask-image: radial-gradient(closest-side, #000 70%, transparent);
+  mask-image: radial-gradient(closest-side, #000 70%, transparent);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  animation: theme-reveal 1s cubic-bezier(0.45, 0, 0.2, 1) both;
+}
+
+@keyframes theme-reveal {
+  from {
+    -webkit-mask-size: 0 0;
+    mask-size: 0 0;
+    -webkit-mask-position: var(--reveal-x) var(--reveal-y);
+    mask-position: var(--reveal-x) var(--reveal-y);
+  }
+  to {
+    -webkit-mask-size: var(--reveal-d) var(--reveal-d);
+    mask-size: var(--reveal-d) var(--reveal-d);
+    -webkit-mask-position:
+      calc(var(--reveal-x) - var(--reveal-d) / 2)
+      calc(var(--reveal-y) - var(--reveal-d) / 2);
+    mask-position:
+      calc(var(--reveal-x) - var(--reveal-d) / 2)
+      calc(var(--reveal-y) - var(--reveal-d) / 2);
+  }
+}
+
+.theme-switching .hero-bleed { view-transition-name: none !important; }
+
 .is-arriving .hero-bleed.anim {
   animation: none;
   opacity: 1;
@@ -426,7 +473,6 @@ site-nav {
   transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
-.nav-pill--icon,
 .nav-pill--back { padding: 0 11px; }
 
 /* The name pill: avatar and name. */
@@ -459,10 +505,10 @@ site-nav {
 
 site-nav .dct-btn--sm svg { width: var(--icon-md); height: var(--icon-md); }
 
-/* On home the icons sit straight on the page, without a pill. The nav
-   ignores clicks so the page under its gaps stays usable; the row takes
-   them back. */
-.home-nav .nav-links {
+/* The icons sit straight on the page, without a pill. The nav ignores
+   clicks so the page under its gaps stays usable; the row takes them
+   back. */
+site-nav .nav-links {
   height: 56px;
   padding: 0 12px;
   pointer-events: auto;
@@ -907,18 +953,56 @@ html .contact-header h2 {
   }
 }
 
+/* The black behind the image is what it dims to on hover. */
 .cs-card-media {
+  position: relative;
   height: 22cqi;
   border-radius: var(--radius-2xl);
   overflow: hidden;
+  background: #000;
 }
 
 .cs-card-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.5s ease;
+  transition: transform 0.5s ease, opacity 0.5s ease;
 }
+
+/* The project's logo, centred and turned white, fades and grows in as
+   the image dims. Mouse hover or keyboard focus only, so it doesn't
+   stick after a tap. */
+.cs-card-logo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(240px, 60%);
+  height: auto;
+  filter: brightness(0) invert(1);
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.92);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  pointer-events: none;
+}
+
+@media (hover: hover) {
+  .cs-card:hover .cs-card-image { opacity: 0.45; }
+  .cs-card:hover .cs-card-logo {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.cs-card:focus-visible .cs-card-image { opacity: 0.45; }
+.cs-card:focus-visible .cs-card-logo {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+/* On click the image comes back up and the logo leaves before the
+   image morphs into the case study hero, so the hero isn't dimmed. */
+.is-leaving .cs-card.is-active .cs-card-image { opacity: 1; }
+.is-leaving .cs-card.is-active .cs-card-logo { opacity: 0; }
 
 /* One card per row on mobile — 22cqi would be too short, so go back
    to a fixed shape. */
