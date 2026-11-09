@@ -461,10 +461,10 @@ site-nav {
 .nav-pill {
   display: flex;
   align-items: center;
-  height: 56px;
-  padding: 0 16px;
+  height: auto;
+  padding: 12px 16px 12px 12px;
   border: 1px solid var(--color-border-muted);
-  border-radius: var(--radius-3xl);
+  border-radius: var(--radius-full);
   background: color-mix(in srgb, var(--color-bg-default) 80%, transparent);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -859,18 +859,15 @@ html .contact-header h2 {
   max-width:640px;
 }
 
-.hero-statement .accent-1 {
+.hero-statement .accent {
   color: var(--color-accent-default);
   font-weight: var(--font-weight-semibold);
 }
-.hero-statement .accent-2 {
+.hero-subline .accent {
   color: var(--color-info-text-muted);
   font-weight: var(--font-weight-semibold);
 }
-.hero-statement .accent-3 {
-  color: var(--color-green-500);
-  font-weight: var(--font-weight-semibold);
-}
+
 .section-label {
   display: flex;
   align-items: center;
