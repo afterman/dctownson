@@ -473,7 +473,7 @@ site-nav {
   transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
-.nav-pill--back { padding: 0 11px; }
+.nav-pill--back { padding: 12px; }
 
 /* The name pill: avatar and name. */
 .nav-name { gap: 12px; }
