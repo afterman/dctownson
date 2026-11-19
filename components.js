@@ -26,7 +26,7 @@
 
 // Current résumé PDF, relative to the site root. Both nav variants
 // link here — swap the filename once when a new résumé ships.
-const RESUME_PATH = 'assets/resume/Daniel_Townson_Resume_DesignSystems_2026.pdf';
+const RESUME_PATH = 'assets/resume/Daniel C Townson_SrProductDesigner2026.pdf';
 
 class SiteNav extends HTMLElement {
   connectedCallback() {
