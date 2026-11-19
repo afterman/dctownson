@@ -60,7 +60,7 @@ class SiteNav extends HTMLElement {
   _navRightHTML(depth) {
     return `
           <div class="nav-right">
-            <div class="nav-links">
+            <div class="nav-pill">
               <dct-button variant="ghost" size="sm" icon-only href="https://www.linkedin.com/in/danieltownson/" target="_blank" rel="noopener" data-tip="LinkedIn" aria-label="LinkedIn">
                 <svg slot="leading" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M8 11v5" />
@@ -262,9 +262,9 @@ customElements.define('site-footer', SiteFooter);
 const BG_PATTERN = {
   lines: 20,
   corner: [91, 447],
-  cornerStep: [56.8, 2.9],
+  cornerStep: [57, 2.9],
   heading: 56,
-  headingStep: -1.58,
+  headingStep: -3,
   size: 761,
   sizeStep: 35,
   radius: 30,
@@ -379,6 +379,58 @@ if (document.prerendering) {
     document.getAnimations().forEach(a => { a.currentTime = 0; });
   }, { once: true });
 }
+
+/* ============================================================
+   Scroll reveal — case study cards beyond the first row
+   The first row fades up on a plain time delay now (style.css,
+   no scroll needed). Rows after it still start lowered/
+   transparent and pick up .is-revealed the first time they
+   scroll into view, so as more case studies get added below the
+   fold, each one gets a scroll-triggered entrance for free.
+   Unobserved once revealed — it doesn't replay on scroll-back.
+   ============================================================ */
+function initCardReveal() {
+  const cards = document.querySelectorAll('.card-grid .cs-card:nth-of-type(n+3)');
+  if (!cards.length) return;
+
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    cards.forEach(card => card.classList.add('is-revealed'));
+    return;
+  }
+
+  const observer = new IntersectionObserver((entries, obs) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('is-revealed');
+      obs.unobserve(entry.target);
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -10% 0px' });
+
+  // Hold off observing until the visitor actually scrolls, so a row
+  // that happens to already be in view (tall screens, short hero)
+  // doesn't reveal before the point of a scroll-triggered entrance.
+  const start = () => cards.forEach(card => observer.observe(card));
+  if (window.scrollY > 0) {
+    start();
+  } else {
+    window.addEventListener('scroll', start, { once: true, passive: true });
+  }
+}
+
+initCardReveal();
+
+/* Scroll cue — jumps to the case studies. Respects reduced motion
+   like everything else on the page (initPageExit, theme switch). */
+(function initScrollCue() {
+  const btn = document.getElementById('scrollCue');
+  const target = document.querySelector('.card-grid');
+  if (!btn || !target) return;
+
+  btn.addEventListener('click', () => {
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    target.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+  });
+})();
 
 /* ============================================================
    <dct-chip> — skill/tag chip component

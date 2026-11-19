@@ -78,7 +78,7 @@ bg-pattern g {
   --fan-pivot: -150px -200px;
   --fan-shift: -110px;
   --fan-base: 4deg;
-  --fan-step: 1.58deg;
+  --fan-step: 3deg;
   --fan-stagger: 30ms;
   --fan-angle: calc(var(--fan-base) + var(--i) * var(--fan-step));
   transform-box: view-box;
@@ -430,7 +430,7 @@ cs-hero meta-tile:nth-child(4) { animation-delay: 0.53s; }
    needed. The pills align with .page's content column and side
    padding at every breakpoint. */
 site-nav {
-  --nav-inset: 56px;
+  --nav-inset: 24px;
   --nav-inset-stuck: 16px;
   display: block;
   position: sticky;
@@ -443,8 +443,8 @@ site-nav {
 
 .nav-inner {
   max-width: 1440px;
-  margin: 0 auto;
-  padding: 0 12px;
+  margin: auto;
+  padding: 0 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -464,7 +464,7 @@ site-nav {
   height: auto;
   padding: 12px 16px 12px 12px;
   border: 1px solid var(--color-border-muted);
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-xl);
   background: color-mix(in srgb, var(--color-bg-default) 80%, transparent);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -510,7 +510,7 @@ site-nav .dct-btn--sm svg { width: var(--icon-md); height: var(--icon-md); }
    back. */
 site-nav .nav-links {
   height: 56px;
-  padding: 0 12px;
+  padding: 0 24px;
   pointer-events: auto;
 }
 
@@ -622,7 +622,7 @@ dct-button { display: inline-flex; }
   justify-content: center;
   gap: var(--spacing-2);
   border: 1px solid transparent;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-xl);
   font-family: var(--font-family-sans);
   font-weight: var(--font-weight-medium);
   line-height: 1;
@@ -831,7 +831,7 @@ html .contact-header h2 {
   position: relative;
   overflow: hidden;
   align-items: start;
-  padding: 120px 0 120px;
+  padding: 180px 0 120px;
 }
 
 .hero-statement {
@@ -864,8 +864,7 @@ html .contact-header h2 {
   font-weight: var(--font-weight-semibold);
 }
 .hero-subline .accent {
-  color: var(--color-info-text-muted);
-  font-weight: var(--font-weight-semibold);
+  color: var(--color-accent-default);
 }
 
 .section-label {
@@ -877,9 +876,49 @@ html .contact-header h2 {
 
 .section-label img { flex-shrink: 0; }
 
+/* ── Scroll cue ──────────────────────────────
+   Scrolls to the case studies on click; the chevrons bounce gently
+   so a visitor who hasn't touched the page yet still gets the hint. */
+.scroll-cue {
+  grid-column: 2 / span 6;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+  margin-top: 40px;
+  padding: 0;
+  background: none;
+  border: none;
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--font-tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-fg-default);
+  cursor: pointer;
+}
+
+.scroll-cue-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  color: var(--color-accent-default);
+  animation: scroll-cue-bounce 2.2s ease-in-out infinite;
+}
+
+@keyframes scroll-cue-bounce {
+  0%, 100% { transform: translateY(-3px); }
+  50%      { transform: translateY(3px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-cue-icon { animation: none; }
+}
+
 @media (max-width: 1023px) {
   .hero-statement,
-  .hero-subline {
+  .hero-subline,
+  .scroll-cue {
     grid-column: 1 / span 6;
     padding-left:32px;
   }
@@ -922,7 +961,7 @@ html .contact-header h2 {
   container-type: inline-size;
   row-gap: 8px;
   margin-bottom: 80px;
-  margin-top: 32px;
+  margin-top: clamp(48px, 14vh, 200px);
 }
 
 @media (max-width: 767px) {
@@ -947,6 +986,54 @@ html .contact-header h2 {
 @media (max-width: 1023px) {
   .cs-card {
     grid-column: span 4;
+  }
+}
+
+/* ── First-row entrance ──────────────────────────────────
+   The first row fades up shortly after load, same motion
+   language as the hero's .anim steps — no scroll needed to see
+   it, since it's the first thing below the fold. */
+.card-grid .cs-card:nth-of-type(-n+2) {
+  opacity: 0;
+  transform: translateY(32px);
+  animation: fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: 0.65s;
+}
+
+.card-grid .cs-card:nth-of-type(2) {
+  animation-delay: 0.77s;
+}
+
+/* ── Scroll reveal ────────────────────────────────────────
+   Rows beyond the first start lowered/transparent; components.js
+   adds .is-revealed via IntersectionObserver the first time each
+   one scrolls into view, so they animate up into place as a
+   visitor scrolls down — and any card added later gets the same
+   entrance automatically, no markup changes needed. */
+.card-grid .cs-card:nth-of-type(n+3) {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card-grid .cs-card:nth-of-type(n+3).is-revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* A little extra stagger between side-by-side cards in the same
+   row, on top of each one's own scroll-triggered timing. */
+.card-grid .cs-card:nth-of-type(even) {
+  transition-delay: 0.12s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cs-card {
+    opacity: 1;
+    transform: none;
+    transition: none;
+    animation: none;
   }
 }
 
