@@ -259,16 +259,17 @@ customElements.define('site-footer', SiteFooter);
    Usage: <bg-pattern aria-hidden="true"></bg-pattern> as the first
    child of <body>.
    ============================================================ */
-const BG_PATTERN = {
-  lines: 20,
-  corner: [91, 447],
-  cornerStep: [57, 2.9],
-  heading: 56,
-  headingStep: -3,
-  size: 761,
-  sizeStep: 35,
-  radius: 30,
-};
+   const BG_PATTERN = {
+    lines: 20,
+    corner: [42, 152],
+    cornerStep: [64, 6.2],
+    heading: 51,
+    headingStep: -2.95,
+    size: 627,
+    sizeStep: 55,
+    radius: 52,
+  };
+  /* style.css  bg-pattern g { --fan-step: 2.95deg; } */
 
 class BgPattern extends HTMLElement {
   connectedCallback() {

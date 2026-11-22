@@ -831,7 +831,7 @@ html .contact-header h2 {
   position: relative;
   overflow: hidden;
   align-items: start;
-  padding: 180px 0 120px;
+  padding: 180px 0 80px;
 }
 
 .hero-statement {
@@ -996,7 +996,7 @@ html .contact-header h2 {
 .card-grid .cs-card:nth-of-type(-n+2) {
   opacity: 0;
   transform: translateY(32px);
-  animation: fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: fade-up 0.9s cubic-bezier(0.16, 1, 0.4, 0.8) forwards;
   animation-delay: 0.65s;
 }
 
